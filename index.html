@@ -5,28 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio Investment System</title>
   <link href="https://fonts.cdnfonts.com/css/aptos" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #ffffff;
+      --bg: #fff;
       --surface: #f5f5f5;
       --border: #e0e0e0;
-      --accent: #6b6b6b;
-      --accent-light: #eeeeee;
-      --muted: #555555;
+      --muted: #555;
       --radius: 6px;
+      --grey: #6b6b6b;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: var(--bg);
-      color: #000000;
+      color: #000;
       font-family: 'Aptos Display', 'Aptos', 'Segoe UI', sans-serif;
       font-size: 14px;
       line-height: 1.5;
     }
 
-    /* ── Header ─────────────────────────────────────── */
+    /* ── Header ─────────────────────────── */
     header {
       border-bottom: 1px solid var(--border);
       padding: 14px 32px;
@@ -38,15 +36,9 @@
       background: #fff;
       z-index: 100;
     }
-    .logo {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      color: #111;
-    }
+    .logo { font-size: 14px; font-weight: 600; }
     .logo span { color: var(--muted); font-weight: 400; }
     .header-actions { display: flex; gap: 8px; }
-
     .btn {
       padding: 7px 18px;
       border-radius: 999px;
@@ -56,25 +48,19 @@
       font-weight: 500;
       background: #fff;
       color: #000;
-      transition: background .12s, border-color .12s;
       font-family: inherit;
+      transition: background .12s, border-color .12s;
     }
     .btn:hover { background: var(--surface); border-color: #aaa; }
-    .btn-dark {
-      background: #fff;
-      color: #000;
-      border: 1px solid #c8c8c8;
-    }
-    .btn-dark:hover { background: var(--surface); border-color: #aaa; }
 
-    /* ── Layout ─────────────────────────────────────── */
+    /* ── Layout ─────────────────────────── */
     .container {
       display: grid;
       grid-template-columns: 240px 1fr;
       min-height: calc(100vh - 49px);
     }
 
-    /* ── Sidebar ────────────────────────────────────── */
+    /* ── Sidebar ────────────────────────── */
     aside {
       border-right: 1px solid var(--border);
       padding: 24px 16px;
@@ -84,314 +70,194 @@
       overflow-y: auto;
     }
     .nav-group {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .8px;
-      color: #aaaaaa;
-      padding: 0 10px;
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .8px;
+      color: #aaa; padding: 0 10px;
       margin: 20px 0 6px;
     }
     .nav-group:first-child { margin-top: 0; }
     .nav-item {
-      display: flex;
-      align-items: center;
-      padding: 7px 10px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      color: #555555;
-      font-size: 13.5px;
+      display: flex; align-items: center;
+      padding: 7px 10px; border-radius: var(--radius);
+      cursor: pointer; color: #555; font-size: 13.5px;
       transition: background .1s, color .1s;
-      margin-bottom: 2px;
-      user-select: none;
+      margin-bottom: 2px; user-select: none;
     }
     .nav-item:hover { background: var(--surface); color: #000; }
-    .nav-item.active { background: var(--accent-light); color: #000; font-weight: 600; }
-    .nav-dot { display: none; }
+    .nav-item.active { background: #eee; color: #000; font-weight: 600; }
 
-    /* ── Main ───────────────────────────────────────── */
-    main {
-      padding: 36px 48px;
-      width: 100%;
-    }
-
+    /* ── Main ───────────────────────────── */
+    main { padding: 36px 48px; width: 100%; }
     .section { display: none; }
     .section.active { display: block; }
+    .section-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #000; }
+    .section-desc { color: #3d3d3d; font-size: 13.5px; margin-bottom: 28px; }
 
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      margin-bottom: 6px;
-      color: #000000;
-    }
-    .section-desc {
-      color: #3d3d3d;
-      font-size: 13.5px;
-      margin-bottom: 28px;
-    }
-
-    /* ── Block ──────────────────────────────────────── */
-    .block {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
+    /* ── Blocks ─────────────────────────── */
+    .block { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
     .block-header {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      background: var(--surface);
-      text-transform: uppercase;
-      letter-spacing: .5px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      font-size: 12px; font-weight: 600; color: var(--muted);
+      background: var(--surface); text-transform: uppercase; letter-spacing: .5px;
     }
     .block-body { padding: 16px; }
 
-    /* ── Form ───────────────────────────────────────── */
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    /* ── Forms ──────────────────────────── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-grid.cols-1 { grid-template-columns: 1fr; }
-    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
     .field { display: flex; flex-direction: column; gap: 5px; }
     .field.full { grid-column: 1 / -1; }
+    label { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: .3px; text-transform: uppercase; }
+    .label-row { display: flex; justify-content: space-between; align-items: center; }
+    .label-val { font-size: 12px; font-weight: 600; color: #000; }
+    input[type="text"], input[type="password"], input[type="number"], input[type="date"], select, textarea {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: var(--radius); color: #000;
+      padding: 7px 10px; font-size: 13px; width: 100%;
+      outline: none; transition: border-color .12s; font-family: inherit;
+    }
+    input:focus, select:focus { border-color: #aaa; }
+    input[type="range"] { width: 100%; accent-color: var(--grey); cursor: pointer; margin: 2px 0; }
+    .range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-    label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: .3px;
-      text-transform: uppercase;
-    }
-    .label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .label-val {
-      font-size: 12px;
-      font-weight: 600;
-      color: #111;
-    }
-
-    input[type="text"],
-    input[type="password"],
-    input[type="number"],
-    input[type="date"],
-    select,
-    textarea {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: #111;
-      padding: 7px 10px;
-      font-size: 13px;
-      width: 100%;
-      outline: none;
-      transition: border-color .12s;
-      font-family: inherit;
-    }
-    input:focus, select:focus, textarea:focus { border-color: #aaa; }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: #6b6b6b;
-      cursor: pointer;
-      margin: 2px 0;
-    }
-    .range-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ── Profiles ───────────────────────────────────── */
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-    }
+    /* ── Profiles ───────────────────────── */
+    .profile-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
     .profile-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 8px 10px;
-      cursor: pointer;
-      text-align: center;
-      transition: border-color .12s, background .12s;
-      background: #fff;
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 8px 10px; cursor: pointer; text-align: center;
+      transition: border-color .12s, background .12s; background: #ebebeb;
     }
-    .profile-card:hover { background: var(--surface); }
-    .profile-card.selected {
-      border-color: #6b6b6b;
-      background: #6b6b6b;
-      color: #fff;
-    }
+    .profile-card:hover { background: #ddd; }
+    .profile-card.selected { background: var(--grey); color: #fff; border-color: var(--grey); }
     .profile-card.selected .p-risk { color: #ccc; }
     .p-icon { font-size: 18px; margin-bottom: 5px; }
     .p-name { font-size: 11px; font-weight: 600; }
     .p-risk { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-    /* ── Profile stats ──────────────────────────────── */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .stat-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 12px;
-    }
+    /* ── Stats ──────────────────────────── */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .stat-item { border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
     .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
     .stat-value { font-size: 16px; font-weight: 600; margin-top: 2px; }
 
-    /* ── Method buttons ─────────────────────────────── */
+    /* ── Method buttons ─────────────────── */
     .method-group { display: flex; flex-wrap: wrap; gap: 8px; }
     .method-btn {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 10px;
-      background: #ebebeb;
-      color: #444;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all .15s;
-      font-family: inherit;
+      padding: 10px 18px; border: none; border-radius: 10px;
+      background: #ebebeb; color: #444; cursor: pointer;
+      font-size: 13px; font-weight: 500; transition: all .15s; font-family: inherit;
     }
     .method-btn:hover { background: #ddd; color: #000; }
-    .method-btn.selected { background: #6b6b6b; color: #fff; }
+    .method-btn.selected { background: var(--grey); color: #fff; }
 
-    /* ── Toggle ─────────────────────────────────────── */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 11px 0;
-    }
+    /* ── Toggles ────────────────────────── */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; }
     .toggle-row + .toggle-row { border-top: 1px solid var(--border); }
     .toggle-name { font-size: 13px; font-weight: 500; }
     .toggle-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
-    .toggle-switch {
-      position: relative;
-      width: 36px; height: 20px;
-      flex-shrink: 0;
-    }
+    .toggle-switch { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
     .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .track {
-      position: absolute; inset: 0;
-      background: var(--border);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .track::before {
-      content: '';
-      position: absolute;
-      width: 14px; height: 14px;
-      background: #fff;
-      border-radius: 50%;
-      top: 3px; left: 3px;
-      transition: transform .2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,.15);
-    }
-    .toggle-switch input:checked + .track { background: #6b6b6b; }
+    .track { position: absolute; inset: 0; background: var(--border); border-radius: 10px; cursor: pointer; transition: background .2s; }
+    .track::before { content: ''; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+    .toggle-switch input:checked + .track { background: var(--grey); }
     .toggle-switch input:checked + .track::before { transform: translateX(16px); }
 
-    /* ── Tags ───────────────────────────────────────── */
-    .tag-area {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      padding: 8px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      min-height: 42px;
-      background: var(--surface);
-    }
-    .tag {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 2px 7px;
-      font-size: 12px;
-      font-weight: 500;
-    }
-    .tag-x {
-      color: var(--muted);
-      cursor: pointer;
-      font-size: 13px;
-      line-height: 1;
-      transition: color .1s;
-    }
-    .tag-x:hover { color: #555; }
+    /* ── Tags ───────────────────────────── */
+    .tag-area { display: flex; flex-wrap: wrap; gap: 5px; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius); min-height: 42px; background: var(--surface); }
+    .tag { display: flex; align-items: center; gap: 4px; background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 12px; font-weight: 500; }
+    .tag-x { color: var(--muted); cursor: pointer; font-size: 13px; line-height: 1; transition: color .1s; }
+    .tag-x:hover { color: #333; }
     .tag-add-row { display: flex; gap: 6px; margin-top: 7px; }
     .tag-add-row input { flex: 1; }
-    .tag-add-btn {
-      padding: 7px 12px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: #fff;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      white-space: nowrap;
-      font-family: inherit;
-    }
+    .tag-add-btn { padding: 7px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; cursor: pointer; font-size: 12px; font-weight: 500; font-family: inherit; }
     .tag-add-btn:hover { background: var(--surface); }
 
-    /* ── Code ───────────────────────────────────────── */
-    .code-box {
-      background: #f6f6f6;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 12px;
-      line-height: 1.7;
-      white-space: pre;
-      overflow-x: auto;
-      color: #111;
-      max-height: 520px;
-      overflow-y: auto;
-    }
+    /* ── Code box ───────────────────────── */
+    .code-box { background: #f6f6f6; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 12px; line-height: 1.7; white-space: pre; overflow-x: auto; color: #000; max-height: 520px; overflow-y: auto; }
 
-    /* ── Toast ──────────────────────────────────────── */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #111;
-      color: #fff;
-      padding: 9px 16px;
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-weight: 500;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity .25s, transform .25s;
-      pointer-events: none;
-      z-index: 999;
+    /* ── ANALYSE SECTION ────────────────── */
+    .run-panel {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
     }
+    .run-config { display: flex; gap: 10px; flex-wrap: wrap; }
+    .run-tag {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 12px; font-weight: 500; color: #333;
+    }
+    .run-btn {
+      padding: 10px 28px; background: var(--grey); color: #fff;
+      border: none; border-radius: 999px; cursor: pointer;
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      transition: background .15s; white-space: nowrap;
+    }
+    .run-btn:hover { background: #555; }
+    .run-btn:disabled { background: #bbb; cursor: not-allowed; }
+
+    /* ── Status ─────────────────────────── */
+    .status-box {
+      padding: 14px 18px; border-radius: var(--radius);
+      border: 1px solid var(--border); background: var(--surface);
+      font-size: 13px; margin-bottom: 16px; display: none;
+    }
+    .status-steps { margin-top: 10px; }
+    .step { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 12px; color: var(--muted); }
+    .step.done { color: #2d7a2d; }
+    .step.active { color: #000; font-weight: 500; }
+    .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+    .step.done .step-dot { background: #4caf50; }
+    .step.active .step-dot { background: #6b6b6b; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* ── KPI cards ──────────────────────── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+    .kpi-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+    .kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .kpi-value { font-size: 24px; font-weight: 700; margin-top: 4px; }
+    .kpi-value.positive { color: #2d7a2d; }
+    .kpi-value.negative { color: #b91c1c; }
+
+    /* ── Charts ─────────────────────────── */
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .chart-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; background: #fff; }
+    .chart-card-full { border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; background: #fff; margin-bottom: 12px; }
+    .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; color: #000; }
+    .chart-subtitle { font-size: 11px; color: var(--muted); margin-top: -10px; margin-bottom: 14px; }
+
+    /* ── Heatmap ────────────────────────── */
+    .heatmap-wrap { overflow-x: auto; }
+    .heatmap-table { border-collapse: collapse; font-size: 11px; width: 100%; }
+    .heatmap-table th { padding: 4px 6px; text-align: center; font-weight: 600; color: var(--muted); background: var(--surface); }
+    .heatmap-table td { padding: 5px 6px; text-align: center; font-weight: 500; font-size: 11px; border: 1px solid #f0f0f0; }
+
+    /* ── Weights table ──────────────────── */
+    .weights-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .weights-table th { text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
+    .weights-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .weights-table tr:last-child td { border-bottom: none; }
+    .w-bar-bg { height: 6px; background: var(--surface); border-radius: 3px; margin-top: 4px; overflow: hidden; }
+    .w-bar-fill { height: 100%; border-radius: 3px; }
+
+    /* ── Alert ──────────────────────────── */
+    .alert { padding: 12px 16px; border-radius: var(--radius); font-size: 13px; margin-bottom: 12px; display: none; }
+    .alert-warn { background: #fff8e1; border: 1px solid #f0d060; color: #7a5000; }
+    .alert-error { background: #fff0f0; border: 1px solid #f0a0a0; color: #7a0000; }
+
+    /* ── Toast ──────────────────────────── */
+    .toast { position: fixed; bottom: 20px; right: 20px; background: #111; color: #fff; padding: 9px 16px; border-radius: var(--radius); font-size: 12px; font-weight: 500; opacity: 0; transform: translateY(6px); transition: opacity .25s, transform .25s; pointer-events: none; z-index: 999; }
     .toast.show { opacity: 1; transform: translateY(0); }
 
     hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
 
-    @media (max-width: 700px) {
+    @media (max-width: 800px) {
       .container { grid-template-columns: 1fr; }
       aside { display: none; }
       .profile-grid { grid-template-columns: repeat(3, 1fr); }
-      .form-grid, .form-grid.cols-3 { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .charts-row, .kpi-grid { grid-template-columns: 1fr; }
       main { padding: 20px 16px; }
     }
   </style>
@@ -402,523 +268,236 @@
   <div class="logo">Portfolio Investment System <span>— Configuration</span></div>
   <div class="header-actions">
     <button class="btn" onclick="resetDefaults()">Réinitialiser</button>
-    <button class="btn btn-dark" onclick="showSection('export')">Générer le code →</button>
+    <button class="btn" onclick="showSection('export')">Générer le code →</button>
   </div>
 </header>
 
 <div class="container">
-
   <aside>
     <div class="nav-group">Configuration</div>
-    <div class="nav-item active" onclick="showSection('profile')" data-section="profile"><span class="nav-dot"></span>Profil</div>
-    <div class="nav-item" onclick="showSection('api')" data-section="api"><span class="nav-dot"></span>API & Taux</div>
-    <div class="nav-item" onclick="showSection('universe')" data-section="universe"><span class="nav-dot"></span>Univers d'actifs</div>
+    <div class="nav-item active" onclick="showSection('profile')" data-section="profile">Profil</div>
+    <div class="nav-item" onclick="showSection('api')" data-section="api">API & Taux</div>
+    <div class="nav-item" onclick="showSection('universe')" data-section="universe">Univers d'actifs</div>
 
     <div class="nav-group">Modèle</div>
-    <div class="nav-item" onclick="showSection('methods')" data-section="methods"><span class="nav-dot"></span>Méthodes</div>
-    <div class="nav-item" onclick="showSection('estimation')" data-section="estimation"><span class="nav-dot"></span>Estimation</div>
-    <div class="nav-item" onclick="showSection('filters')" data-section="filters"><span class="nav-dot"></span>Filtres</div>
+    <div class="nav-item" onclick="showSection('methods')" data-section="methods">Méthodes</div>
+    <div class="nav-item" onclick="showSection('estimation')" data-section="estimation">Estimation</div>
+    <div class="nav-item" onclick="showSection('filters')" data-section="filters">Filtres</div>
 
     <div class="nav-group">Simulation</div>
-    <div class="nav-item" onclick="showSection('backtest')" data-section="backtest"><span class="nav-dot"></span>Backtest</div>
-    <div class="nav-item" onclick="showSection('montecarlo')" data-section="montecarlo"><span class="nav-dot"></span>Monte Carlo</div>
-    <div class="nav-item" onclick="showSection('tactical')" data-section="tactical"><span class="nav-dot"></span>Overlay tactique</div>
+    <div class="nav-item" onclick="showSection('backtest')" data-section="backtest">Backtest</div>
+    <div class="nav-item" onclick="showSection('montecarlo')" data-section="montecarlo">Monte Carlo</div>
+    <div class="nav-item" onclick="showSection('tactical')" data-section="tactical">Overlay tactique</div>
+
+    <div class="nav-group">Résultats</div>
+    <div class="nav-item" onclick="showSection('analyse')" data-section="analyse">▶ Lancer l'analyse</div>
 
     <div class="nav-group">Export</div>
-    <div class="nav-item" onclick="showSection('export')" data-section="export"><span class="nav-dot"></span>Générer le code</div>
+    <div class="nav-item" onclick="showSection('export')" data-section="export">Générer le code</div>
   </aside>
 
   <main>
 
-    <!-- ══ PROFIL ══════════════════════════════════════════ -->
+    <!-- ═══ PROFIL ══════════════════════════════════ -->
     <section class="section active" id="sec-profile">
       <div class="section-title">Profil investisseur</div>
       <div class="section-desc">Définit l'aversion au risque, la volatilité cible et les budgets de risque par classe d'actifs.</div>
-
       <div class="block">
         <div class="block-header">Sélection du profil</div>
         <div class="block-body">
           <div class="profile-grid">
-            <div class="profile-card" data-profile="Very Conservative" onclick="selectProfile(this)">
-              <div class="p-icon">🛡️</div>
-              <div class="p-name">Très conservateur</div>
-              <div class="p-risk">λ = 8 · 5% vol</div>
-            </div>
-            <div class="profile-card" data-profile="Conservative" onclick="selectProfile(this)">
-              <div class="p-icon">🏦</div>
-              <div class="p-name">Conservateur</div>
-              <div class="p-risk">λ = 6 · 8% vol</div>
-            </div>
-            <div class="profile-card selected" data-profile="Balanced" onclick="selectProfile(this)">
-              <div class="p-icon">⚖️</div>
-              <div class="p-name">Équilibré</div>
-              <div class="p-risk">λ = 4 · 12% vol</div>
-            </div>
-            <div class="profile-card" data-profile="Growth" onclick="selectProfile(this)">
-              <div class="p-icon">🚀</div>
-              <div class="p-name">Croissance</div>
-              <div class="p-risk">λ = 2.5 · 18% vol</div>
-            </div>
-            <div class="profile-card" data-profile="Aggressive" onclick="selectProfile(this)">
-              <div class="p-icon">🔥</div>
-              <div class="p-name">Agressif</div>
-              <div class="p-risk">λ = 1.5 · 25% vol</div>
-            </div>
+            <div class="profile-card" data-profile="Very Conservative" onclick="selectProfile(this)"><div class="p-icon">🛡️</div><div class="p-name">Très conservateur</div><div class="p-risk">λ = 8 · 5% vol</div></div>
+            <div class="profile-card" data-profile="Conservative" onclick="selectProfile(this)"><div class="p-icon">🏦</div><div class="p-name">Conservateur</div><div class="p-risk">λ = 6 · 8% vol</div></div>
+            <div class="profile-card selected" data-profile="Balanced" onclick="selectProfile(this)"><div class="p-icon">⚖️</div><div class="p-name">Équilibré</div><div class="p-risk">λ = 4 · 12% vol</div></div>
+            <div class="profile-card" data-profile="Growth" onclick="selectProfile(this)"><div class="p-icon">🚀</div><div class="p-name">Croissance</div><div class="p-risk">λ = 2.5 · 18% vol</div></div>
+            <div class="profile-card" data-profile="Aggressive" onclick="selectProfile(this)"><div class="p-icon">🔥</div><div class="p-name">Agressif</div><div class="p-risk">λ = 1.5 · 25% vol</div></div>
           </div>
         </div>
       </div>
-
       <div class="block">
         <div class="block-header">Paramètres du profil</div>
-        <div class="block-body">
-          <div class="stat-grid" id="profile-stats"></div>
-        </div>
+        <div class="block-body"><div class="stat-grid" id="profile-stats"></div></div>
       </div>
-
       <div class="block">
         <div class="block-header">Budgets de risque par classe</div>
         <div class="block-body" id="risk-budgets"></div>
       </div>
     </section>
 
-    <!-- ══ API ════════════════════════════════════════════ -->
+    <!-- ═══ API ════════════════════════════════════ -->
     <section class="section" id="sec-api">
       <div class="section-title">API & Taux de référence</div>
       <div class="section-desc">Clé FRED et taux sans risque utilisé pour le Sharpe et Black-Litterman.</div>
-
       <div class="block">
         <div class="block-header">FRED API</div>
         <div class="block-body">
-          <div class="field">
-            <label>Clé API (optionnel)</label>
-            <input type="password" id="fred_api_key" placeholder="Laisser vide = taux par défaut (4.5%)" />
-          </div>
+          <div class="field"><label>Clé API (optionnel)</label><input type="password" id="fred_api_key" placeholder="Laisser vide = taux par défaut (4.5%)" /></div>
         </div>
       </div>
-
       <div class="block">
         <div class="block-header">Taux sans risque</div>
         <div class="block-body">
           <div class="form-grid">
             <div class="field">
-              <div class="label-row">
-                <label>Taux annualisé</label>
-                <span class="label-val" id="rf_display">4.50%</span>
-              </div>
-              <input type="range" id="risk_free_rate" min="0" max="10" step="0.1" value="4.5"
-                oninput="rfUpdate()" />
+              <div class="label-row"><label>Taux annualisé</label><span class="label-val" id="rf_display">4.50%</span></div>
+              <input type="range" id="risk_free_rate" min="0" max="10" step="0.1" value="4.5" oninput="rfUpdate()" />
               <div class="range-labels"><span>0%</span><span>5%</span><span>10%</span></div>
             </div>
-            <div class="field">
-              <label>Taux journalier</label>
-              <input type="text" id="rf_daily" value="0.01786% / jour" readonly style="color:var(--muted);background:var(--surface)" />
-            </div>
+            <div class="field"><label>Taux journalier</label><input type="text" id="rf_daily" value="0.01786% / jour" readonly style="color:var(--muted);background:var(--surface)" /></div>
           </div>
         </div>
       </div>
-
       <div class="block">
         <div class="block-header">Dates</div>
         <div class="block-body">
           <div class="form-grid">
-            <div class="field">
-              <label>Début de l'historique</label>
-              <input type="date" id="data_start" value="2010-01-01" />
-            </div>
-            <div class="field">
-              <label>Début du backtest</label>
-              <input type="date" id="backtest_start" value="2015-01-01" />
-            </div>
+            <div class="field"><label>Début de l'historique</label><input type="date" id="data_start" value="2010-01-01" /></div>
+            <div class="field"><label>Début du backtest</label><input type="date" id="backtest_start" value="2015-01-01" /></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ══ UNIVERS ════════════════════════════════════════ -->
+    <!-- ═══ UNIVERS ════════════════════════════════ -->
     <section class="section" id="sec-universe">
       <div class="section-title">Univers d'actifs</div>
       <div class="section-desc">Tickers Yahoo Finance par classe. Cliquez × pour supprimer, ou ajoutez via le champ de saisie.</div>
-
-      <div class="block">
-        <div class="block-header">Actions — Equity</div>
-        <div class="block-body">
-          <div class="tag-area" id="tags-equity"></div>
-          <div class="tag-add-row">
-            <input type="text" id="input-equity" placeholder="SPY, QQQ…" onkeydown="if(event.key==='Enter')addTag('equity')" style="text-transform:uppercase" />
-            <button class="tag-add-btn" onclick="addTag('equity')">Ajouter</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Obligations — Fixed Income</div>
-        <div class="block-body">
-          <div class="tag-area" id="tags-fixed_income"></div>
-          <div class="tag-add-row">
-            <input type="text" id="input-fixed_income" placeholder="AGG, TLT…" onkeydown="if(event.key==='Enter')addTag('fixed_income')" style="text-transform:uppercase" />
-            <button class="tag-add-btn" onclick="addTag('fixed_income')">Ajouter</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Matières premières — Commodity</div>
-        <div class="block-body">
-          <div class="tag-area" id="tags-commodity"></div>
-          <div class="tag-add-row">
-            <input type="text" id="input-commodity" placeholder="GLD, SLV…" onkeydown="if(event.key==='Enter')addTag('commodity')" style="text-transform:uppercase" />
-            <button class="tag-add-btn" onclick="addTag('commodity')">Ajouter</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Immobilier coté — Real Estate</div>
-        <div class="block-body">
-          <div class="tag-area" id="tags-real_estate"></div>
-          <div class="tag-add-row">
-            <input type="text" id="input-real_estate" placeholder="VNQ, VNQI…" onkeydown="if(event.key==='Enter')addTag('real_estate')" style="text-transform:uppercase" />
-            <button class="tag-add-btn" onclick="addTag('real_estate')">Ajouter</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Crypto-monnaies</div>
-        <div class="block-body">
-          <div class="tag-area" id="tags-crypto"></div>
-          <div class="tag-add-row">
-            <input type="text" id="input-crypto" placeholder="BTC-USD, ETH-USD…" onkeydown="if(event.key==='Enter')addTag('crypto')" style="text-transform:uppercase" />
-            <button class="tag-add-btn" onclick="addTag('crypto')">Ajouter</button>
-          </div>
-        </div>
-      </div>
+      <div class="block"><div class="block-header">Actions — Equity</div><div class="block-body"><div class="tag-area" id="tags-equity"></div><div class="tag-add-row"><input type="text" id="input-equity" placeholder="SPY, QQQ…" onkeydown="if(event.key==='Enter')addTag('equity')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('equity')">Ajouter</button></div></div></div>
+      <div class="block"><div class="block-header">Obligations — Fixed Income</div><div class="block-body"><div class="tag-area" id="tags-fixed_income"></div><div class="tag-add-row"><input type="text" id="input-fixed_income" placeholder="AGG, TLT…" onkeydown="if(event.key==='Enter')addTag('fixed_income')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('fixed_income')">Ajouter</button></div></div></div>
+      <div class="block"><div class="block-header">Matières premières — Commodity</div><div class="block-body"><div class="tag-area" id="tags-commodity"></div><div class="tag-add-row"><input type="text" id="input-commodity" placeholder="GLD, SLV…" onkeydown="if(event.key==='Enter')addTag('commodity')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('commodity')">Ajouter</button></div></div></div>
+      <div class="block"><div class="block-header">Immobilier coté — Real Estate</div><div class="block-body"><div class="tag-area" id="tags-real_estate"></div><div class="tag-add-row"><input type="text" id="input-real_estate" placeholder="VNQ, VNQI…" onkeydown="if(event.key==='Enter')addTag('real_estate')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('real_estate')">Ajouter</button></div></div></div>
+      <div class="block"><div class="block-header">Crypto-monnaies</div><div class="block-body"><div class="tag-area" id="tags-crypto"></div><div class="tag-add-row"><input type="text" id="input-crypto" placeholder="BTC-USD, ETH-USD…" onkeydown="if(event.key==='Enter')addTag('crypto')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('crypto')">Ajouter</button></div></div></div>
     </section>
 
-    <!-- ══ MÉTHODES ═══════════════════════════════════════ -->
+    <!-- ═══ MÉTHODES ═══════════════════════════════ -->
     <section class="section" id="sec-methods">
       <div class="section-title">Méthodes</div>
       <div class="section-desc">Algorithmes d'estimation et d'optimisation.</div>
-
-      <div class="block">
-        <div class="block-header">Estimation des rendements (μ)</div>
-        <div class="block-body">
-          <div class="method-group" id="mg-return">
-            <button class="method-btn selected" data-val="black_litterman" onclick="selMethod('return',this)">Black-Litterman</button>
-            <button class="method-btn" data-val="shrinkage" onclick="selMethod('return',this)">James-Stein Shrinkage</button>
-            <button class="method-btn" data-val="historical" onclick="selMethod('return',this)">Historique</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Estimation de la covariance (Σ)</div>
-        <div class="block-body">
-          <div class="method-group" id="mg-cov">
-            <button class="method-btn selected" data-val="ledoit_wolf" onclick="selMethod('cov',this)">Ledoit-Wolf</button>
-            <button class="method-btn" data-val="ewma" onclick="selMethod('cov',this)">EWMA</button>
-            <button class="method-btn" data-val="sample" onclick="selMethod('cov',this)">Sample</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Optimisation du portefeuille</div>
-        <div class="block-body">
-          <div class="method-group" id="mg-optim">
-            <button class="method-btn selected" data-val="risk_budget" onclick="selMethod('optim',this)">Risk Budgeting</button>
-            <button class="method-btn" data-val="mvo" onclick="selMethod('optim',this)">MVO — Max Sharpe</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Fréquence de rééquilibrage</div>
-        <div class="block-body">
-          <div class="method-group" id="mg-rebalance">
-            <button class="method-btn" data-val="weekly" onclick="selMethod('rebalance',this)">Hebdomadaire</button>
-            <button class="method-btn selected" data-val="monthly" onclick="selMethod('rebalance',this)">Mensuel</button>
-            <button class="method-btn" data-val="quarterly" onclick="selMethod('rebalance',this)">Trimestriel</button>
-            <button class="method-btn" data-val="annual" onclick="selMethod('rebalance',this)">Annuel</button>
-          </div>
-        </div>
-      </div>
+      <div class="block"><div class="block-header">Estimation des rendements (μ)</div><div class="block-body"><div class="method-group" id="mg-return"><button class="method-btn selected" data-val="black_litterman" onclick="selMethod('return',this)">Black-Litterman</button><button class="method-btn" data-val="shrinkage" onclick="selMethod('return',this)">James-Stein Shrinkage</button><button class="method-btn" data-val="historical" onclick="selMethod('return',this)">Historique</button></div></div></div>
+      <div class="block"><div class="block-header">Estimation de la covariance (Σ)</div><div class="block-body"><div class="method-group" id="mg-cov"><button class="method-btn selected" data-val="ledoit_wolf" onclick="selMethod('cov',this)">Ledoit-Wolf</button><button class="method-btn" data-val="ewma" onclick="selMethod('cov',this)">EWMA</button><button class="method-btn" data-val="sample" onclick="selMethod('cov',this)">Sample</button></div></div></div>
+      <div class="block"><div class="block-header">Optimisation du portefeuille</div><div class="block-body"><div class="method-group" id="mg-optim"><button class="method-btn selected" data-val="risk_budget" onclick="selMethod('optim',this)">Risk Budgeting</button><button class="method-btn" data-val="mvo" onclick="selMethod('optim',this)">MVO — Max Sharpe</button></div></div></div>
+      <div class="block"><div class="block-header">Fréquence de rééquilibrage</div><div class="block-body"><div class="method-group" id="mg-rebalance"><button class="method-btn" data-val="weekly" onclick="selMethod('rebalance',this)">Hebdomadaire</button><button class="method-btn selected" data-val="monthly" onclick="selMethod('rebalance',this)">Mensuel</button><button class="method-btn" data-val="quarterly" onclick="selMethod('rebalance',this)">Trimestriel</button><button class="method-btn" data-val="annual" onclick="selMethod('rebalance',this)">Annuel</button></div></div></div>
     </section>
 
-    <!-- ══ ESTIMATION ════════════════════════════════════ -->
+    <!-- ═══ ESTIMATION ════════════════════════════ -->
     <section class="section" id="sec-estimation">
       <div class="section-title">Paramètres d'estimation</div>
       <div class="section-desc">Hyperparamètres des estimateurs μ et Σ.</div>
-
-      <div class="block">
-        <div class="block-header">Général</div>
-        <div class="block-body">
-          <div class="form-grid">
-            <div class="field">
-              <div class="label-row">
-                <label>Fenêtre d'estimation</label>
-                <span class="label-val" id="estwin_v">5 ans</span>
-              </div>
-              <input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5"
-                oninput="document.getElementById('estwin_v').textContent=this.value+' ans'" />
-              <div class="range-labels"><span>1 an</span><span>8 ans</span><span>15 ans</span></div>
-            </div>
-            <div class="field">
-              <div class="label-row">
-                <label>Départs aléatoires (MVO)</label>
-                <span class="label-val" id="nstarts_v">15</span>
-              </div>
-              <input type="range" id="n_random_starts" min="5" max="50" step="1" value="15"
-                oninput="document.getElementById('nstarts_v').textContent=this.value" />
-              <div class="range-labels"><span>5</span><span>25</span><span>50</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Black-Litterman</div>
-        <div class="block-body">
-          <div class="form-grid">
-            <div class="field">
-              <div class="label-row">
-                <label>Tau (τ) — incertitude prior</label>
-                <span class="label-val" id="tau_v">0.050</span>
-              </div>
-              <input type="range" id="bl_tau" min="0.01" max="0.20" step="0.005" value="0.05"
-                oninput="document.getElementById('tau_v').textContent=parseFloat(this.value).toFixed(3)" />
-              <div class="range-labels"><span>0.01</span><span>0.10</span><span>0.20</span></div>
-            </div>
-            <div class="field" style="align-self:start">
-              <label>Note</label>
-              <div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">
-                Faible τ → fort prior d'équilibre. Valeur typique : 1/T (nb de jours).
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">EWMA</div>
-        <div class="block-body">
-          <div class="form-grid">
-            <div class="field">
-              <div class="label-row">
-                <label>Lambda (λ) — facteur d'oubli</label>
-                <span class="label-val" id="ewma_v">0.940</span>
-              </div>
-              <input type="range" id="ewma_lambda" min="0.80" max="0.99" step="0.005" value="0.94"
-                oninput="ewmaUpdate()" />
-              <div class="range-labels"><span>0.80</span><span>0.90</span><span>0.99</span></div>
-            </div>
-            <div class="field">
-              <label>Demi-vie calculée</label>
-              <input type="text" id="ewma_hl" value="≈ 11.0 jours" readonly style="color:var(--muted);background:var(--surface)" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="block"><div class="block-header">Général</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Fenêtre d'estimation</label><span class="label-val" id="estwin_v">5 ans</span></div><input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5" oninput="document.getElementById('estwin_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>8 ans</span><span>15 ans</span></div></div><div class="field"><div class="label-row"><label>Départs aléatoires (MVO)</label><span class="label-val" id="nstarts_v">15</span></div><input type="range" id="n_random_starts" min="5" max="50" step="1" value="15" oninput="document.getElementById('nstarts_v').textContent=this.value" /><div class="range-labels"><span>5</span><span>25</span><span>50</span></div></div></div></div></div>
+      <div class="block"><div class="block-header">Black-Litterman</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Tau (τ)</label><span class="label-val" id="tau_v">0.050</span></div><input type="range" id="bl_tau" min="0.01" max="0.20" step="0.005" value="0.05" oninput="document.getElementById('tau_v').textContent=parseFloat(this.value).toFixed(3)" /><div class="range-labels"><span>0.01</span><span>0.10</span><span>0.20</span></div></div><div class="field" style="align-self:start"><label>Note</label><div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">Faible τ → fort prior d'équilibre. Valeur typique : 1/T.</div></div></div></div></div>
+      <div class="block"><div class="block-header">EWMA</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Lambda (λ)</label><span class="label-val" id="ewma_v">0.940</span></div><input type="range" id="ewma_lambda" min="0.80" max="0.99" step="0.005" value="0.94" oninput="ewmaUpdate()" /><div class="range-labels"><span>0.80</span><span>0.90</span><span>0.99</span></div></div><div class="field"><label>Demi-vie calculée</label><input type="text" id="ewma_hl" value="≈ 11.0 jours" readonly style="color:var(--muted);background:var(--surface)" /></div></div></div></div>
     </section>
 
-    <!-- ══ FILTRES ════════════════════════════════════════ -->
+    <!-- ═══ FILTRES ════════════════════════════════ -->
     <section class="section" id="sec-filters">
       <div class="section-title">Filtres de l'univers</div>
       <div class="section-desc">Critères d'inclusion des actifs dans l'univers d'optimisation.</div>
-
-      <div class="block">
-        <div class="block-body">
-          <div class="form-grid">
-            <div class="field">
-              <div class="label-row">
-                <label>Corrélation maximale</label>
-                <span class="label-val" id="corr_v">0.90</span>
-              </div>
-              <input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90"
-                oninput="document.getElementById('corr_v').textContent=parseFloat(this.value).toFixed(2)" />
-              <div class="range-labels"><span>0.50</span><span>0.75</span><span>0.99</span></div>
-            </div>
-            <div class="field">
-              <div class="label-row">
-                <label>Historique minimum</label>
-                <span class="label-val" id="hist_v">3 ans</span>
-              </div>
-              <input type="range" id="min_history_years" min="1" max="10" step="1" value="3"
-                oninput="document.getElementById('hist_v').textContent=this.value+' ans'" />
-              <div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
-            </div>
-            <div class="field">
-              <div class="label-row">
-                <label>Volatilité annuelle minimale</label>
-                <span class="label-val" id="vol_v">1.0%</span>
-              </div>
-              <input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1"
-                oninput="document.getElementById('vol_v').textContent=parseFloat(this.value).toFixed(1)+'%'" />
-              <div class="range-labels"><span>0%</span><span>2.5%</span><span>5%</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="block"><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Corrélation maximale</label><span class="label-val" id="corr_v">0.90</span></div><input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90" oninput="document.getElementById('corr_v').textContent=parseFloat(this.value).toFixed(2)" /><div class="range-labels"><span>0.50</span><span>0.75</span><span>0.99</span></div></div><div class="field"><div class="label-row"><label>Historique minimum</label><span class="label-val" id="hist_v">3 ans</span></div><input type="range" id="min_history_years" min="1" max="10" step="1" value="3" oninput="document.getElementById('hist_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div></div><div class="field"><div class="label-row"><label>Volatilité annuelle min.</label><span class="label-val" id="vol_v">1.0%</span></div><input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1" oninput="document.getElementById('vol_v').textContent=parseFloat(this.value).toFixed(1)+'%'" /><div class="range-labels"><span>0%</span><span>2.5%</span><span>5%</span></div></div></div></div></div>
     </section>
 
-    <!-- ══ BACKTEST ═══════════════════════════════════════ -->
+    <!-- ═══ BACKTEST ═══════════════════════════════ -->
     <section class="section" id="sec-backtest">
       <div class="section-title">Backtest walk-forward</div>
       <div class="section-desc">Fenêtres d'entraînement et de test out-of-sample, coûts de transaction.</div>
-
-      <div class="block">
-        <div class="block-body">
-          <div class="form-grid">
-            <div class="field">
-              <div class="label-row">
-                <label>Fenêtre d'entraînement</label>
-                <span class="label-val" id="train_v">3 ans</span>
-              </div>
-              <input type="range" id="backtest_train_years" min="1" max="10" step="1" value="3"
-                oninput="document.getElementById('train_v').textContent=this.value+' ans'" />
-              <div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
-            </div>
-            <div class="field">
-              <div class="label-row">
-                <label>Fenêtre de test</label>
-                <span class="label-val" id="test_v">1 mois</span>
-              </div>
-              <input type="range" id="backtest_test_months" min="1" max="12" step="1" value="1"
-                oninput="document.getElementById('test_v').textContent=this.value+' mois'" />
-              <div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
-            </div>
-            <div class="field">
-              <div class="label-row">
-                <label>Coûts de transaction</label>
-                <span class="label-val" id="tc_v">10 bps</span>
-              </div>
-              <input type="range" id="transaction_cost_bps" min="0" max="50" step="1" value="10"
-                oninput="document.getElementById('tc_v').textContent=this.value+' bps'" />
-              <div class="range-labels"><span>0 bps</span><span>25 bps</span><span>50 bps</span></div>
-            </div>
-            <div class="field">
-              <label>Facteur d'annualisation</label>
-              <input type="number" id="annualization_factor" value="252" min="200" max="365" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="block"><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Fenêtre d'entraînement</label><span class="label-val" id="train_v">3 ans</span></div><input type="range" id="backtest_train_years" min="1" max="10" step="1" value="3" oninput="document.getElementById('train_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div></div><div class="field"><div class="label-row"><label>Fenêtre de test</label><span class="label-val" id="test_v">1 mois</span></div><input type="range" id="backtest_test_months" min="1" max="12" step="1" value="1" oninput="document.getElementById('test_v').textContent=this.value+' mois'" /><div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div></div><div class="field"><div class="label-row"><label>Coûts de transaction</label><span class="label-val" id="tc_v">10 bps</span></div><input type="range" id="transaction_cost_bps" min="0" max="50" step="1" value="10" oninput="document.getElementById('tc_v').textContent=this.value+' bps'" /><div class="range-labels"><span>0 bps</span><span>25 bps</span><span>50 bps</span></div></div><div class="field"><label>Facteur d'annualisation</label><input type="number" id="annualization_factor" value="252" min="200" max="365" /></div></div></div></div>
     </section>
 
-    <!-- ══ MONTE CARLO ════════════════════════════════════ -->
+    <!-- ═══ MONTE CARLO ════════════════════════════ -->
     <section class="section" id="sec-montecarlo">
       <div class="section-title">Monte Carlo</div>
       <div class="section-desc">Génération de scénarios de rendements futurs.</div>
-
-      <div class="block">
-        <div class="block-body">
-          <div class="form-grid">
-            <div class="field">
-              <label>Nombre de simulations</label>
-              <div class="method-group" id="mg-nsim" style="margin-top:2px">
-                <button class="method-btn" data-val="1000" onclick="selMethod('nsim',this)">1 000</button>
-                <button class="method-btn" data-val="2000" onclick="selMethod('nsim',this)">2 000</button>
-                <button class="method-btn selected" data-val="5000" onclick="selMethod('nsim',this)">5 000</button>
-                <button class="method-btn" data-val="10000" onclick="selMethod('nsim',this)">10 000</button>
-              </div>
-            </div>
-            <div class="field">
-              <div class="label-row">
-                <label>Horizon de projection</label>
-                <span class="label-val" id="horizon_v">10 ans</span>
-              </div>
-              <input type="range" id="simulation_horizon_years" min="1" max="30" step="1" value="10"
-                oninput="document.getElementById('horizon_v').textContent=this.value+' ans'" />
-              <div class="range-labels"><span>1 an</span><span>15 ans</span><span>30 ans</span></div>
-            </div>
-            <div class="field">
-              <label>Capital initial (€)</label>
-              <input type="number" id="initial_wealth" value="100000" min="1000" step="1000" />
-            </div>
-            <div class="field">
-              <label>Graine aléatoire</label>
-              <input type="number" id="random_state" value="42" min="0" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">Méthodes activées</div>
-        <div class="block-body">
-          <div class="toggle-row">
-            <div><div class="toggle-name">Gaussienne paramétrique</div><div class="toggle-desc">Rapide · Sous-estime les queues lourdes</div></div>
-            <label class="toggle-switch"><input type="checkbox" id="mc_gaussian" checked /><span class="track"></span></label>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-name">Bootstrap par blocs</div><div class="toggle-desc">Préserve les autocorrélations</div></div>
-            <label class="toggle-switch"><input type="checkbox" id="mc_bootstrap" checked /><span class="track"></span></label>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-name">Régimes HMM</div><div class="toggle-desc">Transitions expansion/crise · Nécessite hmmlearn</div></div>
-            <label class="toggle-switch"><input type="checkbox" id="mc_hmm" /><span class="track"></span></label>
-          </div>
-        </div>
-      </div>
+      <div class="block"><div class="block-body"><div class="form-grid"><div class="field"><label>Nombre de simulations</label><div class="method-group" id="mg-nsim" style="margin-top:2px"><button class="method-btn" data-val="500" onclick="selMethod('nsim',this)">500</button><button class="method-btn" data-val="1000" onclick="selMethod('nsim',this)">1 000</button><button class="method-btn selected" data-val="2000" onclick="selMethod('nsim',this)">2 000</button><button class="method-btn" data-val="5000" onclick="selMethod('nsim',this)">5 000</button></div></div><div class="field"><div class="label-row"><label>Horizon de projection</label><span class="label-val" id="horizon_v">10 ans</span></div><input type="range" id="simulation_horizon_years" min="1" max="30" step="1" value="10" oninput="document.getElementById('horizon_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>15 ans</span><span>30 ans</span></div></div><div class="field"><label>Capital initial (€)</label><input type="number" id="initial_wealth" value="100000" min="1000" step="1000" /></div><div class="field"><label>Graine aléatoire</label><input type="number" id="random_state" value="42" min="0" /></div></div></div></div>
     </section>
 
-    <!-- ══ TACTICAL ═══════════════════════════════════════ -->
+    <!-- ═══ TACTICAL ═══════════════════════════════ -->
     <section class="section" id="sec-tactical">
       <div class="section-title">Overlay tactique (TAA)</div>
-      <div class="section-desc">Ajustements dynamiques basés sur le momentum et le régime de volatilité, sous contrainte de tracking error.</div>
+      <div class="section-desc">Ajustements dynamiques basés sur le momentum et le régime de volatilité.</div>
+      <div class="block"><div class="block-body"><div class="toggle-row" style="padding:0 0 14px"><div><div class="toggle-name">Activer l'overlay tactique</div><div class="toggle-desc">Applique les signaux momentum/régime à la SAA</div></div><label class="toggle-switch"><input type="checkbox" id="taa_enabled" checked onchange="taaToggle()" /><span class="track"></span></label></div><hr style="margin:0 0 14px"><div id="taa-fields"><div class="form-grid"><div class="field"><div class="label-row"><label>Fenêtre momentum</label><span class="label-val" id="mom_v">63 j (~3 mois)</span></div><input type="range" id="momentum_lookback" min="21" max="252" step="21" value="63" oninput="momUpdate(this.value)" /><div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div></div><div class="field"><div class="label-row"><label>Tracking error max</label><span class="label-val" id="te_v">2.0%</span></div><input type="range" id="te_budget" min="0.5" max="10" step="0.5" value="2" oninput="document.getElementById('te_v').textContent=parseFloat(this.value).toFixed(1)+'%'" /><div class="range-labels"><span>0.5%</span><span>5%</span><span>10%</span></div></div></div></div></div></div>
+    </section>
 
-      <div class="block">
-        <div class="block-body">
-          <div class="toggle-row" style="padding:0 0 14px">
-            <div><div class="toggle-name">Activer l'overlay tactique</div><div class="toggle-desc">Applique les signaux momentum/régime à la SAA</div></div>
-            <label class="toggle-switch"><input type="checkbox" id="taa_enabled" checked onchange="taaToggle()" /><span class="track"></span></label>
+    <!-- ═══ ANALYSE ════════════════════════════════ -->
+    <section class="section" id="sec-analyse">
+      <div class="section-title">Analyse du portefeuille</div>
+      <div class="section-desc">Téléchargement des données de marché, optimisation et visualisations basées sur vos paramètres.</div>
+
+      <div class="run-panel">
+        <div class="run-config" id="run-summary"></div>
+        <button class="run-btn" id="run-btn" onclick="runAnalysis()">▶ Lancer l'analyse</button>
+      </div>
+
+      <div class="alert alert-warn" id="alert-warn"></div>
+      <div class="alert alert-error" id="alert-err"></div>
+
+      <div class="status-box" id="status-box">
+        <div style="font-size:13px;font-weight:600" id="status-title">Analyse en cours…</div>
+        <div class="status-steps" id="status-steps"></div>
+      </div>
+
+      <div id="results-area" style="display:none">
+        <!-- KPIs -->
+        <div class="kpi-grid" id="kpi-grid"></div>
+
+        <!-- Row 1: Allocation + Risk contributions -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-title">Allocation du portefeuille</div>
+            <canvas id="chart-alloc" height="220"></canvas>
           </div>
-          <hr style="margin:0 0 14px">
-          <div id="taa-fields">
-            <div class="form-grid">
-              <div class="field">
-                <div class="label-row">
-                  <label>Fenêtre momentum</label>
-                  <span class="label-val" id="mom_v">63 j (~3 mois)</span>
-                </div>
-                <input type="range" id="momentum_lookback" min="21" max="252" step="21" value="63"
-                  oninput="momUpdate(this.value)" />
-                <div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
-              </div>
-              <div class="field">
-                <div class="label-row">
-                  <label>Tracking error max</label>
-                  <span class="label-val" id="te_v">2.0%</span>
-                </div>
-                <input type="range" id="te_budget" min="0.5" max="10" step="0.5" value="2"
-                  oninput="document.getElementById('te_v').textContent=parseFloat(this.value).toFixed(1)+'%'" />
-                <div class="range-labels"><span>0.5%</span><span>5%</span><span>10%</span></div>
-              </div>
-            </div>
+          <div class="chart-card">
+            <div class="chart-title">Contributions au risque</div>
+            <div class="chart-subtitle">Réelle vs budget cible</div>
+            <canvas id="chart-rc" height="220"></canvas>
           </div>
+        </div>
+
+        <!-- Weights table -->
+        <div class="chart-card-full">
+          <div class="chart-title">Détail de l'allocation</div>
+          <div id="weights-table-wrap"></div>
+        </div>
+
+        <!-- Performance chart -->
+        <div class="chart-card-full">
+          <div class="chart-title">Performance cumulée</div>
+          <div class="chart-subtitle">Portefeuille vs SPY (buy-and-hold)</div>
+          <canvas id="chart-perf" height="280"></canvas>
+        </div>
+
+        <!-- Monte Carlo -->
+        <div class="chart-card-full">
+          <div class="chart-title">Simulation Monte Carlo</div>
+          <div class="chart-subtitle" id="mc-subtitle"></div>
+          <canvas id="chart-mc" height="300"></canvas>
+        </div>
+
+        <!-- Correlation heatmap -->
+        <div class="chart-card-full">
+          <div class="chart-title">Matrice de corrélation</div>
+          <div class="heatmap-wrap"><div id="corr-heatmap"></div></div>
         </div>
       </div>
     </section>
 
-    <!-- ══ EXPORT ══════════════════════════════════════════ -->
+    <!-- ═══ EXPORT ═════════════════════════════════ -->
     <section class="section" id="sec-export">
       <div class="section-title">Code Python généré</div>
       <div class="section-desc">Copiez ce bloc dans les cellules 3 et 4 de votre notebook.</div>
-
       <div style="display:flex;gap:8px;margin-bottom:12px">
-        <button class="btn btn-dark" onclick="copyCode()">Copier</button>
+        <button class="btn" onclick="copyCode()" style="background:#111;color:#fff;border-color:#111">Copier</button>
         <button class="btn" onclick="downloadCode()">Télécharger .py</button>
       </div>
-
       <div class="code-box" id="code-out"></div>
     </section>
 
   </main>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
+// ════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════
 const PROFILES = {
   'Very Conservative': { lambda_: 8, vol: '5%', max_eq: '30%', max_cr: '0%', crypto: false, budgets: { equity:.20, fixed_income:.65, commodity:.10, real_estate:.05, crypto:.00 } },
   'Conservative':      { lambda_: 6, vol: '8%', max_eq: '50%', max_cr: '0%', crypto: false, budgets: { equity:.35, fixed_income:.50, commodity:.10, real_estate:.05, crypto:.00 } },
@@ -926,6 +505,9 @@ const PROFILES = {
   'Growth':            { lambda_:2.5, vol:'18%', max_eq: '85%', max_cr:'10%', crypto: true,  budgets: { equity:.65, fixed_income:.15, commodity:.08, real_estate:.05, crypto:.07 } },
   'Aggressive':        { lambda_:1.5, vol:'25%', max_eq:'100%', max_cr:'20%', crypto: true,  budgets: { equity:.70, fixed_income:.05, commodity:.05, real_estate:.05, crypto:.15 } },
 };
+
+const CLASS_COLORS = { equity:'#4a90d9', fixed_income:'#5cb85c', commodity:'#e8a838', real_estate:'#9b59b6', crypto:'#f7931a' };
+const CLASS_LABELS = { equity:'Actions', fixed_income:'Obligations', commodity:'Matières premières', real_estate:'Immobilier', crypto:'Crypto' };
 
 const universe = {
   equity: ['SPY','QQQ','VGK','EEM','VWO'],
@@ -935,19 +517,25 @@ const universe = {
   crypto: ['BTC-USD','ETH-USD'],
 };
 
-const methods = { return:'black_litterman', cov:'ledoit_wolf', optim:'risk_budget', rebalance:'monthly', nsim:'5000' };
+const methods = { return:'black_litterman', cov:'ledoit_wolf', optim:'risk_budget', rebalance:'monthly', nsim:'2000' };
 let selectedProfile = 'Balanced';
+let charts = {};
 
-// Nav
+// ════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════
 function showSection(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('sec-' + name).classList.add('active');
   document.querySelector(`[data-section="${name}"]`)?.classList.add('active');
   if (name === 'export') generateCode();
+  if (name === 'analyse') updateRunSummary();
 }
 
-// Profile
+// ════════════════════════════════════════════════════
+// PROFILE
+// ════════════════════════════════════════════════════
 function selectProfile(el) {
   document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
@@ -958,52 +546,44 @@ function selectProfile(el) {
 function renderProfile() {
   const p = PROFILES[selectedProfile];
   document.getElementById('profile-stats').innerHTML = [
-    ['Aversion (λ)', p.lambda_],
-    ['Vol. cible', p.vol],
-    ['Max actions', p.max_eq],
-    ['Crypto', p.crypto ? 'Oui' : 'Non'],
+    ['Aversion (λ)', p.lambda_], ['Vol. cible', p.vol], ['Max actions', p.max_eq], ['Crypto', p.crypto ? 'Oui' : 'Non'],
   ].map(([l,v]) => `<div class="stat-item"><div class="stat-label">${l}</div><div class="stat-value">${v}</div></div>`).join('');
-
-  const classes = { equity:'Actions', fixed_income:'Obligations', commodity:'Matières premières', real_estate:'Immobilier', crypto:'Crypto' };
-  document.getElementById('risk-budgets').innerHTML = Object.entries(p.budgets).map(([k, v]) => `
+  document.getElementById('risk-budgets').innerHTML = Object.entries(p.budgets).map(([k,v]) => `
     <div style="display:flex;align-items:center;gap:10px;padding:7px 0;${k!=='equity'?'border-top:1px solid var(--border)':''}">
-      <div style="width:120px;font-size:12px;color:var(--muted)">${classes[k]}</div>
+      <div style="width:130px;font-size:12px;color:var(--muted)">${CLASS_LABELS[k]}</div>
       <div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
-        <div style="width:${v*100}%;height:100%;background:#6b6b6b;border-radius:3px;transition:width .3s"></div>
+        <div style="width:${v*100}%;height:100%;background:${CLASS_COLORS[k]};border-radius:3px;transition:width .3s"></div>
       </div>
       <div style="width:32px;text-align:right;font-size:12px;font-weight:600">${(v*100).toFixed(0)}%</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// Tags
+// ════════════════════════════════════════════════════
+// TAGS / UNIVERSE
+// ════════════════════════════════════════════════════
 function renderTags(cls) {
   document.getElementById('tags-'+cls).innerHTML = universe[cls].map(t =>
-    `<div class="tag">${t}<span class="tag-x" onclick="removeTag('${cls}','${t}')">×</span></div>`
-  ).join('');
+    `<div class="tag">${t}<span class="tag-x" onclick="removeTag('${cls}','${t}')">×</span></div>`).join('');
 }
-function removeTag(cls, t) {
-  universe[cls] = universe[cls].filter(x => x !== t);
-  renderTags(cls);
-}
+function removeTag(cls, t) { universe[cls] = universe[cls].filter(x => x !== t); renderTags(cls); }
 function addTag(cls) {
   const inp = document.getElementById('input-'+cls);
-  inp.value.toUpperCase().split(/[\s,;]+/).forEach(t => {
-    t = t.trim();
-    if (t && !universe[cls].includes(t)) universe[cls].push(t);
-  });
-  inp.value = '';
-  renderTags(cls);
+  inp.value.toUpperCase().split(/[\s,;]+/).forEach(t => { t = t.trim(); if (t && !universe[cls].includes(t)) universe[cls].push(t); });
+  inp.value = ''; renderTags(cls);
 }
 
-// Methods
+// ════════════════════════════════════════════════════
+// METHODS
+// ════════════════════════════════════════════════════
 function selMethod(type, el) {
   el.parentElement.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   methods[type] = el.dataset.val;
 }
 
-// Live updates
+// ════════════════════════════════════════════════════
+// LIVE UPDATES
+// ════════════════════════════════════════════════════
 function rfUpdate() {
   const v = parseFloat(document.getElementById('risk_free_rate').value);
   document.getElementById('rf_display').textContent = v.toFixed(2) + '%';
@@ -1014,16 +594,575 @@ function ewmaUpdate() {
   document.getElementById('ewma_v').textContent = v.toFixed(3);
   document.getElementById('ewma_hl').value = '≈ ' + (Math.log(.5)/Math.log(v)).toFixed(1) + ' jours';
 }
-function momUpdate(v) {
-  document.getElementById('mom_v').textContent = `${v} j (~${Math.round(v/21)} mois)`;
-}
-function taaToggle() {
-  const on = document.getElementById('taa_enabled').checked;
-  document.getElementById('taa-fields').style.opacity = on ? '1' : '0.35';
-  document.getElementById('taa-fields').style.pointerEvents = on ? '' : 'none';
+function momUpdate(v) { document.getElementById('mom_v').textContent = `${v} j (~${Math.round(v/21)} mois)`; }
+function taaToggle() { const on = document.getElementById('taa_enabled').checked; document.getElementById('taa-fields').style.opacity = on?'1':'0.35'; document.getElementById('taa-fields').style.pointerEvents = on?'':'none'; }
+
+function updateRunSummary() {
+  const tickers = getAllTickers();
+  document.getElementById('run-summary').innerHTML = [
+    `<span class="run-tag">👤 ${selectedProfile}</span>`,
+    `<span class="run-tag">⚙️ ${methods.optim === 'risk_budget' ? 'Risk Budget' : 'MVO'} / ${methods.return === 'black_litterman' ? 'BL' : methods.return} / ${methods.cov}</span>`,
+    `<span class="run-tag">📊 ${tickers.length} actifs</span>`,
+    `<span class="run-tag">🎲 ${parseInt(methods.nsim).toLocaleString()} simulations</span>`,
+  ].join('');
 }
 
-// Code generation
+function getAllTickers() {
+  const p = PROFILES[selectedProfile];
+  const tickers = [...universe.equity, ...universe.fixed_income, ...universe.commodity, ...universe.real_estate];
+  if (p.crypto) tickers.push(...universe.crypto);
+  return [...new Set(tickers)];
+}
+
+function getTickerClass(ticker) {
+  for (const [cls, tks] of Object.entries(universe)) {
+    if (tks.includes(ticker)) return cls;
+  }
+  return 'equity';
+}
+
+// ════════════════════════════════════════════════════
+// PORTFOLIO MATHEMATICS
+// ════════════════════════════════════════════════════
+
+// Matrix × vector
+function matVec(M, v) { return M.map(row => row.reduce((s,x,j) => s + x*v[j], 0)); }
+
+// Align price data from API
+function alignPrices(rawData, tickers) {
+  const valid = tickers.filter(t => rawData[t] && !rawData[t].error && rawData[t].timestamps && rawData[t].prices);
+  if (valid.length < 2) return null;
+  const maps = {};
+  for (const t of valid) {
+    maps[t] = {};
+    rawData[t].timestamps.forEach((ts, i) => {
+      const p = rawData[t].prices[i];
+      if (p != null && p > 0) maps[t][new Date(ts*1000).toISOString().slice(0,10)] = p;
+    });
+  }
+  let dates = new Set(Object.keys(maps[valid[0]]));
+  for (const t of valid.slice(1)) for (const d of [...dates]) { if (!maps[t][d]) dates.delete(d); }
+  dates = [...dates].sort();
+  if (dates.length < 100) return null;
+  const prices = valid.map(t => dates.map(d => maps[t][d]));
+  return { tickers: valid, dates, prices };
+}
+
+// Daily returns from prices
+function pricesToReturns(prices) { return prices.map(p => p.slice(1).map((v,i) => (v-p[i])/p[i])); }
+
+// Annualized covariance (sample)
+function sampleCov(returns, ann=252) {
+  const n = returns.length, T = returns[0].length;
+  const mu = returns.map(r => r.reduce((a,b) => a+b,0)/T);
+  const X = returns.map((r,i) => r.map(x => x-mu[i]));
+  return Array.from({length:n}, (_,i) => Array.from({length:n}, (_,j) => {
+    let s=0; for (let t=0;t<T;t++) s += X[i][t]*X[j][t];
+    return s/(T-1)*ann;
+  }));
+}
+
+// Ledoit-Wolf shrinkage
+function ledoitWolfCov(returns, ann=252) {
+  const n = returns.length, T = returns[0].length;
+  const S = sampleCov(returns, ann);
+  let trS = 0; for (let i=0;i<n;i++) trS += S[i][i];
+  const mu_hat = trS/n;
+  let num=0, denom=0;
+  for (let i=0;i<n;i++) for (let j=0;j<n;j++) {
+    const F = i===j ? mu_hat : 0;
+    denom += (S[i][j]-F)**2;
+    if (i===j) num += S[i][i]**2;
+  }
+  num *= (n+2)/T;
+  const alpha = Math.min(1, Math.max(0, num/(denom+1e-10)));
+  return S.map((row,i) => row.map((v,j) => (1-alpha)*v + alpha*(i===j?mu_hat:0)));
+}
+
+// EWMA covariance
+function ewmaCov(returns, lambda=0.94, ann=252) {
+  const n = returns.length, T = returns[0].length;
+  const cov = sampleCov(returns.map(r => r.slice(0,Math.min(60,T))), ann);
+  for (let t=60;t<T;t++) {
+    const r = returns.map(ri => ri[t]);
+    for (let i=0;i<n;i++) for (let j=0;j<n;j++)
+      cov[i][j] = lambda*cov[i][j] + (1-lambda)*r[i]*r[j]*ann;
+  }
+  return cov;
+}
+
+// Annualized mean returns
+function historicalMu(returns, ann=252) {
+  const T = returns[0].length;
+  return returns.map(r => r.reduce((a,b)=>a+b,0)/T*ann);
+}
+
+// James-Stein shrinkage
+function shrinkageMu(returns, ann=252) {
+  const n = returns.length, T = returns[0].length;
+  const mu = historicalMu(returns, ann);
+  const gm = mu.reduce((a,b)=>a+b,0)/n;
+  const v = mu.reduce((s,m)=>s+(m-gm)**2,0)/n;
+  const a = Math.min(0.9, Math.max(0.1, (n-2)/(n*T*v/ann+n-2)));
+  return mu.map(m => (1-a)*m+a*gm);
+}
+
+// Black-Litterman (no views)
+function blackLittermanMu(returns, cov, lambda=4, ann=252) {
+  const n = returns.length;
+  const w_eq = Array(n).fill(1/n);
+  const pi = matVec(cov, w_eq).map(x => x*lambda);
+  const mu_h = shrinkageMu(returns, ann);
+  const tau = 0.05;
+  return mu_h.map((m,i) => m/(1+tau) + pi[i]*tau/(1+tau));
+}
+
+// Portfolio variance
+function portVar(w, cov) { const Sw = matVec(cov, w); return w.reduce((s,wi,i)=>s+wi*Sw[i],0); }
+
+// Risk contributions
+function riskContribs(w, cov) {
+  const Sw = matVec(cov, w);
+  const pv = Math.max(w.reduce((s,wi,i)=>s+wi*Sw[i],0), 1e-10);
+  return w.map((wi,i) => wi*Sw[i]/pv);
+}
+
+// Project onto simplex
+function projSimplex(v, lo=0.001, hi=0.5) {
+  let w = v.map(x => Math.max(lo, Math.min(hi, x)));
+  const s = w.reduce((a,b)=>a+b,0);
+  return w.map(x => x/s);
+}
+
+// MVO: gradient ascent to maximize Sharpe
+function mvoWeights(mu, cov, rf) {
+  const n = mu.length;
+  let w = Array(n).fill(1/n);
+  let lr = 0.03;
+  for (let iter=0; iter<3000; iter++) {
+    const Sw = matVec(cov, w);
+    const pv = Math.max(w.reduce((s,wi,i)=>s+wi*Sw[i],0), 1e-10);
+    const pVol = Math.sqrt(pv);
+    const pRet = w.reduce((s,wi,i)=>s+wi*mu[i],0);
+    const sh = (pRet-rf)/pVol;
+    const grad = mu.map((mi,i) => ((mi-rf)-sh*Sw[i])/pVol);
+    const wNew = projSimplex(w.map((wi,i) => wi+lr*grad[i]));
+    const pv2 = portVar(wNew, cov);
+    const pRet2 = wNew.reduce((s,wi,i)=>s+wi*mu[i],0);
+    const sh2 = (pRet2-rf)/Math.sqrt(Math.max(pv2,1e-10));
+    if (sh2 > sh) { w = wNew; lr = Math.min(lr*1.05, 0.2); }
+    else lr *= 0.6;
+    if (lr < 1e-7) break;
+  }
+  return w;
+}
+
+// Risk parity (multiplicative weights)
+function riskParityWeights(cov, budgets) {
+  const n = cov.length;
+  const b = budgets.map(x => Math.max(x, 0.001));
+  const bs = b.reduce((a,x)=>a+x,0);
+  const bn = b.map(x => x/bs);
+  let w = bn.map(x => Math.max(x, 1/n));
+  const ws = w.reduce((a,x)=>a+x,0);
+  w = w.map(x => x/ws);
+  for (let iter=0; iter<2000; iter++) {
+    const Sw = matVec(cov, w);
+    const pv = Math.max(w.reduce((s,wi,i)=>s+wi*Sw[i],0), 1e-10);
+    const rc = w.map((wi,i) => wi*Sw[i]/pv);
+    w = w.map((wi,i) => wi*Math.exp(-0.3*(rc[i]-bn[i])));
+    w = w.map(x => Math.max(x, 1e-8));
+    const s = w.reduce((a,x)=>a+x,0);
+    w = w.map(x => x/s);
+  }
+  return w;
+}
+
+// Max drawdown
+function maxDrawdown(cumReturns) {
+  let mdd=0, peak=1;
+  for (const v of cumReturns) { if (v>peak) peak=v; const d=(v-peak)/peak; if(d<mdd) mdd=d; }
+  return mdd;
+}
+
+// Cholesky decomposition
+function cholesky(A) {
+  const n = A.length;
+  const L = Array.from({length:n},()=>Array(n).fill(0));
+  for (let i=0;i<n;i++) for (let j=0;j<=i;j++) {
+    let s = A[i][j];
+    for (let k=0;k<j;k++) s -= L[i][k]*L[j][k];
+    L[i][j] = i===j ? Math.sqrt(Math.max(s,1e-12)) : (L[j][j]>1e-10 ? s/L[j][j] : 0);
+  }
+  return L;
+}
+
+// Box-Muller normal random
+function randn() {
+  let u, v;
+  do { u = Math.random(); } while (!u);
+  do { v = Math.random(); } while (!v);
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+}
+
+// Monte Carlo Gaussian
+function monteCarlo(weights, mu, cov, nSim, horizonYears, ann=252) {
+  const T = horizonYears*ann, n = weights.length;
+  const muD = mu.map(m => m/ann);
+  const covD = cov.map(row => row.map(v => v/ann));
+  // Regularize
+  for (let i=0;i<n;i++) covD[i][i] = Math.max(covD[i][i], 1e-8);
+  const L = cholesky(covD);
+  const paths = [];
+  for (let s=0;s<nSim;s++) {
+    let nav=1; const path=[1];
+    for (let t=0;t<T;t++) {
+      const z = Array(n).fill(0).map(randn);
+      let pr=0;
+      for (let i=0;i<n;i++) {
+        const ri = muD[i] + L[i].reduce((sum,lij,j)=>sum+lij*z[j],0);
+        pr += weights[i]*ri;
+      }
+      nav *= (1+pr); path.push(nav);
+    }
+    paths.push(path);
+  }
+  return paths;
+}
+
+// Percentiles of MC paths
+function mcPercentiles(paths, percs=[5,25,50,75,95]) {
+  const T = paths[0].length;
+  return percs.map(p => Array.from({length:T}, (_,t) => {
+    const vals = paths.map(path=>path[t]).sort((a,b)=>a-b);
+    return vals[Math.floor(p/100*(vals.length-1))];
+  }));
+}
+
+// Correlation matrix from covariance
+function covToCorr(cov) {
+  const n = cov.length;
+  const std = cov.map((row,i) => Math.sqrt(Math.max(row[i], 1e-10)));
+  return cov.map((row,i) => row.map((v,j) => v/(std[i]*std[j])));
+}
+
+// Simple buy-and-hold backtest
+function backtestBH(weights, returns, dates) {
+  // Portfolio daily returns
+  const portRet = returns[0].map((_,t) => weights.reduce((s,w,i) => s+w*returns[i][t], 0));
+  // Cumulative
+  let nav=1; const cumPort=[1];
+  for (const r of portRet) { nav*=(1+r); cumPort.push(nav); }
+  return { portRet, cumPort, dates: dates.slice(0, dates.length) };
+}
+
+// ════════════════════════════════════════════════════
+// ANALYSIS RUNNER
+// ════════════════════════════════════════════════════
+const STEPS = [
+  { id:'s1', label:'Téléchargement des données de marché' },
+  { id:'s2', label:'Alignement et nettoyage des séries' },
+  { id:'s3', label:'Estimation de la covariance (Σ)' },
+  { id:'s4', label:'Estimation des rendements (μ)' },
+  { id:'s5', label:'Optimisation du portefeuille' },
+  { id:'s6', label:'Simulation Monte Carlo' },
+  { id:'s7', label:'Affichage des résultats' },
+];
+
+function setStep(idx) {
+  document.querySelectorAll('.step').forEach((el,i) => {
+    el.classList.remove('active','done');
+    if (i < idx) el.classList.add('done');
+    else if (i === idx) el.classList.add('active');
+  });
+}
+
+async function runAnalysis() {
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true; btn.textContent = '⏳ Analyse en cours…';
+
+  // Reset UI
+  document.getElementById('results-area').style.display = 'none';
+  document.getElementById('alert-warn').style.display = 'none';
+  document.getElementById('alert-err').style.display = 'none';
+
+  // Show status
+  const statusBox = document.getElementById('status-box');
+  statusBox.style.display = 'block';
+  document.getElementById('status-title').textContent = 'Analyse en cours…';
+  document.getElementById('status-steps').innerHTML = STEPS.map((s,i) =>
+    `<div class="step" id="${s.id}"><div class="step-dot"></div>${s.label}</div>`).join('');
+  setStep(0);
+
+  try {
+    // Destroy old charts
+    Object.values(charts).forEach(c => { try { c.destroy(); } catch(_){} });
+    charts = {};
+
+    // ── Step 1: Fetch data ──
+    const tickers = getAllTickers();
+    const rf = parseFloat(document.getElementById('risk_free_rate').value) / 100;
+    let rawData;
+    try {
+      const res = await fetch(`/api/prices?tickers=${tickers.join(',')}&period=5y`);
+      rawData = await res.json();
+    } catch(e) {
+      showErr('Erreur de connexion à l\'API de données. Vérifiez votre connexion internet.');
+      resetBtn(btn); return;
+    }
+    setStep(1);
+
+    // ── Step 2: Align ──
+    await tick();
+    const aligned = alignPrices(rawData, tickers);
+    if (!aligned || aligned.tickers.length < 3) {
+      showWarn(`Données insuffisantes. Seulement ${aligned?.tickers?.length||0} actifs disponibles. Vérifiez les tickers.`);
+      // list failed tickers
+      const failed = tickers.filter(t => !rawData[t] || rawData[t].error);
+      if (failed.length) showWarn(`Actifs non récupérés : ${failed.join(', ')}`);
+      resetBtn(btn); return;
+    }
+
+    const { tickers: validTickers, dates, prices } = aligned;
+    const failed = tickers.filter(t => !validTickers.includes(t));
+    if (failed.length) showWarn(`Actifs ignorés (données insuffisantes) : ${failed.join(', ')}`);
+
+    const returns = pricesToReturns(prices);
+    const n = validTickers.length;
+    const estYears = parseInt(document.getElementById('estimation_window_years').value);
+    const estDays = Math.min(estYears * 252, returns[0].length);
+    const retEst = returns.map(r => r.slice(-estDays));
+    setStep(2);
+
+    // ── Step 3: Covariance ──
+    await tick();
+    let cov;
+    if (methods.cov === 'ledoit_wolf') cov = ledoitWolfCov(retEst);
+    else if (methods.cov === 'ewma') cov = ewmaCov(retEst, parseFloat(document.getElementById('ewma_lambda').value));
+    else cov = sampleCov(retEst);
+    setStep(3);
+
+    // ── Step 4: Expected returns ──
+    await tick();
+    let mu;
+    if (methods.return === 'black_litterman') mu = blackLittermanMu(retEst, cov, PROFILES[selectedProfile].lambda_);
+    else if (methods.return === 'shrinkage') mu = shrinkageMu(retEst);
+    else mu = historicalMu(retEst);
+    setStep(4);
+
+    // ── Step 5: Optimize ──
+    await tick();
+    const budgets = buildBudgets(validTickers);
+    let weights;
+    if (methods.optim === 'mvo') weights = mvoWeights(mu, cov, rf);
+    else weights = riskParityWeights(cov, budgets);
+
+    const rc = riskContribs(weights, cov);
+    const pRet = weights.reduce((s,w,i)=>s+w*mu[i],0);
+    const pVol = Math.sqrt(portVar(weights, cov));
+    const pSharpe = (pRet - rf) / Math.max(pVol, 1e-8);
+    setStep(5);
+
+    // ── Step 6: Monte Carlo ──
+    await tick();
+    const nSim = Math.min(parseInt(methods.nsim), 2000);
+    const horizonYears = parseInt(document.getElementById('simulation_horizon_years').value);
+    const initWealth = parseInt(document.getElementById('initial_wealth').value);
+    const mcPaths = monteCarlo(weights, mu, cov, nSim, horizonYears);
+    const mcPercs = mcPercentiles(mcPaths, [5, 25, 50, 75, 95]);
+
+    // Backtest (buy-and-hold with optimal weights)
+    const bh = backtestBH(weights, returns, dates);
+
+    // SPY benchmark (first equity ticker or SPY if present)
+    const spyIdx = validTickers.indexOf('SPY');
+    const bmkIdx = spyIdx >= 0 ? spyIdx : 0;
+    const bmkRet = returns[bmkIdx];
+    let bmkNav=1; const bmkCum=[1];
+    for (const r of bmkRet) { bmkNav*=(1+r); bmkCum.push(bmkNav); }
+
+    const mdd = maxDrawdown(bh.cumPort);
+    setStep(6);
+
+    // ── Step 7: Render ──
+    await tick();
+    renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd, dates, cumPort: bh.cumPort, bmkCum, bmkName: validTickers[bmkIdx], mcPercs, horizonYears, initWealth, nSim });
+    setStep(7);
+
+    document.getElementById('status-title').textContent = '✅ Analyse terminée';
+    document.getElementById('results-area').style.display = 'block';
+
+  } catch(e) {
+    showErr('Erreur inattendue : ' + e.message);
+    console.error(e);
+  }
+  resetBtn(btn);
+}
+
+function buildBudgets(tickers) {
+  const p = PROFILES[selectedProfile];
+  return tickers.map(t => {
+    const cls = getTickerClass(t);
+    const budget = p.budgets[cls] || 0;
+    const count = tickers.filter(x => getTickerClass(x) === cls).length;
+    return budget / Math.max(count, 1);
+  });
+}
+
+function tick() { return new Promise(r => setTimeout(r, 30)); }
+
+function showWarn(msg) {
+  const el = document.getElementById('alert-warn');
+  el.style.display = 'block';
+  el.textContent = '⚠️ ' + msg;
+}
+function showErr(msg) {
+  const el = document.getElementById('alert-err');
+  el.style.display = 'block';
+  el.textContent = '❌ ' + msg;
+  document.getElementById('status-box').style.display = 'none';
+}
+function resetBtn(btn) {
+  btn.disabled = false;
+  btn.textContent = '▶ Relancer l\'analyse';
+}
+
+// ════════════════════════════════════════════════════
+// RENDER RESULTS
+// ════════════════════════════════════════════════════
+function renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd, dates, cumPort, bmkCum, bmkName, mcPercs, horizonYears, initWealth, nSim }) {
+
+  // KPIs
+  document.getElementById('kpi-grid').innerHTML = [
+    { label: 'Rendement annuel', value: (pRet*100).toFixed(1)+'%', cls: pRet>=0?'positive':'negative' },
+    { label: 'Volatilité annuelle', value: (pVol*100).toFixed(1)+'%', cls: '' },
+    { label: 'Ratio de Sharpe', value: pSharpe.toFixed(2), cls: pSharpe>=1?'positive':'' },
+    { label: 'Max Drawdown (BH)', value: (mdd*100).toFixed(1)+'%', cls: 'negative' },
+  ].map(k => `<div class="kpi-card"><div class="kpi-label">${k.label}</div><div class="kpi-value ${k.cls}">${k.value}</div></div>`).join('');
+
+  // Allocation donut
+  const allocColors = validTickers.map(t => CLASS_COLORS[getTickerClass(t)]);
+  charts.alloc = new Chart(document.getElementById('chart-alloc'), {
+    type: 'doughnut',
+    data: {
+      labels: validTickers,
+      datasets: [{ data: weights.map(w=>+(w*100).toFixed(2)), backgroundColor: allocColors, borderWidth: 1, borderColor: '#fff' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { position: 'right', labels: { font: { size: 11 }, padding: 10 } }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%` } } },
+      cutout: '65%'
+    }
+  });
+
+  // Risk contributions grouped bar
+  charts.rc = new Chart(document.getElementById('chart-rc'), {
+    type: 'bar',
+    data: {
+      labels: validTickers,
+      datasets: [
+        { label: 'RC réelle', data: rc.map(v=>+(v*100).toFixed(2)), backgroundColor: allocColors, borderWidth: 0 },
+        { label: 'Cible', data: budgets.map(v=>+(v*100).toFixed(2)), backgroundColor: allocColors.map(c=>c+'44'), borderWidth: 1, borderColor: allocColors }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { labels: { font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%` } } },
+      scales: { y: { ticks: { callback: v => v+'%' }, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } }
+    }
+  });
+
+  // Weights table
+  const sorted = validTickers.map((t,i) => ({ t, w: weights[i], rc: rc[i], mu: mu[i], cls: getTickerClass(t) }))
+    .sort((a,b) => b.w-a.w);
+  document.getElementById('weights-table-wrap').innerHTML = `
+    <table class="weights-table">
+      <thead><tr><th>Ticker</th><th>Classe</th><th>Poids</th><th>Contrib. risque</th><th>Rend. attendu</th></tr></thead>
+      <tbody>${sorted.map(r => `<tr>
+        <td style="font-weight:600">${r.t}</td>
+        <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${CLASS_COLORS[r.cls]};margin-right:6px"></span>${CLASS_LABELS[r.cls]}</td>
+        <td>${(r.w*100).toFixed(1)}%<div class="w-bar-bg"><div class="w-bar-fill" style="width:${r.w*100}%;background:${CLASS_COLORS[r.cls]}"></div></div></td>
+        <td>${(r.rc*100).toFixed(1)}%</td>
+        <td style="color:${r.mu>=0?'#2d7a2d':'#b91c1c'}">${(r.mu*100).toFixed(1)}%</td>
+      </tr>`).join('')}
+      </tbody>
+    </table>`;
+
+  // Performance line chart
+  const perfDates = dates.filter((_,i) => i % 5 === 0);
+  const perfPort = cumPort.filter((_,i) => i % 5 === 0);
+  const perfBmk = bmkCum.filter((_,i) => i % 5 === 0);
+  charts.perf = new Chart(document.getElementById('chart-perf'), {
+    type: 'line',
+    data: {
+      labels: perfDates,
+      datasets: [
+        { label: 'Portefeuille', data: perfPort.map(v=>+((v-1)*100).toFixed(2)), borderColor: '#4a90d9', backgroundColor: 'rgba(74,144,217,.08)', fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2 },
+        { label: bmkName+' (benchmark)', data: perfBmk.map(v=>+((v-1)*100).toFixed(2)), borderColor: '#aaa', backgroundColor: 'transparent', tension: 0.3, pointRadius: 0, borderWidth: 1.5, borderDash: [4,4] }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y>=0?'+':''}${ctx.parsed.y.toFixed(1)}%` } }, legend: { labels: { font: { size: 11 } } } },
+      scales: { y: { ticks: { callback: v => v+'%' }, grid: { color: '#f0f0f0' } }, x: { ticks: { maxTicksLimit: 8, font: { size: 10 } }, grid: { display: false } } }
+    }
+  });
+
+  // Monte Carlo fan chart
+  const T = mcPercs[0].length;
+  const stride = Math.max(1, Math.floor(T / 200));
+  const mcLabels = Array.from({length: Math.ceil(T/stride)}, (_,i) => {
+    const yr = (i*stride/252);
+    return yr % 1 < 0.1 ? 'An '+Math.round(yr) : '';
+  });
+  const [p5,p25,p50,p75,p95] = mcPercs.map(arr => arr.filter((_,i)=>i%stride===0).map(v=>+(v*initWealth/1000).toFixed(1)));
+  document.getElementById('mc-subtitle').textContent = `${nSim.toLocaleString()} simulations · Horizon ${horizonYears} ans · Capital initial ${initWealth.toLocaleString()}€`;
+  charts.mc = new Chart(document.getElementById('chart-mc'), {
+    type: 'line',
+    data: {
+      labels: mcLabels,
+      datasets: [
+        { label: 'P95', data: p95, borderColor: 'rgba(74,144,217,.3)', backgroundColor: 'rgba(74,144,217,.05)', fill: '+1', pointRadius: 0, borderWidth: 1, tension: 0.3 },
+        { label: 'P75', data: p75, borderColor: 'rgba(74,144,217,.4)', backgroundColor: 'rgba(74,144,217,.08)', fill: '+1', pointRadius: 0, borderWidth: 1, tension: 0.3 },
+        { label: 'Médiane (P50)', data: p50, borderColor: '#4a90d9', backgroundColor: 'transparent', pointRadius: 0, borderWidth: 2.5, tension: 0.3 },
+        { label: 'P25', data: p25, borderColor: 'rgba(74,144,217,.4)', backgroundColor: 'rgba(74,144,217,.08)', fill: '+1', pointRadius: 0, borderWidth: 1, tension: 0.3 },
+        { label: 'P5', data: p5, borderColor: 'rgba(74,144,217,.3)', backgroundColor: 'rgba(74,144,217,.05)', fill: false, pointRadius: 0, borderWidth: 1, tension: 0.3 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}k€` } }, legend: { labels: { font: { size: 11 } } } },
+      scales: { y: { ticks: { callback: v => v+'k€' }, grid: { color: '#f0f0f0' } }, x: { ticks: { font: { size: 10 } }, grid: { display: false } } }
+    }
+  });
+
+  // Correlation heatmap
+  const corr = covToCorr(cov);
+  const cols = validTickers;
+  let html = '<table class="heatmap-table"><thead><tr><th></th>';
+  html += cols.map(t => `<th title="${t}">${t.length>6?t.slice(0,6)+'…':t}</th>`).join('');
+  html += '</tr></thead><tbody>';
+  for (let i=0;i<cols.length;i++) {
+    html += `<tr><th style="text-align:left;padding:4px 8px">${cols[i]}</th>`;
+    for (let j=0;j<cols.length;j++) {
+      const v = corr[i][j];
+      const absV = Math.abs(v);
+      let bg;
+      if (i===j) bg = 'rgba(107,107,107,0.15)';
+      else if (v>0) bg = `rgba(74,144,217,${(absV*0.7).toFixed(2)})`;
+      else bg = `rgba(248,113,113,${(absV*0.7).toFixed(2)})`;
+      const textColor = absV > 0.5 ? '#fff' : '#333';
+      html += `<td style="background:${bg};color:${textColor}">${v.toFixed(2)}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table>';
+  document.getElementById('corr-heatmap').innerHTML = html;
+}
+
+// ════════════════════════════════════════════════════
+// CODE GENERATION
+// ════════════════════════════════════════════════════
 function generateCode() {
   const g = id => document.getElementById(id).value;
   const rf = parseFloat(g('risk_free_rate'));
@@ -1031,21 +1170,15 @@ function generateCode() {
   const lines = [
     `# ═══════════════════════════════════════════════`,
     `# Configuration — Portfolio Investment System`,
-    `# ═══════════════════════════════════════════════`,
-    ``,
-    `# Section 3 — API & paramètres de base`,
+    `# ═══════════════════════════════════════════════`,``,
     `FRED_API_KEY = '${g('fred_api_key')}'`,
-    `DEFAULT_RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}  # ${rf.toFixed(2)}%`,
-    `RISK_FREE_RATE_DAILY = DEFAULT_RISK_FREE_RATE_ANNUAL / 252`,
-    ``,
+    `DEFAULT_RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}`,
+    `RISK_FREE_RATE_DAILY = DEFAULT_RISK_FREE_RATE_ANNUAL / 252`,``,
     `SELECTED_PROFILE = '${selectedProfile}'`,
-    `DATA_START      = '${g('data_start')}'`,
-    `BACKTEST_START  = '${g('backtest_start')}'`,
-    ``,
-    `# Section 4 — Configuration globale`,
+    `DATA_START = '${g('data_start')}'`,
+    `BACKTEST_START = '${g('backtest_start')}'`,``,
     `RANDOM_STATE = ${g('random_state')}`,
-    `np.random.seed(RANDOM_STATE)`,
-    ``,
+    `np.random.seed(RANDOM_STATE)`,``,
     `DEFAULT_PARAMS = {`,
     `    'profile':                  '${selectedProfile}',`,
     `    'estimation_window_years':  ${g('estimation_window_years')},`,
@@ -1065,50 +1198,30 @@ function generateCode() {
     `    'min_history_years':        ${g('min_history_years')},`,
     `    'max_correlation':          ${parseFloat(g('max_correlation')).toFixed(2)},`,
     `    'min_annual_vol':           ${(parseFloat(g('min_annual_vol'))/100).toFixed(4)},`,
-    `}`,
-    ``,
-    `# Section 5 — Univers d'actifs`,
+    `}`,``,
     `ASSET_UNIVERSE = {`,
     ...Object.entries(universe).map(([k,v]) => `    '${k}': ${JSON.stringify(v)},`),
-    `}`,
-    ``,
-    `# Overlay tactique`,
+    `}`,``,
     `TAA_ENABLED = ${taa ? 'True' : 'False'}`,
-    ...(taa ? [
-      `MOMENTUM_LOOKBACK_DAYS = ${g('momentum_lookback')}`,
-      `TE_BUDGET = ${(parseFloat(g('te_budget'))/100).toFixed(4)}`,
-    ] : []),
-    ``,
-    `# Monte Carlo`,
+    ...(taa?[`MOMENTUM_LOOKBACK_DAYS = ${g('momentum_lookback')}`, `TE_BUDGET = ${(parseFloat(g('te_budget'))/100).toFixed(4)}`]:[]),``,
     `INITIAL_WEALTH = ${g('initial_wealth')}`,
-    `HORIZON = ${g('simulation_horizon_years')}`,
-    ``,
+    `HORIZON = ${g('simulation_horizon_years')}`,``,
     `print(f'✅ Config chargée — profil : {SELECTED_PROFILE}')`,
   ];
   document.getElementById('code-out').textContent = lines.join('\n');
 }
 
-function copyCode() {
-  navigator.clipboard.writeText(document.getElementById('code-out').textContent).then(() => toast('Copié !'));
-}
-function downloadCode() {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([document.getElementById('code-out').textContent], {type:'text/plain'}));
-  a.download = 'portfolio_config.py';
-  a.click();
-  toast('Téléchargé !');
-}
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
+function copyCode() { navigator.clipboard.writeText(document.getElementById('code-out').textContent).then(()=>toast('Copié !')); }
+function downloadCode() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([document.getElementById('code-out').textContent],{type:'text/plain'})); a.download='portfolio_config.py'; a.click(); toast('Téléchargé !'); }
+function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
 function resetDefaults() { location.reload(); }
 
-// Init
+// ════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════
 renderProfile();
 Object.keys(universe).forEach(renderTags);
+updateRunSummary();
 </script>
 </body>
 </html>
