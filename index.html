@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Investment System — Configuration</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2330;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --accent3: #d29922;
+      --danger: #f85149;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #58a6ff 0%, #3fb950 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 7px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+    }
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-success {
+      background: var(--accent2);
+      color: #0d1117;
+    }
+    .btn:hover { opacity: .85; }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .container {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 57px);
+    }
+
+    /* ── Sidebar / Nav ───────────────────────────────────────── */
+    aside {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 20px 12px;
+      position: sticky;
+      top: 57px;
+      height: calc(100vh - 57px);
+      overflow-y: auto;
+    }
+    .nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--text-muted);
+      padding: 0 8px;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+    .nav-label:first-child { margin-top: 0; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: background .12s, color .12s;
+      margin-bottom: 2px;
+    }
+    .nav-item:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+    .nav-item.active {
+      background: rgba(88,166,255,.12);
+      color: var(--accent);
+    }
+    .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+    /* ── Main ───────────────────────────────────────────────── */
+    main {
+      padding: 28px 36px;
+      overflow-y: auto;
+      max-width: 900px;
+    }
+
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    /* ── Cards ──────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    /* ── Form Grid ──────────────────────────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid.cols-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .form-grid.cols-1 {
+      grid-template-columns: 1fr;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: .3px;
+    }
+    .label-inline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .label-value {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(88,166,255,.1);
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 13px;
+      width: 100%;
+      outline: none;
+      transition: border-color .15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    select option { background: #1c2330; }
+
+    /* ── Toggle ─────────────────────────────────────────────── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+    .toggle-row + .toggle-row {
+      border-top: 1px solid var(--border);
+    }
+    .toggle-info { flex: 1; }
+    .toggle-info .toggle-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .toggle-info .toggle-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 11px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .slider-track::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform .2s;
+    }
+    .toggle-switch input:checked + .slider-track { background: var(--accent2); }
+    .toggle-switch input:checked + .slider-track::before { transform: translateX(18px); }
+
+    /* ── Badges / Pills ─────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-blue { background: rgba(88,166,255,.15); color: var(--accent); }
+    .badge-green { background: rgba(63,185,80,.15); color: var(--accent2); }
+    .badge-yellow { background: rgba(210,153,34,.15); color: var(--accent3); }
+    .badge-red { background: rgba(248,81,73,.15); color: var(--danger); }
+
+    /* ── Profile Cards ──────────────────────────────────────── */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .profile-card {
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .15s, background .15s;
+    }
+    .profile-card:hover { border-color: #444; }
+    .profile-card.selected {
+      border-color: var(--accent);
+      background: rgba(88,166,255,.08);
+    }
+    .profile-card .p-icon { font-size: 22px; margin-bottom: 6px; }
+    .profile-card .p-name { font-size: 12px; font-weight: 700; }
+    .profile-card .p-risk {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .profile-card .p-bar {
+      height: 4px;
+      border-radius: 2px;
+      margin-top: 8px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .profile-card .p-fill {
+      height: 100%;
+      border-radius: 2px;
+    }
+
+    /* ── Asset Tags ─────────────────────────────────────────── */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      min-height: 44px;
+    }
+    .tag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: default;
+    }
+    .tag-remove {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1;
+      transition: color .1s;
+    }
+    .tag-remove:hover { color: var(--danger); }
+    .tag-input-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .tag-input-row input { flex: 1; }
+    .tag-add-btn {
+      padding: 7px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .tag-add-btn:hover { background: var(--border); }
+
+    /* ── Method Selector ────────────────────────────────────── */
+    .method-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .method-btn {
+      padding: 8px 14px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface2);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all .15s;
+    }
+    .method-btn:hover { border-color: #444; color: var(--text); }
+    .method-btn.selected {
+      border-color: var(--accent);
+      background: rgba(88,166,255,.1);
+      color: var(--accent);
+    }
+
+    /* ── Code Output ────────────────────────────────────────── */
+    .code-output {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre;
+      overflow-x: auto;
+      color: #e6edf3;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .code-comment { color: #8b949e; }
+    .code-string { color: #a5d6ff; }
+    .code-number { color: #79c0ff; }
+    .code-keyword { color: #ff7b72; }
+    .code-var { color: #ffa657; }
+
+    /* ── Toast ──────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent2);
+      color: #0d1117;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Divider ────────────────────────────────────────────── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .form-grid.cols-3, .form-grid { grid-template-columns: 1fr; }
+      .profile-grid { grid-template-columns: repeat(3, 1fr); }
+      main { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────── -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">📈</div>
+    Portfolio Investment System
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-secondary" onclick="resetDefaults()">Réinitialiser</button>
+    <button class="btn btn-primary" onclick="showSection('export')">Générer le code</button>
+  </div>
+</header>
+
+<!-- ── LAYOUT ───────────────────────────────────────────────── -->
+<div class="container">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────────── -->
+  <aside>
+    <div class="nav-label">Configuration</div>
+    <a class="nav-item active" onclick="showSection('profile')" data-section="profile">
+      <span class="nav-icon">👤</span> Profil Investisseur
+    </a>
+    <a class="nav-item" onclick="showSection('api')" data-section="api">
+      <span class="nav-icon">🔑</span> API & Taux
+    </a>
+    <a class="nav-item" onclick="showSection('universe')" data-section="universe">
+      <span class="nav-icon">🌍</span> Univers d'Actifs
+    </a>
+
+    <div class="nav-label">Modèle</div>
+    <a class="nav-item" onclick="showSection('methods')" data-section="methods">
+      <span class="nav-icon">⚙️</span> Méthodes
+    </a>
+    <a class="nav-item" onclick="showSection('estimation')" data-section="estimation">
+      <span class="nav-icon">📐</span> Estimation
+    </a>
+    <a class="nav-item" onclick="showSection('filters')" data-section="filters">
+      <span class="nav-icon">🔍</span> Filtres Univers
+    </a>
+
+    <div class="nav-label">Backtest & Simulation</div>
+    <a class="nav-item" onclick="showSection('backtest')" data-section="backtest">
+      <span class="nav-icon">🔄</span> Backtest
+    </a>
+    <a class="nav-item" onclick="showSection('montecarlo')" data-section="montecarlo">
+      <span class="nav-icon">🎲</span> Monte Carlo
+    </a>
+    <a class="nav-item" onclick="showSection('tactical')" data-section="tactical">
+      <span class="nav-icon">🎛️</span> Overlay Tactique
+    </a>
+
+    <div class="nav-label">Export</div>
+    <a class="nav-item" onclick="showSection('export')" data-section="export">
+      <span class="nav-icon">📋</span> Générer le Code
+    </a>
+  </aside>
+
+  <!-- ── MAIN ────────────────────────────────────────────────── -->
+  <main>
+
+    <!-- ════════════════ SECTION: PROFIL ════════════════════ -->
+    <section class="section active" id="sec-profile">
+      <div class="section-title">Profil Investisseur</div>
+      <div class="section-desc">Sélectionnez le profil de risque. Chaque profil définit l'aversion au risque (λ), la volatilité cible et les budgets de risque par classe d'actifs.</div>
+
+      <div class="card">
+        <div class="card-title">Profil sélectionné</div>
+        <div class="profile-grid">
+          <div class="profile-card selected" data-profile="Very Conservative" onclick="selectProfile(this)">
+            <div class="p-icon">🛡️</div>
+            <div class="p-name">Très Conservateur</div>
+            <div class="p-risk">λ = 8 · Vol 5%</div>
+            <div class="p-bar"><div class="p-fill" style="width:10%;background:#58a6ff"></div></div>
+          </div>
+          <div class="profile-card" data-profile="Conservative" onclick="selectProfile(this)">
+            <div class="p-icon">🏦</div>
+            <div class="p-name">Conservateur</div>
+            <div class="p-risk">λ = 6 · Vol 8%</div>
+            <div class="p-bar"><div class="p-fill" style="width:30%;background:#79c0ff"></div></div>
+          </div>
+          <div class="profile-card" data-profile="Balanced" onclick="selectProfile(this)">
+            <div class="p-icon">⚖️</div>
+            <div class="p-name">Équilibré</div>
+            <div class="p-risk">λ = 4 · Vol 12%</div>
+            <div class="p-bar"><div class="p-fill" style="width:55%;background:#3fb950"></div></div>
+          </div>
+          <div class="profile-card" data-profile="Growth" onclick="selectProfile(this)">
+            <div class="p-icon">🚀</div>
+            <div class="p-name">Croissance</div>
+            <div class="p-risk">λ = 2.5 · Vol 18%</div>
+            <div class="p-bar"><div class="p-fill" style="width:75%;background:#d29922"></div></div>
+          </div>
+          <div class="profile-card" data-profile="Aggressive" onclick="selectProfile(this)">
+            <div class="p-icon">🔥</div>
+            <div class="p-name">Agressif</div>
+            <div class="p-risk">λ = 1.5 · Vol 25%</div>
+            <div class="p-bar"><div class="p-fill" style="width:100%;background:#f85149"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Paramètres du profil sélectionné</div>
+        <div id="profile-details" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: API ════════════════════════ -->
+    <section class="section" id="sec-api">
+      <div class="section-title">API & Taux de référence</div>
+      <div class="section-desc">Configurez les clés API et le taux sans risque utilisé pour le calcul du Sharpe ratio et du modèle Black-Litterman.</div>
+
+      <div class="card">
+        <div class="card-title">Clé API FRED</div>
+        <div class="form-grid cols-1">
+          <div class="field">
+            <label>FRED API Key (optionnel)</label>
+            <input type="password" id="fred_api_key" placeholder="Laisser vide = taux par défaut" />
+            <small style="color:var(--text-muted);font-size:11px;">Obtenez une clé gratuite sur fred.stlouisfed.org. Permet de récupérer le T-Bill 3M en temps réel.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Taux sans risque par défaut</div>
+        <div class="form-grid">
+          <div class="field">
+            <div class="label-inline">
+              <label>Taux annualisé</label>
+              <span class="label-value" id="rf_display">4.50%</span>
+            </div>
+            <input type="range" id="risk_free_rate" min="0" max="10" step="0.1" value="4.5"
+              oninput="document.getElementById('rf_display').textContent=parseFloat(this.value).toFixed(2)+'%'" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0%</span><span>5%</span><span>10%</span></div>
+          </div>
+          <div class="field">
+            <label>Taux journalier calculé</label>
+            <div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:13px;color:var(--accent)">
+              ≈ <span id="rf_daily_display">0.01786</span>% / jour
+            </div>
+            <small style="color:var(--text-muted);font-size:11px;">= Taux annuel / 252 jours de trading</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Dates de référence</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Début de l'historique (DATA_START)</label>
+            <input type="date" id="data_start" value="2010-01-01" />
+            <small style="color:var(--text-muted);font-size:11px;">Utilisé pour télécharger les données brutes</small>
+          </div>
+          <div class="field">
+            <label>Début du backtest (BACKTEST_START)</label>
+            <input type="date" id="backtest_start" value="2015-01-01" />
+            <small style="color:var(--text-muted);font-size:11px;">Doit être postérieure à DATA_START</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: UNIVERS ════════════════════ -->
+    <section class="section" id="sec-universe">
+      <div class="section-title">Univers d'Actifs</div>
+      <div class="section-desc">Définissez les tickers Yahoo Finance par classe d'actifs. Cliquez sur × pour supprimer, et ajoutez de nouveaux tickers via le champ de saisie.</div>
+
+      <div class="card">
+        <div class="card-title">🏛️ Actions (Equity)</div>
+        <div class="tag-container" id="tags-equity"></div>
+        <div class="tag-input-row">
+          <input type="text" id="input-equity" placeholder="ex: MSFT, VTI..." onkeydown="if(event.key==='Enter')addTag('equity')" style="text-transform:uppercase" />
+          <button class="tag-add-btn" onclick="addTag('equity')">+ Ajouter</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📑 Obligations (Fixed Income)</div>
+        <div class="tag-container" id="tags-fixed_income"></div>
+        <div class="tag-input-row">
+          <input type="text" id="input-fixed_income" placeholder="ex: BND, SHY..." onkeydown="if(event.key==='Enter')addTag('fixed_income')" style="text-transform:uppercase" />
+          <button class="tag-add-btn" onclick="addTag('fixed_income')">+ Ajouter</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🥇 Matières Premières (Commodity)</div>
+        <div class="tag-container" id="tags-commodity"></div>
+        <div class="tag-input-row">
+          <input type="text" id="input-commodity" placeholder="ex: GLD, USO..." onkeydown="if(event.key==='Enter')addTag('commodity')" style="text-transform:uppercase" />
+          <button class="tag-add-btn" onclick="addTag('commodity')">+ Ajouter</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏘️ Immobilier coté (Real Estate)</div>
+        <div class="tag-container" id="tags-real_estate"></div>
+        <div class="tag-input-row">
+          <input type="text" id="input-real_estate" placeholder="ex: IYR..." onkeydown="if(event.key==='Enter')addTag('real_estate')" style="text-transform:uppercase" />
+          <button class="tag-add-btn" onclick="addTag('real_estate')">+ Ajouter</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">₿ Crypto-monnaies</div>
+        <div class="tag-container" id="tags-crypto"></div>
+        <div class="tag-input-row">
+          <input type="text" id="input-crypto" placeholder="ex: SOL-USD..." onkeydown="if(event.key==='Enter')addTag('crypto')" style="text-transform:uppercase" />
+          <button class="tag-add-btn" onclick="addTag('crypto')">+ Ajouter</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: MÉTHODES ══════════════════ -->
+    <section class="section" id="sec-methods">
+      <div class="section-title">Méthodes d'estimation et d'optimisation</div>
+      <div class="section-desc">Choisissez les algorithmes utilisés pour estimer les rendements, la covariance et optimiser le portefeuille.</div>
+
+      <div class="card">
+        <div class="card-title">Estimation des rendements attendus (μ)</div>
+        <div class="method-group" id="method-return">
+          <div class="method-btn selected" data-val="black_litterman" onclick="selectMethod('return', this)">
+            <div style="font-size:13px;margin-bottom:3px">Black-Litterman</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Bayésien · Recommandé</div>
+          </div>
+          <div class="method-btn" data-val="shrinkage" onclick="selectMethod('return', this)">
+            <div style="font-size:13px;margin-bottom:3px">James-Stein Shrinkage</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Régularisation statistique</div>
+          </div>
+          <div class="method-btn" data-val="historical" onclick="selectMethod('return', this)">
+            <div style="font-size:13px;margin-bottom:3px">Historique</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Moyenne simple · Biaisé</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Estimation de la matrice de covariance (Σ)</div>
+        <div class="method-group" id="method-cov">
+          <div class="method-btn selected" data-val="ledoit_wolf" onclick="selectMethod('cov', this)">
+            <div style="font-size:13px;margin-bottom:3px">Ledoit-Wolf</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Shrinkage optimal · Recommandé</div>
+          </div>
+          <div class="method-btn" data-val="ewma" onclick="selectMethod('cov', this)">
+            <div style="font-size:13px;margin-bottom:3px">EWMA</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Dynamique temporelle</div>
+          </div>
+          <div class="method-btn" data-val="sample" onclick="selectMethod('cov', this)">
+            <div style="font-size:13px;margin-bottom:3px">Sample</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Naïf · Non recommandé</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Méthode d'optimisation du portefeuille</div>
+        <div class="method-group" id="method-optim">
+          <div class="method-btn selected" data-val="risk_budget" onclick="selectMethod('optim', this)">
+            <div style="font-size:13px;margin-bottom:3px">Risk Budgeting</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Contrôle des contributions · Recommandé</div>
+          </div>
+          <div class="method-btn" data-val="mvo" onclick="selectMethod('optim', this)">
+            <div style="font-size:13px;margin-bottom:3px">MVO (Max Sharpe)</div>
+            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Mean-Variance · Markowitz</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Fréquence de rééquilibrage</div>
+        <div class="method-group" id="method-rebalance">
+          <div class="method-btn" data-val="weekly" onclick="selectMethod('rebalance', this)">Hebdomadaire</div>
+          <div class="method-btn selected" data-val="monthly" onclick="selectMethod('rebalance', this)">Mensuel</div>
+          <div class="method-btn" data-val="quarterly" onclick="selectMethod('rebalance', this)">Trimestriel</div>
+          <div class="method-btn" data-val="annual" onclick="selectMethod('rebalance', this)">Annuel</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: ESTIMATION ════════════════ -->
+    <section class="section" id="sec-estimation">
+      <div class="section-title">Paramètres d'Estimation</div>
+      <div class="section-desc">Calibrez les hyperparamètres des estimateurs de μ et Σ.</div>
+
+      <div class="card">
+        <div class="card-title">Fenêtre d'estimation</div>
+        <div class="form-grid">
+          <div class="field">
+            <div class="label-inline">
+              <label>Fenêtre d'estimation (années)</label>
+              <span class="label-value" id="estwin_display">5 ans</span>
+            </div>
+            <input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5"
+              oninput="document.getElementById('estwin_display').textContent=this.value+' ans'" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>8 ans</span><span>15 ans</span></div>
+          </div>
+          <div class="field">
+            <div class="label-inline">
+              <label>Départs aléatoires (multi-start MVO)</label>
+              <span class="label-value" id="nstarts_display">15</span>
+            </div>
+            <input type="range" id="n_random_starts" min="5" max="50" step="1" value="15"
+              oninput="document.getElementById('nstarts_display').textContent=this.value" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>5</span><span>25</span><span>50</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Black-Litterman</div>
+        <div class="form-grid">
+          <div class="field">
+            <div class="label-inline">
+              <label>Tau (τ) — incertitude sur le prior</label>
+              <span class="label-value" id="bl_tau_display">0.050</span>
+            </div>
+            <input type="range" id="bl_tau" min="0.01" max="0.20" step="0.005" value="0.05"
+              oninput="document.getElementById('bl_tau_display').textContent=parseFloat(this.value).toFixed(3)" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.01</span><span>0.10</span><span>0.20</span></div>
+            <small style="color:var(--text-muted);font-size:11px;">Valeur typique : 1/T où T = nb de jours. Faible τ = fort prior d'équilibre.</small>
+          </div>
+          <div class="field" style="align-self:start">
+            <label>Informations</label>
+            <div style="background:rgba(88,166,255,.07);border:1px solid rgba(88,166,255,.2);border-radius:6px;padding:10px;font-size:12px;line-height:1.6;color:var(--text-muted)">
+              Le modèle BL combine un <strong style="color:var(--text)">prior d'équilibre de marché</strong> (Π = λ·Σ·w_mkt) avec des vues du gestionnaire. τ contrôle le poids du prior vs les données.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">EWMA (Exponentially Weighted Moving Average)</div>
+        <div class="form-grid">
+          <div class="field">
+            <div class="label-inline">
+              <label>Lambda (λ) — facteur d'oubli</label>
+              <span class="label-value" id="ewma_display">0.940</span>
+            </div>
+            <input type="range" id="ewma_lambda" min="0.80" max="0.99" step="0.005" value="0.94"
+              oninput="document.getElementById('ewma_display').textContent=parseFloat(this.value).toFixed(3)" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.80</span><span>0.90</span><span>0.99</span></div>
+            <small style="color:var(--text-muted);font-size:11px;">0.94 = demi-vie ≈ 11 jours (RiskMetrics standard)</small>
+          </div>
+          <div class="field" style="align-self:start">
+            <label>Demi-vie calculée</label>
+            <div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:13px;color:var(--accent)">
+              ≈ <span id="ewma_halflife">11.0</span> jours
+            </div>
+            <small style="color:var(--text-muted);font-size:11px;">= log(0.5) / log(λ)</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: FILTRES ════════════════════ -->
+    <section class="section" id="sec-filters">
+      <div class="section-title">Filtres de l'Univers d'Actifs</div>
+      <div class="section-desc">Critères d'inclusion des actifs dans l'univers d'optimisation.</div>
+
+      <div class="card">
+        <div class="form-grid">
+          <div class="field">
+            <div class="label-inline">
+              <label>Corrélation maximale</label>
+              <span class="label-value" id="maxcorr_display">0.90</span>
+            </div>
+            <input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90"
+              oninput="document.getElementById('maxcorr_display').textContent=parseFloat(this.value).toFixed(2)" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.50</span><span>0.75</span><span>0.99</span></div>
+            <small style="color:var(--text-muted);font-size:11px;">Élimine les actifs redondants (corr > seuil avec un autre actif déjà présent)</small>
+          </div>
+          <div class="field">
+            <div class="label-inline">
+              <label>Historique minimum (années)</label>
+              <span class="label-value" id="minhist_display">3 ans</span>
+            </div>
+            <input type="range" id="min_history_years" min="1" max="10" step="1" value="3"
+              oninput="document.getElementById('minhist_display').textContent=this.value+' ans'" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
+          </div>
+          <div class="field">
+            <div class="label-inline">
+              <label>Volatilité annuelle minimale</label>
+              <span class="label-value" id="minvol_display">1.0%</span>
+            </div>
+            <input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1"
+              oninput="document.getElementById('minvol_display').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0%</span><span>2.5%</span><span>5%</span></div>
+            <small style="color:var(--text-muted);font-size:11px;">Exclut les actifs trop peu volatils (quasi-cash)</small>
+          </div>
+          <div class="field" style="align-self:start">
+            <label>Résumé des filtres</label>
+            <div id="filter-summary" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;line-height:2;font-family:monospace"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: BACKTEST ══════════════════ -->
+    <section class="section" id="sec-backtest">
+      <div class="section-title">Paramètres du Backtest Walk-Forward</div>
+      <div class="section-desc">Configuration du backtest out-of-sample. Le walk-forward partitionne les données en fenêtres d'entraînement et de test successives pour éviter le look-ahead bias.</div>
+
+      <div class="card">
+        <div class="form-grid">
+          <div class="field">
+            <div class="label-inline">
+              <label>Fenêtre d'entraînement (années)</label>
+              <span class="label-value" id="train_display">3 ans</span>
+            </div>
+            <input type="range" id="backtest_train_years" min="1" max="10" step="1" value="3"
+              oninput="document.getElementById('train_display').textContent=this.value+' ans'" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
+          </div>
+          <div class="field">
+            <div class="label-inline">
+              <label>Fenêtre de test (mois)</label>
+              <span class="label-value" id="test_display">1 mois</span>
+            </div>
+            <input type="range" id="backtest_test_months" min="1" max="12" step="1" value="1"
+              oninput="document.getElementById('test_display').textContent=this.value+(this.value>1?' mois':' mois')" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
+          </div>
+          <div class="field">
+            <div class="label-inline">
+              <label>Coûts de transaction (bps)</label>
+              <span class="label-value" id="tc_display">10 bps</span>
+            </div>
+            <input type="range" id="transaction_cost_bps" min="0" max="50" step="1" value="10"
+              oninput="document.getElementById('tc_display').textContent=this.value+' bps'" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0 bps</span><span>25 bps</span><span>50 bps</span></div>
+            <small style="color:var(--text-muted);font-size:11px;">1 bps = 0.01%. Appliqué sur le turnover à chaque rééquilibrage.</small>
+          </div>
+          <div class="field" style="align-self:start">
+            <label>Facteur d'annualisation</label>
+            <input type="number" id="annualization_factor" value="252" min="200" max="365" />
+            <small style="color:var(--text-muted);font-size:11px;">252 = jours de trading US par an. Modifier si marché non-US.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: MONTE CARLO ══════════════ -->
+    <section class="section" id="sec-montecarlo">
+      <div class="section-title">Simulation Monte Carlo</div>
+      <div class="section-desc">Paramètres pour la génération de scénarios futurs. Plus de simulations = meilleure précision mais temps de calcul plus long.</div>
+
+      <div class="card">
+        <div class="form-grid">
+          <div class="field">
+            <label>Nombre de simulations</label>
+            <div class="method-group" id="method-nsim" style="margin-top:4px">
+              <div class="method-btn" data-val="1000" onclick="selectMethod('nsim', this)">1 000</div>
+              <div class="method-btn" data-val="2000" onclick="selectMethod('nsim', this)">2 000</div>
+              <div class="method-btn selected" data-val="5000" onclick="selectMethod('nsim', this)">5 000</div>
+              <div class="method-btn" data-val="10000" onclick="selectMethod('nsim', this)">10 000</div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="label-inline">
+              <label>Horizon de projection (années)</label>
+              <span class="label-value" id="horizon_display">10 ans</span>
+            </div>
+            <input type="range" id="simulation_horizon_years" min="1" max="30" step="1" value="10"
+              oninput="document.getElementById('horizon_display').textContent=this.value+' ans'" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>15 ans</span><span>30 ans</span></div>
+          </div>
+          <div class="field">
+            <label>Capital initial (€)</label>
+            <input type="number" id="initial_wealth" value="100000" min="1000" step="1000" />
+          </div>
+          <div class="field">
+            <label>Graine aléatoire (reproductibilité)</label>
+            <input type="number" id="random_state" value="42" min="0" max="999999" />
+            <small style="color:var(--text-muted);font-size:11px;">Fixe la graine numpy pour des résultats reproductibles</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Méthodes Monte Carlo activées</div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-name">Simulation Gaussienne paramétrique</div>
+            <div class="toggle-desc">Rapide · Sous-estime les queues lourdes</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="mc_gaussian" checked />
+            <span class="slider-track"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-name">Bootstrap par blocs</div>
+            <div class="toggle-desc">Préserve les autocorrélations et la volatilité clustering</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="mc_bootstrap" checked />
+            <span class="slider-track"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-name">Régimes HMM (Markov)</div>
+            <div class="toggle-desc">Modélise les transitions expansion/crise · Nécessite hmmlearn</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="mc_hmm" />
+            <span class="slider-track"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: TACTICAL ══════════════════ -->
+    <section class="section" id="sec-tactical">
+      <div class="section-title">Overlay Tactique (TAA)</div>
+      <div class="section-desc">L'overlay tactique ajuste l'allocation stratégique (SAA) en fonction du momentum et du régime de volatilité, sous contrainte de tracking error.</div>
+
+      <div class="card">
+        <div class="toggle-row" style="padding-bottom:16px">
+          <div class="toggle-info">
+            <div class="toggle-name" style="font-size:14px;font-weight:600">Activer l'overlay tactique</div>
+            <div class="toggle-desc">Applique les signaux de momentum et régime à la SAA</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="taa_enabled" checked onchange="toggleTAA()" />
+            <span class="slider-track"></span>
+          </label>
+        </div>
+      </div>
+
+      <div id="taa-params">
+        <div class="card">
+          <div class="form-grid">
+            <div class="field">
+              <div class="label-inline">
+                <label>Fenêtre momentum (jours)</label>
+                <span class="label-value" id="momentum_display">63 j (~3 mois)</span>
+              </div>
+              <input type="range" id="momentum_lookback" min="21" max="252" step="21" value="63"
+                oninput="updateMomentumDisplay(this.value)" />
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
+            </div>
+            <div class="field">
+              <div class="label-inline">
+                <label>Budget de Tracking Error max</label>
+                <span class="label-value" id="te_display">2.0%</span>
+              </div>
+              <input type="range" id="te_budget" min="0.5" max="10" step="0.5" value="2"
+                oninput="document.getElementById('te_display').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.5%</span><span>5%</span><span>10%</span></div>
+              <small style="color:var(--text-muted);font-size:11px;">TE = √((w_TAA−w_SAA)ᵀ·Σ·(w_TAA−w_SAA)) ≤ TE_max</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ SECTION: EXPORT ════════════════════ -->
+    <section class="section" id="sec-export">
+      <div class="section-title">Code Python généré</div>
+      <div class="section-desc">Copiez ce bloc dans les sections 3 et 4 de votre notebook pour appliquer votre configuration.</div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <button class="btn btn-success" onclick="copyCode()">📋 Copier le code</button>
+        <button class="btn btn-secondary" onclick="downloadCode()">⬇️ Télécharger .py</button>
+      </div>
+
+      <div class="code-output" id="code-preview"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✅ Copié dans le presse-papiers !</div>
+
+<script>
+// ── State ───────────────────────────────────────────────────────
+const state = {
+  profile: 'Very Conservative',
+  fred_api_key: '',
+  risk_free_rate: 4.5,
+  data_start: '2010-01-01',
+  backtest_start: '2015-01-01',
+  universe: {
+    equity: ['SPY', 'QQQ', 'VGK', 'EEM', 'VWO'],
+    fixed_income: ['AGG', 'TLT', 'IEF', 'LQD', 'HYG', 'EMB'],
+    commodity: ['GLD', 'SLV', 'DJP'],
+    real_estate: ['VNQ', 'VNQI'],
+    crypto: ['BTC-USD', 'ETH-USD'],
+  },
+  methods: {
+    return: 'black_litterman',
+    cov: 'ledoit_wolf',
+    optim: 'risk_budget',
+    rebalance: 'monthly',
+    nsim: '5000',
+  },
+  estimation_window_years: 5,
+  n_random_starts: 15,
+  bl_tau: 0.05,
+  ewma_lambda: 0.94,
+  max_correlation: 0.90,
+  min_history_years: 3,
+  min_annual_vol: 1.0,
+  backtest_train_years: 3,
+  backtest_test_months: 1,
+  transaction_cost_bps: 10,
+  annualization_factor: 252,
+  simulation_horizon_years: 10,
+  initial_wealth: 100000,
+  random_state: 42,
+  taa_enabled: true,
+  momentum_lookback: 63,
+  te_budget: 2.0,
+};
+
+const PROFILES_INFO = {
+  'Very Conservative': { lambda_: 8, target_vol: '5%', max_equity: '30%', max_crypto: '0%', include_crypto: false, risk_budgets: { equity: 0.20, fixed_income: 0.65, commodity: 0.10, real_estate: 0.05, crypto: 0.00 } },
+  'Conservative': { lambda_: 6, target_vol: '8%', max_equity: '50%', max_crypto: '0%', include_crypto: false, risk_budgets: { equity: 0.35, fixed_income: 0.50, commodity: 0.10, real_estate: 0.05, crypto: 0.00 } },
+  'Balanced': { lambda_: 4, target_vol: '12%', max_equity: '70%', max_crypto: '5%', include_crypto: true, risk_budgets: { equity: 0.50, fixed_income: 0.30, commodity: 0.10, real_estate: 0.05, crypto: 0.05 } },
+  'Growth': { lambda_: 2.5, target_vol: '18%', max_equity: '85%', max_crypto: '10%', include_crypto: true, risk_budgets: { equity: 0.65, fixed_income: 0.15, commodity: 0.08, real_estate: 0.05, crypto: 0.07 } },
+  'Aggressive': { lambda_: 1.5, target_vol: '25%', max_equity: '100%', max_crypto: '20%', include_crypto: true, risk_budgets: { equity: 0.70, fixed_income: 0.05, commodity: 0.05, real_estate: 0.05, crypto: 0.15 } },
+};
+
+// ── Navigation ──────────────────────────────────────────────────
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.querySelector(`[data-section="${name}"]`)?.classList.add('active');
+  if (name === 'export') generateCode();
+}
+
+// ── Profile ─────────────────────────────────────────────────────
+function selectProfile(el) {
+  document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.profile = el.dataset.profile;
+  renderProfileDetails();
+}
+
+function renderProfileDetails() {
+  const p = PROFILES_INFO[state.profile];
+  const container = document.getElementById('profile-details');
+  const items = [
+    ['Aversion au risque (λ)', p.lambda_],
+    ['Volatilité cible', p.target_vol],
+    ['Max. exposition actions', p.max_equity],
+    ['Max. exposition crypto', p.max_crypto],
+    ['Crypto incluse', p.include_crypto ? '✅ Oui' : '❌ Non'],
+    ['Eq. risk budget', (p.risk_budgets.equity*100).toFixed(0)+'%'],
+    ['Fixed inc. risk budget', (p.risk_budgets.fixed_income*100).toFixed(0)+'%'],
+    ['Commodity risk budget', (p.risk_budgets.commodity*100).toFixed(0)+'%'],
+  ];
+  container.innerHTML = items.map(([k, v]) => `
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 12px;">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;">${k}</div>
+      <div style="font-size:15px;font-weight:700;color:var(--accent)">${v}</div>
+    </div>
+  `).join('');
+}
+
+// ── Tags ────────────────────────────────────────────────────────
+function renderTags(cls) {
+  const container = document.getElementById('tags-' + cls);
+  container.innerHTML = state.universe[cls].map(ticker => `
+    <div class="tag">
+      ${ticker}
+      <span class="tag-remove" onclick="removeTag('${cls}','${ticker}')">×</span>
+    </div>
+  `).join('');
+}
+
+function removeTag(cls, ticker) {
+  state.universe[cls] = state.universe[cls].filter(t => t !== ticker);
+  renderTags(cls);
+}
+
+function addTag(cls) {
+  const input = document.getElementById('input-' + cls);
+  const val = input.value.trim().toUpperCase();
+  if (!val) return;
+  val.split(/[\s,;]+/).forEach(t => {
+    t = t.trim();
+    if (t && !state.universe[cls].includes(t)) state.universe[cls].push(t);
+  });
+  input.value = '';
+  renderTags(cls);
+}
+
+// ── Methods ─────────────────────────────────────────────────────
+function selectMethod(type, el) {
+  const group = el.parentElement;
+  group.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.methods[type] = el.dataset.val;
+}
+
+// ── EWMA half-life ──────────────────────────────────────────────
+function updateEWMAHalflife() {
+  const lambda = parseFloat(document.getElementById('ewma_lambda').value);
+  const hl = Math.log(0.5) / Math.log(lambda);
+  document.getElementById('ewma_halflife').textContent = hl.toFixed(1);
+}
+
+// ── RF rate ─────────────────────────────────────────────────────
+function updateRFDaily() {
+  const rf = parseFloat(document.getElementById('risk_free_rate').value);
+  document.getElementById('rf_daily_display').textContent = (rf / 252).toFixed(5);
+}
+
+// ── Momentum display ────────────────────────────────────────────
+function updateMomentumDisplay(val) {
+  const months = Math.round(val / 21);
+  document.getElementById('momentum_display').textContent = `${val} j (~${months} mois)`;
+}
+
+// ── Filter summary ──────────────────────────────────────────────
+function updateFilterSummary() {
+  const corr = parseFloat(document.getElementById('max_correlation').value);
+  const hist = document.getElementById('min_history_years').value;
+  const vol = parseFloat(document.getElementById('min_annual_vol').value);
+  document.getElementById('filter-summary').innerHTML =
+    `max_corr = ${corr.toFixed(2)}\nmin_hist = ${hist} ans\nmin_vol  = ${vol.toFixed(1)}%`;
+}
+
+// ── TAA toggle ──────────────────────────────────────────────────
+function toggleTAA() {
+  const enabled = document.getElementById('taa_enabled').checked;
+  document.getElementById('taa-params').style.opacity = enabled ? '1' : '0.4';
+  document.getElementById('taa-params').style.pointerEvents = enabled ? '' : 'none';
+}
+
+// ── Code Generation ─────────────────────────────────────────────
+function generateCode() {
+  const rf = parseFloat(document.getElementById('risk_free_rate').value);
+  const estwin = document.getElementById('estimation_window_years').value;
+  const nstarts = document.getElementById('n_random_starts').value;
+  const bl_tau = parseFloat(document.getElementById('bl_tau').value);
+  const ewma = parseFloat(document.getElementById('ewma_lambda').value);
+  const maxcorr = parseFloat(document.getElementById('max_correlation').value);
+  const minhist = document.getElementById('min_history_years').value;
+  const minvol = parseFloat(document.getElementById('min_annual_vol').value);
+  const train = document.getElementById('backtest_train_years').value;
+  const test = document.getElementById('backtest_test_months').value;
+  const tc = document.getElementById('transaction_cost_bps').value;
+  const ann = document.getElementById('annualization_factor').value;
+  const horizon = document.getElementById('simulation_horizon_years').value;
+  const nsim = state.methods.nsim;
+  const wealth = document.getElementById('initial_wealth').value;
+  const seed = document.getElementById('random_state').value;
+  const taa = document.getElementById('taa_enabled').checked;
+  const momentum = document.getElementById('momentum_lookback').value;
+  const te = parseFloat(document.getElementById('te_budget').value);
+  const fred = document.getElementById('fred_api_key').value;
+  const ds = document.getElementById('data_start').value;
+  const bs = document.getElementById('backtest_start').value;
+
+  const lines = [];
+  lines.push(`# ═══════════════════════════════════════════════════════`);
+  lines.push(`# CONFIGURATION GÉNÉRÉE — Portfolio Investment System`);
+  lines.push(`# ═══════════════════════════════════════════════════════`);
+  lines.push(``);
+  lines.push(`# ── Section 3 : Clés API & Paramètres de base ───────────`);
+  lines.push(`FRED_API_KEY = '${fred}'`);
+  lines.push(`DEFAULT_RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}  # ${rf.toFixed(2)}%`);
+  lines.push(`RISK_FREE_RATE_DAILY = DEFAULT_RISK_FREE_RATE_ANNUAL / 252`);
+  lines.push(``);
+  lines.push(`SELECTED_PROFILE = '${state.profile}'`);
+  lines.push(`BACKTEST_START = '${bs}'`);
+  lines.push(`DATA_START = '${ds}'`);
+  lines.push(``);
+  lines.push(`# ── Section 4 : Configuration globale ───────────────────`);
+  lines.push(`RANDOM_STATE = ${seed}`);
+  lines.push(`np.random.seed(RANDOM_STATE)`);
+  lines.push(``);
+  lines.push(`DEFAULT_PARAMS = {`);
+  lines.push(`    'profile':                  '${state.profile}',`);
+  lines.push(`    'estimation_window_years':  ${estwin},`);
+  lines.push(`    'covariance_method':        '${state.methods.cov}',`);
+  lines.push(`    'return_method':            '${state.methods.return}',`);
+  lines.push(`    'optimization_method':      '${state.methods.optim}',`);
+  lines.push(`    'rebalance_frequency':      '${state.methods.rebalance}',`);
+  lines.push(`    'transaction_cost_bps':     ${tc},`);
+  lines.push(`    'annualization_factor':     ${ann},`);
+  lines.push(`    'ewma_lambda':              ${ewma.toFixed(3)},`);
+  lines.push(`    'bl_tau':                   ${bl_tau.toFixed(3)},`);
+  lines.push(`    'n_random_starts':          ${nstarts},`);
+  lines.push(`    'backtest_train_years':     ${train},`);
+  lines.push(`    'backtest_test_months':     ${test},`);
+  lines.push(`    'n_simulations':            ${nsim},`);
+  lines.push(`    'simulation_horizon_years': ${horizon},`);
+  lines.push(`    'min_history_years':        ${minhist},`);
+  lines.push(`    'max_correlation':          ${maxcorr.toFixed(2)},`);
+  lines.push(`    'min_annual_vol':           ${(minvol/100).toFixed(4)},`);
+  lines.push(`}`);
+  lines.push(``);
+  lines.push(`# ── Section 5 : Univers d'actifs ─────────────────────────`);
+  lines.push(`ASSET_UNIVERSE: Dict[str, List[str]] = {`);
+  for (const [cls, tickers] of Object.entries(state.universe)) {
+    lines.push(`    '${cls}': ${JSON.stringify(tickers)},`);
+  }
+  lines.push(`}`);
+  lines.push(``);
+  lines.push(`# ── Overlay Tactique (TAA) ───────────────────────────────`);
+  lines.push(`TAA_ENABLED = ${taa ? 'True' : 'False'}`);
+  if (taa) {
+    lines.push(`MOMENTUM_LOOKBACK_DAYS = ${momentum}  # ~${Math.round(momentum/21)} mois`);
+    lines.push(`TE_BUDGET = ${(te/100).toFixed(4)}  # ${te.toFixed(1)}%`);
+  }
+  lines.push(``);
+  lines.push(`# ── Monte Carlo ──────────────────────────────────────────`);
+  lines.push(`INITIAL_WEALTH = ${wealth}`);
+  lines.push(`HORIZON = ${horizon}`);
+  lines.push(``);
+  lines.push(`print('✅ Configuration chargée avec succès.')`);
+  lines.push(`print(f'   Profil : {SELECTED_PROFILE}')`);
+  lines.push(`print(f'   Méthodes : {DEFAULT_PARAMS[\"return_method\"]} / {DEFAULT_PARAMS[\"covariance_method\"]} / {DEFAULT_PARAMS[\"optimization_method\"]}')`);
+
+  const code = lines.join('\n');
+  document.getElementById('code-preview').textContent = code;
+}
+
+// ── Copy / Download ─────────────────────────────────────────────
+function copyCode() {
+  const code = document.getElementById('code-preview').textContent;
+  navigator.clipboard.writeText(code).then(() => showToast('✅ Code copié dans le presse-papiers !'));
+}
+
+function downloadCode() {
+  const code = document.getElementById('code-preview').textContent;
+  const blob = new Blob([code], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'portfolio_config.py';
+  a.click();
+  showToast('⬇️ Fichier téléchargé !');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── Reset ───────────────────────────────────────────────────────
+function resetDefaults() {
+  location.reload();
+}
+
+// ── Init ────────────────────────────────────────────────────────
+function init() {
+  // Render profile
+  renderProfileDetails();
+
+  // Render tags
+  for (const cls of Object.keys(state.universe)) renderTags(cls);
+
+  // Select the Balanced profile card by default (matching original notebook)
+  document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector('[data-profile="Balanced"]').classList.add('selected');
+  state.profile = 'Balanced';
+  renderProfileDetails();
+
+  // Live listeners
+  document.getElementById('risk_free_rate').addEventListener('input', updateRFDaily);
+  document.getElementById('ewma_lambda').addEventListener('input', updateEWMAHalflife);
+  document.getElementById('max_correlation').addEventListener('input', updateFilterSummary);
+  document.getElementById('min_history_years').addEventListener('input', updateFilterSummary);
+  document.getElementById('min_annual_vol').addEventListener('input', updateFilterSummary);
+
+  // Initial state
+  updateRFDaily();
+  updateEWMAHalflife();
+  updateFilterSummary();
+}
+
+init();
+</script>
+</body>
+</html>
