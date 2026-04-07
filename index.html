@@ -6,6 +6,9 @@
   <title>Portfolio Investment System</title>
   <link href="https://fonts.cdnfonts.com/css/aptos" rel="stylesheet" />
   <link href="https://fonts.cdnfonts.com/css/aptos-display" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <style>
     :root {
@@ -256,6 +259,89 @@
     .toast.show { opacity: 1; transform: translateY(0); }
 
     hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+    /* ── Flatpickr custom theme ─────────── */
+    .flatpickr-calendar {
+      font-family: 'Aptos Display', 'Aptos', 'Segoe UI', sans-serif !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 10px !important;
+      box-shadow: 0 8px 30px rgba(0,0,0,.08) !important;
+      padding: 10px !important;
+      background: #fff !important;
+    }
+    .flatpickr-months {
+      padding: 4px 0 8px !important;
+      align-items: center !important;
+    }
+    .flatpickr-month {
+      height: 32px !important;
+    }
+    .flatpickr-current-month {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #000 !important;
+      padding-top: 4px !important;
+    }
+    .flatpickr-current-month .numInputWrapper input,
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+      font-family: 'Aptos Display', sans-serif !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+      color: #000 !important;
+    }
+    .flatpickr-prev-month, .flatpickr-next-month {
+      color: #555 !important;
+      fill: #555 !important;
+      padding: 6px 10px !important;
+    }
+    .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg { fill: #000 !important; }
+    .flatpickr-weekdays { background: transparent !important; }
+    span.flatpickr-weekday {
+      font-family: 'Aptos Display', sans-serif !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #aaa !important;
+      text-transform: uppercase !important;
+      letter-spacing: .5px !important;
+    }
+    .flatpickr-day {
+      font-family: 'Aptos Display', sans-serif !important;
+      font-size: 13px !important;
+      color: #000 !important;
+      border-radius: 8px !important;
+      border: none !important;
+      height: 36px !important;
+      line-height: 36px !important;
+      width: 36px !important;
+      max-width: 36px !important;
+      transition: background .12s !important;
+    }
+    .flatpickr-day:hover {
+      background: #f0f0f0 !important;
+      color: #000 !important;
+    }
+    .flatpickr-day.selected, .flatpickr-day.selected:hover {
+      background: #ebebeb !important;
+      color: #000 !important;
+      font-weight: 700 !important;
+      border: 1px solid #bbb !important;
+    }
+    .flatpickr-day.today {
+      border: 1px solid #bbb !important;
+      font-weight: 600 !important;
+    }
+    .flatpickr-day.today:hover {
+      background: #f0f0f0 !important;
+      color: #000 !important;
+    }
+    .flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay {
+      color: #ccc !important;
+    }
+    .flatpickr-day.flatpickr-disabled {
+      color: #ddd !important;
+    }
+    .numInputWrapper:hover { background: transparent !important; }
+    .numInputWrapper span { border: none !important; }
 
     @media (max-width: 800px) {
       .container { grid-template-columns: 1fr; }
@@ -1233,6 +1319,24 @@ function resetDefaults() { location.reload(); }
 renderProfile();
 Object.keys(universe).forEach(renderTags);
 updateRunSummary();
+
+// Flatpickr calendars
+flatpickr('#data_start', {
+  locale: 'fr',
+  dateFormat: 'Y-m-d',
+  defaultDate: '2010-01-01',
+  disableMobile: true,
+  prevArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>',
+  nextArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
+});
+flatpickr('#backtest_start', {
+  locale: 'fr',
+  dateFormat: 'Y-m-d',
+  defaultDate: '2015-01-01',
+  disableMobile: true,
+  prevArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>',
+  nextArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
+});
 </script>
 </body>
 </html>
