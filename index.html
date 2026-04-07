@@ -121,7 +121,7 @@
       outline: none; transition: border-color .12s; font-family: inherit;
     }
     input:focus, select:focus { border-color: #aaa; }
-    input[type="range"] { width: 100%; accent-color: var(--grey); cursor: pointer; margin: 2px 0; }
+    input[type="range"] { width: 100%; accent-color: #aaa; cursor: pointer; margin: 2px 0; }
     .range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
 
     /* ── Profiles ───────────────────────── */
@@ -151,8 +151,8 @@
       background: #ebebeb; color: #444; cursor: pointer;
       font-size: 13px; font-weight: 500; transition: all .15s; font-family: inherit;
     }
-    .method-btn:hover { background: #ddd; color: #000; }
-    .method-btn.selected { background: var(--grey); color: #fff; }
+    .method-btn:hover { background: #f0f0f0; border-color: #bbb; color: #000; }
+    .method-btn.selected { background: #ebebeb; color: #000; border: 1px solid #bbb; }
 
     /* ── Toggles ────────────────────────── */
     .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; }
@@ -163,7 +163,7 @@
     .toggle-switch input { opacity: 0; width: 0; height: 0; }
     .track { position: absolute; inset: 0; background: var(--border); border-radius: 10px; cursor: pointer; transition: background .2s; }
     .track::before { content: ''; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
-    .toggle-switch input:checked + .track { background: var(--grey); }
+    .toggle-switch input:checked + .track { background: #aaa; }
     .toggle-switch input:checked + .track::before { transform: translateX(16px); }
 
     /* ── Tags ───────────────────────────── */
