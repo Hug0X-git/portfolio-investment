@@ -3,222 +3,187 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio Investment System — Configuration</title>
+  <title>Portfolio Investment System</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface2: #1c2330;
-      --border: #30363d;
-      --accent: #58a6ff;
-      --accent2: #3fb950;
-      --accent3: #d29922;
-      --danger: #f85149;
-      --text: #e6edf3;
-      --text-muted: #8b949e;
-      --radius: 8px;
+      --bg: #ffffff;
+      --surface: #f9f9f9;
+      --border: #e5e5e5;
+      --accent: #111111;
+      --accent-light: #f0f0f0;
+      --muted: #888888;
+      --green: #16a34a;
+      --red: #dc2626;
+      --blue: #2563eb;
+      --radius: 6px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      color: #111;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
       font-size: 14px;
       line-height: 1.5;
     }
 
-    /* ── Header ─────────────────────────────────────────────── */
+    /* ── Header ─────────────────────────────────────── */
     header {
-      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
+      padding: 14px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
+      background: #fff;
       z-index: 100;
     }
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: #111;
     }
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, #58a6ff 0%, #3fb950 100%);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-    .header-actions {
-      display: flex;
-      gap: 10px;
-    }
-    .btn {
-      padding: 7px 16px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: opacity .15s, transform .1s;
-    }
-    .btn:active { transform: scale(.97); }
-    .btn-primary {
-      background: var(--accent);
-      color: #0d1117;
-    }
-    .btn-secondary {
-      background: var(--surface2);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-success {
-      background: var(--accent2);
-      color: #0d1117;
-    }
-    .btn:hover { opacity: .85; }
+    .logo span { color: var(--muted); font-weight: 400; }
+    .header-actions { display: flex; gap: 8px; }
 
-    /* ── Layout ─────────────────────────────────────────────── */
+    .btn {
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      background: #fff;
+      color: #111;
+      transition: background .12s;
+    }
+    .btn:hover { background: var(--surface); }
+    .btn-dark {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    .btn-dark:hover { background: #333; }
+
+    /* ── Layout ─────────────────────────────────────── */
     .container {
       display: grid;
-      grid-template-columns: 220px 1fr;
-      min-height: calc(100vh - 57px);
+      grid-template-columns: 200px 1fr;
+      min-height: calc(100vh - 49px);
     }
 
-    /* ── Sidebar / Nav ───────────────────────────────────────── */
+    /* ── Sidebar ────────────────────────────────────── */
     aside {
-      background: var(--surface);
       border-right: 1px solid var(--border);
       padding: 20px 12px;
       position: sticky;
-      top: 57px;
-      height: calc(100vh - 57px);
+      top: 49px;
+      height: calc(100vh - 49px);
       overflow-y: auto;
     }
-    .nav-label {
-      font-size: 11px;
+    .nav-group {
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: .8px;
-      color: var(--text-muted);
+      color: var(--muted);
       padding: 0 8px;
-      margin-bottom: 6px;
-      margin-top: 16px;
+      margin: 18px 0 6px;
     }
-    .nav-label:first-child { margin-top: 0; }
+    .nav-group:first-child { margin-top: 0; }
     .nav-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 10px;
-      border-radius: 6px;
+      padding: 6px 8px;
+      border-radius: var(--radius);
       cursor: pointer;
-      color: var(--text-muted);
-      text-decoration: none;
+      color: var(--muted);
       font-size: 13px;
-      transition: background .12s, color .12s;
-      margin-bottom: 2px;
+      transition: background .1s, color .1s;
+      margin-bottom: 1px;
+      user-select: none;
     }
-    .nav-item:hover {
-      background: var(--surface2);
-      color: var(--text);
+    .nav-item:hover { background: var(--surface); color: #111; }
+    .nav-item.active { background: var(--accent-light); color: #111; font-weight: 500; }
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
     }
-    .nav-item.active {
-      background: rgba(88,166,255,.12);
-      color: var(--accent);
-    }
-    .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+    .nav-item.active .nav-dot { background: #111; }
 
-    /* ── Main ───────────────────────────────────────────────── */
+    /* ── Main ───────────────────────────────────────── */
     main {
-      padding: 28px 36px;
-      overflow-y: auto;
-      max-width: 900px;
+      padding: 32px 40px;
+      max-width: 820px;
     }
 
-    .section {
-      display: none;
-    }
-    .section.active {
-      display: block;
-    }
+    .section { display: none; }
+    .section.active { display: block; }
 
     .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 4px;
+      font-size: 18px;
+      font-weight: 600;
       letter-spacing: -0.3px;
+      margin-bottom: 4px;
     }
     .section-desc {
-      color: var(--text-muted);
+      color: var(--muted);
       font-size: 13px;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
-    /* ── Cards ──────────────────────────────────────────────── */
-    .card {
-      background: var(--surface);
+    /* ── Block ──────────────────────────────────────── */
+    .block {
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
     }
-    .card-title {
-      font-size: 13px;
+    .block-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
       font-weight: 600;
-      margin-bottom: 16px;
-      color: var(--text-muted);
+      color: var(--muted);
+      background: var(--surface);
       text-transform: uppercase;
-      letter-spacing: .6px;
+      letter-spacing: .5px;
     }
+    .block-body { padding: 16px; }
 
-    /* ── Form Grid ──────────────────────────────────────────── */
+    /* ── Form ───────────────────────────────────────── */
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
-    .form-grid.cols-3 {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-    .form-grid.cols-1 {
-      grid-template-columns: 1fr;
-    }
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .form-grid.cols-1 { grid-template-columns: 1fr; }
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
     .field.full { grid-column: 1 / -1; }
 
     label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .label-val {
       font-size: 12px;
       font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: .3px;
-    }
-    .label-inline {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .label-value {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--accent);
-      background: rgba(88,166,255,.1);
-      padding: 1px 7px;
-      border-radius: 4px;
+      color: #111;
     }
 
     input[type="text"],
@@ -227,886 +192,760 @@
     input[type="date"],
     select,
     textarea {
-      background: var(--bg);
+      background: #fff;
       border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      padding: 8px 10px;
+      border-radius: var(--radius);
+      color: #111;
+      padding: 7px 10px;
       font-size: 13px;
       width: 100%;
       outline: none;
-      transition: border-color .15s;
+      transition: border-color .12s;
+      font-family: inherit;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-    }
+    input:focus, select:focus, textarea:focus { border-color: #aaa; }
+
     input[type="range"] {
       width: 100%;
-      accent-color: var(--accent);
+      accent-color: #111;
       cursor: pointer;
+      margin: 2px 0;
+    }
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
     }
 
-    select option { background: #1c2330; }
+    /* ── Profiles ───────────────────────────────────── */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .profile-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 8px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .12s, background .12s;
+      background: #fff;
+    }
+    .profile-card:hover { background: var(--surface); }
+    .profile-card.selected {
+      border-color: #111;
+      background: #111;
+      color: #fff;
+    }
+    .profile-card.selected .p-risk { color: #aaa; }
+    .p-icon { font-size: 18px; margin-bottom: 5px; }
+    .p-name { font-size: 11px; font-weight: 600; }
+    .p-risk { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-    /* ── Toggle ─────────────────────────────────────────────── */
+    /* ── Profile stats ──────────────────────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .stat-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+    }
+    .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .stat-value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+    /* ── Method buttons ─────────────────────────────── */
+    .method-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .method-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all .12s;
+      font-family: inherit;
+    }
+    .method-btn:hover { border-color: #aaa; color: #111; }
+    .method-btn.selected { border-color: #111; background: #111; color: #fff; }
+
+    /* ── Toggle ─────────────────────────────────────── */
     .toggle-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 0;
+      padding: 11px 0;
     }
-    .toggle-row + .toggle-row {
-      border-top: 1px solid var(--border);
-    }
-    .toggle-info { flex: 1; }
-    .toggle-info .toggle-name {
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .toggle-info .toggle-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+    .toggle-row + .toggle-row { border-top: 1px solid var(--border); }
+    .toggle-name { font-size: 13px; font-weight: 500; }
+    .toggle-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
     .toggle-switch {
       position: relative;
-      width: 40px;
-      height: 22px;
+      width: 36px; height: 20px;
       flex-shrink: 0;
     }
     .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .slider-track {
-      position: absolute;
-      inset: 0;
+    .track {
+      position: absolute; inset: 0;
       background: var(--border);
-      border-radius: 11px;
+      border-radius: 10px;
       cursor: pointer;
       transition: background .2s;
     }
-    .slider-track::before {
+    .track::before {
       content: '';
       position: absolute;
-      width: 16px;
-      height: 16px;
-      background: white;
+      width: 14px; height: 14px;
+      background: #fff;
       border-radius: 50%;
-      top: 3px;
-      left: 3px;
+      top: 3px; left: 3px;
       transition: transform .2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.15);
     }
-    .toggle-switch input:checked + .slider-track { background: var(--accent2); }
-    .toggle-switch input:checked + .slider-track::before { transform: translateX(18px); }
+    .toggle-switch input:checked + .track { background: #111; }
+    .toggle-switch input:checked + .track::before { transform: translateX(16px); }
 
-    /* ── Badges / Pills ─────────────────────────────────────── */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .badge-blue { background: rgba(88,166,255,.15); color: var(--accent); }
-    .badge-green { background: rgba(63,185,80,.15); color: var(--accent2); }
-    .badge-yellow { background: rgba(210,153,34,.15); color: var(--accent3); }
-    .badge-red { background: rgba(248,81,73,.15); color: var(--danger); }
-
-    /* ── Profile Cards ──────────────────────────────────────── */
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-    }
-    .profile-card {
-      background: var(--surface2);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 10px;
-      cursor: pointer;
-      text-align: center;
-      transition: border-color .15s, background .15s;
-    }
-    .profile-card:hover { border-color: #444; }
-    .profile-card.selected {
-      border-color: var(--accent);
-      background: rgba(88,166,255,.08);
-    }
-    .profile-card .p-icon { font-size: 22px; margin-bottom: 6px; }
-    .profile-card .p-name { font-size: 12px; font-weight: 700; }
-    .profile-card .p-risk {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    .profile-card .p-bar {
-      height: 4px;
-      border-radius: 2px;
-      margin-top: 8px;
-      background: var(--border);
-      overflow: hidden;
-    }
-    .profile-card .p-fill {
-      height: 100%;
-      border-radius: 2px;
-    }
-
-    /* ── Asset Tags ─────────────────────────────────────────── */
-    .tag-container {
+    /* ── Tags ───────────────────────────────────────── */
+    .tag-area {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 5px;
       padding: 8px;
-      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      min-height: 44px;
+      border-radius: var(--radius);
+      min-height: 42px;
+      background: var(--surface);
     }
     .tag {
       display: flex;
       align-items: center;
-      gap: 5px;
-      background: var(--surface2);
+      gap: 4px;
+      background: #fff;
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 3px 8px;
+      padding: 2px 7px;
       font-size: 12px;
       font-weight: 500;
-      cursor: default;
     }
-    .tag-remove {
+    .tag-x {
+      color: var(--muted);
       cursor: pointer;
-      color: var(--text-muted);
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1;
       transition: color .1s;
     }
-    .tag-remove:hover { color: var(--danger); }
-    .tag-input-row {
-      display: flex;
-      gap: 6px;
-      margin-top: 8px;
-    }
-    .tag-input-row input { flex: 1; }
+    .tag-x:hover { color: var(--red); }
+    .tag-add-row { display: flex; gap: 6px; margin-top: 7px; }
+    .tag-add-row input { flex: 1; }
     .tag-add-btn {
       padding: 7px 12px;
-      background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      cursor: pointer;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    .tag-add-btn:hover { background: var(--border); }
-
-    /* ── Method Selector ────────────────────────────────────── */
-    .method-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .method-btn {
-      padding: 8px 14px;
-      border: 2px solid var(--border);
-      border-radius: 6px;
-      background: var(--surface2);
-      color: var(--text-muted);
+      border-radius: var(--radius);
+      background: #fff;
       cursor: pointer;
       font-size: 12px;
-      font-weight: 600;
-      transition: all .15s;
+      font-weight: 500;
+      white-space: nowrap;
+      font-family: inherit;
     }
-    .method-btn:hover { border-color: #444; color: var(--text); }
-    .method-btn.selected {
-      border-color: var(--accent);
-      background: rgba(88,166,255,.1);
-      color: var(--accent);
-    }
+    .tag-add-btn:hover { background: var(--surface); }
 
-    /* ── Code Output ────────────────────────────────────────── */
-    .code-output {
-      background: #0d1117;
+    /* ── Code ───────────────────────────────────────── */
+    .code-box {
+      background: #f6f6f6;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 16px;
       font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
       font-size: 12px;
-      line-height: 1.6;
+      line-height: 1.7;
       white-space: pre;
       overflow-x: auto;
-      color: #e6edf3;
-      max-height: 500px;
+      color: #111;
+      max-height: 520px;
       overflow-y: auto;
     }
-    .code-comment { color: #8b949e; }
-    .code-string { color: #a5d6ff; }
-    .code-number { color: #79c0ff; }
-    .code-keyword { color: #ff7b72; }
-    .code-var { color: #ffa657; }
 
-    /* ── Toast ──────────────────────────────────────────────── */
+    /* ── Toast ──────────────────────────────────────── */
     .toast {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--accent2);
-      color: #0d1117;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 13px;
+      bottom: 20px;
+      right: 20px;
+      background: #111;
+      color: #fff;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-weight: 500;
       opacity: 0;
-      transform: translateY(10px);
-      transition: opacity .3s, transform .3s;
+      transform: translateY(6px);
+      transition: opacity .25s, transform .25s;
       pointer-events: none;
       z-index: 999;
     }
     .toast.show { opacity: 1; transform: translateY(0); }
 
-    /* ── Divider ────────────────────────────────────────────── */
-    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
 
-    /* ── Responsive ─────────────────────────────────────────── */
-    @media (max-width: 768px) {
+    @media (max-width: 700px) {
       .container { grid-template-columns: 1fr; }
       aside { display: none; }
-      .form-grid.cols-3, .form-grid { grid-template-columns: 1fr; }
       .profile-grid { grid-template-columns: repeat(3, 1fr); }
+      .form-grid, .form-grid.cols-3 { grid-template-columns: 1fr; }
       main { padding: 20px 16px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── HEADER ──────────────────────────────────────────────── -->
 <header>
-  <div class="logo">
-    <div class="logo-icon">📈</div>
-    Portfolio Investment System
-  </div>
+  <div class="logo">Portfolio Investment System <span>— Configuration</span></div>
   <div class="header-actions">
-    <button class="btn btn-secondary" onclick="resetDefaults()">Réinitialiser</button>
-    <button class="btn btn-primary" onclick="showSection('export')">Générer le code</button>
+    <button class="btn" onclick="resetDefaults()">Réinitialiser</button>
+    <button class="btn btn-dark" onclick="showSection('export')">Générer le code →</button>
   </div>
 </header>
 
-<!-- ── LAYOUT ───────────────────────────────────────────────── -->
 <div class="container">
 
-  <!-- ── SIDEBAR ─────────────────────────────────────────────── -->
   <aside>
-    <div class="nav-label">Configuration</div>
-    <a class="nav-item active" onclick="showSection('profile')" data-section="profile">
-      <span class="nav-icon">👤</span> Profil Investisseur
-    </a>
-    <a class="nav-item" onclick="showSection('api')" data-section="api">
-      <span class="nav-icon">🔑</span> API & Taux
-    </a>
-    <a class="nav-item" onclick="showSection('universe')" data-section="universe">
-      <span class="nav-icon">🌍</span> Univers d'Actifs
-    </a>
+    <div class="nav-group">Configuration</div>
+    <div class="nav-item active" onclick="showSection('profile')" data-section="profile"><span class="nav-dot"></span>Profil</div>
+    <div class="nav-item" onclick="showSection('api')" data-section="api"><span class="nav-dot"></span>API & Taux</div>
+    <div class="nav-item" onclick="showSection('universe')" data-section="universe"><span class="nav-dot"></span>Univers d'actifs</div>
 
-    <div class="nav-label">Modèle</div>
-    <a class="nav-item" onclick="showSection('methods')" data-section="methods">
-      <span class="nav-icon">⚙️</span> Méthodes
-    </a>
-    <a class="nav-item" onclick="showSection('estimation')" data-section="estimation">
-      <span class="nav-icon">📐</span> Estimation
-    </a>
-    <a class="nav-item" onclick="showSection('filters')" data-section="filters">
-      <span class="nav-icon">🔍</span> Filtres Univers
-    </a>
+    <div class="nav-group">Modèle</div>
+    <div class="nav-item" onclick="showSection('methods')" data-section="methods"><span class="nav-dot"></span>Méthodes</div>
+    <div class="nav-item" onclick="showSection('estimation')" data-section="estimation"><span class="nav-dot"></span>Estimation</div>
+    <div class="nav-item" onclick="showSection('filters')" data-section="filters"><span class="nav-dot"></span>Filtres</div>
 
-    <div class="nav-label">Backtest & Simulation</div>
-    <a class="nav-item" onclick="showSection('backtest')" data-section="backtest">
-      <span class="nav-icon">🔄</span> Backtest
-    </a>
-    <a class="nav-item" onclick="showSection('montecarlo')" data-section="montecarlo">
-      <span class="nav-icon">🎲</span> Monte Carlo
-    </a>
-    <a class="nav-item" onclick="showSection('tactical')" data-section="tactical">
-      <span class="nav-icon">🎛️</span> Overlay Tactique
-    </a>
+    <div class="nav-group">Simulation</div>
+    <div class="nav-item" onclick="showSection('backtest')" data-section="backtest"><span class="nav-dot"></span>Backtest</div>
+    <div class="nav-item" onclick="showSection('montecarlo')" data-section="montecarlo"><span class="nav-dot"></span>Monte Carlo</div>
+    <div class="nav-item" onclick="showSection('tactical')" data-section="tactical"><span class="nav-dot"></span>Overlay tactique</div>
 
-    <div class="nav-label">Export</div>
-    <a class="nav-item" onclick="showSection('export')" data-section="export">
-      <span class="nav-icon">📋</span> Générer le Code
-    </a>
+    <div class="nav-group">Export</div>
+    <div class="nav-item" onclick="showSection('export')" data-section="export"><span class="nav-dot"></span>Générer le code</div>
   </aside>
 
-  <!-- ── MAIN ────────────────────────────────────────────────── -->
   <main>
 
-    <!-- ════════════════ SECTION: PROFIL ════════════════════ -->
+    <!-- ══ PROFIL ══════════════════════════════════════════ -->
     <section class="section active" id="sec-profile">
-      <div class="section-title">Profil Investisseur</div>
-      <div class="section-desc">Sélectionnez le profil de risque. Chaque profil définit l'aversion au risque (λ), la volatilité cible et les budgets de risque par classe d'actifs.</div>
+      <div class="section-title">Profil investisseur</div>
+      <div class="section-desc">Définit l'aversion au risque, la volatilité cible et les budgets de risque par classe d'actifs.</div>
 
-      <div class="card">
-        <div class="card-title">Profil sélectionné</div>
-        <div class="profile-grid">
-          <div class="profile-card selected" data-profile="Very Conservative" onclick="selectProfile(this)">
-            <div class="p-icon">🛡️</div>
-            <div class="p-name">Très Conservateur</div>
-            <div class="p-risk">λ = 8 · Vol 5%</div>
-            <div class="p-bar"><div class="p-fill" style="width:10%;background:#58a6ff"></div></div>
-          </div>
-          <div class="profile-card" data-profile="Conservative" onclick="selectProfile(this)">
-            <div class="p-icon">🏦</div>
-            <div class="p-name">Conservateur</div>
-            <div class="p-risk">λ = 6 · Vol 8%</div>
-            <div class="p-bar"><div class="p-fill" style="width:30%;background:#79c0ff"></div></div>
-          </div>
-          <div class="profile-card" data-profile="Balanced" onclick="selectProfile(this)">
-            <div class="p-icon">⚖️</div>
-            <div class="p-name">Équilibré</div>
-            <div class="p-risk">λ = 4 · Vol 12%</div>
-            <div class="p-bar"><div class="p-fill" style="width:55%;background:#3fb950"></div></div>
-          </div>
-          <div class="profile-card" data-profile="Growth" onclick="selectProfile(this)">
-            <div class="p-icon">🚀</div>
-            <div class="p-name">Croissance</div>
-            <div class="p-risk">λ = 2.5 · Vol 18%</div>
-            <div class="p-bar"><div class="p-fill" style="width:75%;background:#d29922"></div></div>
-          </div>
-          <div class="profile-card" data-profile="Aggressive" onclick="selectProfile(this)">
-            <div class="p-icon">🔥</div>
-            <div class="p-name">Agressif</div>
-            <div class="p-risk">λ = 1.5 · Vol 25%</div>
-            <div class="p-bar"><div class="p-fill" style="width:100%;background:#f85149"></div></div>
+      <div class="block">
+        <div class="block-header">Sélection du profil</div>
+        <div class="block-body">
+          <div class="profile-grid">
+            <div class="profile-card" data-profile="Very Conservative" onclick="selectProfile(this)">
+              <div class="p-icon">🛡️</div>
+              <div class="p-name">Très conservateur</div>
+              <div class="p-risk">λ = 8 · 5% vol</div>
+            </div>
+            <div class="profile-card" data-profile="Conservative" onclick="selectProfile(this)">
+              <div class="p-icon">🏦</div>
+              <div class="p-name">Conservateur</div>
+              <div class="p-risk">λ = 6 · 8% vol</div>
+            </div>
+            <div class="profile-card selected" data-profile="Balanced" onclick="selectProfile(this)">
+              <div class="p-icon">⚖️</div>
+              <div class="p-name">Équilibré</div>
+              <div class="p-risk">λ = 4 · 12% vol</div>
+            </div>
+            <div class="profile-card" data-profile="Growth" onclick="selectProfile(this)">
+              <div class="p-icon">🚀</div>
+              <div class="p-name">Croissance</div>
+              <div class="p-risk">λ = 2.5 · 18% vol</div>
+            </div>
+            <div class="profile-card" data-profile="Aggressive" onclick="selectProfile(this)">
+              <div class="p-icon">🔥</div>
+              <div class="p-name">Agressif</div>
+              <div class="p-risk">λ = 1.5 · 25% vol</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">Paramètres du profil sélectionné</div>
-        <div id="profile-details" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <!-- Filled by JS -->
+      <div class="block">
+        <div class="block-header">Paramètres du profil</div>
+        <div class="block-body">
+          <div class="stat-grid" id="profile-stats"></div>
         </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Budgets de risque par classe</div>
+        <div class="block-body" id="risk-budgets"></div>
       </div>
     </section>
 
-    <!-- ════════════════ SECTION: API ════════════════════════ -->
+    <!-- ══ API ════════════════════════════════════════════ -->
     <section class="section" id="sec-api">
       <div class="section-title">API & Taux de référence</div>
-      <div class="section-desc">Configurez les clés API et le taux sans risque utilisé pour le calcul du Sharpe ratio et du modèle Black-Litterman.</div>
+      <div class="section-desc">Clé FRED et taux sans risque utilisé pour le Sharpe et Black-Litterman.</div>
 
-      <div class="card">
-        <div class="card-title">Clé API FRED</div>
-        <div class="form-grid cols-1">
+      <div class="block">
+        <div class="block-header">FRED API</div>
+        <div class="block-body">
           <div class="field">
-            <label>FRED API Key (optionnel)</label>
-            <input type="password" id="fred_api_key" placeholder="Laisser vide = taux par défaut" />
-            <small style="color:var(--text-muted);font-size:11px;">Obtenez une clé gratuite sur fred.stlouisfed.org. Permet de récupérer le T-Bill 3M en temps réel.</small>
+            <label>Clé API (optionnel)</label>
+            <input type="password" id="fred_api_key" placeholder="Laisser vide = taux par défaut (4.5%)" />
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">Taux sans risque par défaut</div>
-        <div class="form-grid">
-          <div class="field">
-            <div class="label-inline">
-              <label>Taux annualisé</label>
-              <span class="label-value" id="rf_display">4.50%</span>
-            </div>
-            <input type="range" id="risk_free_rate" min="0" max="10" step="0.1" value="4.5"
-              oninput="document.getElementById('rf_display').textContent=parseFloat(this.value).toFixed(2)+'%'" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0%</span><span>5%</span><span>10%</span></div>
-          </div>
-          <div class="field">
-            <label>Taux journalier calculé</label>
-            <div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:13px;color:var(--accent)">
-              ≈ <span id="rf_daily_display">0.01786</span>% / jour
-            </div>
-            <small style="color:var(--text-muted);font-size:11px;">= Taux annuel / 252 jours de trading</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Dates de référence</div>
-        <div class="form-grid">
-          <div class="field">
-            <label>Début de l'historique (DATA_START)</label>
-            <input type="date" id="data_start" value="2010-01-01" />
-            <small style="color:var(--text-muted);font-size:11px;">Utilisé pour télécharger les données brutes</small>
-          </div>
-          <div class="field">
-            <label>Début du backtest (BACKTEST_START)</label>
-            <input type="date" id="backtest_start" value="2015-01-01" />
-            <small style="color:var(--text-muted);font-size:11px;">Doit être postérieure à DATA_START</small>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════ SECTION: UNIVERS ════════════════════ -->
-    <section class="section" id="sec-universe">
-      <div class="section-title">Univers d'Actifs</div>
-      <div class="section-desc">Définissez les tickers Yahoo Finance par classe d'actifs. Cliquez sur × pour supprimer, et ajoutez de nouveaux tickers via le champ de saisie.</div>
-
-      <div class="card">
-        <div class="card-title">🏛️ Actions (Equity)</div>
-        <div class="tag-container" id="tags-equity"></div>
-        <div class="tag-input-row">
-          <input type="text" id="input-equity" placeholder="ex: MSFT, VTI..." onkeydown="if(event.key==='Enter')addTag('equity')" style="text-transform:uppercase" />
-          <button class="tag-add-btn" onclick="addTag('equity')">+ Ajouter</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📑 Obligations (Fixed Income)</div>
-        <div class="tag-container" id="tags-fixed_income"></div>
-        <div class="tag-input-row">
-          <input type="text" id="input-fixed_income" placeholder="ex: BND, SHY..." onkeydown="if(event.key==='Enter')addTag('fixed_income')" style="text-transform:uppercase" />
-          <button class="tag-add-btn" onclick="addTag('fixed_income')">+ Ajouter</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🥇 Matières Premières (Commodity)</div>
-        <div class="tag-container" id="tags-commodity"></div>
-        <div class="tag-input-row">
-          <input type="text" id="input-commodity" placeholder="ex: GLD, USO..." onkeydown="if(event.key==='Enter')addTag('commodity')" style="text-transform:uppercase" />
-          <button class="tag-add-btn" onclick="addTag('commodity')">+ Ajouter</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🏘️ Immobilier coté (Real Estate)</div>
-        <div class="tag-container" id="tags-real_estate"></div>
-        <div class="tag-input-row">
-          <input type="text" id="input-real_estate" placeholder="ex: IYR..." onkeydown="if(event.key==='Enter')addTag('real_estate')" style="text-transform:uppercase" />
-          <button class="tag-add-btn" onclick="addTag('real_estate')">+ Ajouter</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">₿ Crypto-monnaies</div>
-        <div class="tag-container" id="tags-crypto"></div>
-        <div class="tag-input-row">
-          <input type="text" id="input-crypto" placeholder="ex: SOL-USD..." onkeydown="if(event.key==='Enter')addTag('crypto')" style="text-transform:uppercase" />
-          <button class="tag-add-btn" onclick="addTag('crypto')">+ Ajouter</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════ SECTION: MÉTHODES ══════════════════ -->
-    <section class="section" id="sec-methods">
-      <div class="section-title">Méthodes d'estimation et d'optimisation</div>
-      <div class="section-desc">Choisissez les algorithmes utilisés pour estimer les rendements, la covariance et optimiser le portefeuille.</div>
-
-      <div class="card">
-        <div class="card-title">Estimation des rendements attendus (μ)</div>
-        <div class="method-group" id="method-return">
-          <div class="method-btn selected" data-val="black_litterman" onclick="selectMethod('return', this)">
-            <div style="font-size:13px;margin-bottom:3px">Black-Litterman</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Bayésien · Recommandé</div>
-          </div>
-          <div class="method-btn" data-val="shrinkage" onclick="selectMethod('return', this)">
-            <div style="font-size:13px;margin-bottom:3px">James-Stein Shrinkage</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Régularisation statistique</div>
-          </div>
-          <div class="method-btn" data-val="historical" onclick="selectMethod('return', this)">
-            <div style="font-size:13px;margin-bottom:3px">Historique</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Moyenne simple · Biaisé</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Estimation de la matrice de covariance (Σ)</div>
-        <div class="method-group" id="method-cov">
-          <div class="method-btn selected" data-val="ledoit_wolf" onclick="selectMethod('cov', this)">
-            <div style="font-size:13px;margin-bottom:3px">Ledoit-Wolf</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Shrinkage optimal · Recommandé</div>
-          </div>
-          <div class="method-btn" data-val="ewma" onclick="selectMethod('cov', this)">
-            <div style="font-size:13px;margin-bottom:3px">EWMA</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Dynamique temporelle</div>
-          </div>
-          <div class="method-btn" data-val="sample" onclick="selectMethod('cov', this)">
-            <div style="font-size:13px;margin-bottom:3px">Sample</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Naïf · Non recommandé</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Méthode d'optimisation du portefeuille</div>
-        <div class="method-group" id="method-optim">
-          <div class="method-btn selected" data-val="risk_budget" onclick="selectMethod('optim', this)">
-            <div style="font-size:13px;margin-bottom:3px">Risk Budgeting</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Contrôle des contributions · Recommandé</div>
-          </div>
-          <div class="method-btn" data-val="mvo" onclick="selectMethod('optim', this)">
-            <div style="font-size:13px;margin-bottom:3px">MVO (Max Sharpe)</div>
-            <div style="font-size:11px;font-weight:400;color:inherit;opacity:.8">Mean-Variance · Markowitz</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Fréquence de rééquilibrage</div>
-        <div class="method-group" id="method-rebalance">
-          <div class="method-btn" data-val="weekly" onclick="selectMethod('rebalance', this)">Hebdomadaire</div>
-          <div class="method-btn selected" data-val="monthly" onclick="selectMethod('rebalance', this)">Mensuel</div>
-          <div class="method-btn" data-val="quarterly" onclick="selectMethod('rebalance', this)">Trimestriel</div>
-          <div class="method-btn" data-val="annual" onclick="selectMethod('rebalance', this)">Annuel</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════ SECTION: ESTIMATION ════════════════ -->
-    <section class="section" id="sec-estimation">
-      <div class="section-title">Paramètres d'Estimation</div>
-      <div class="section-desc">Calibrez les hyperparamètres des estimateurs de μ et Σ.</div>
-
-      <div class="card">
-        <div class="card-title">Fenêtre d'estimation</div>
-        <div class="form-grid">
-          <div class="field">
-            <div class="label-inline">
-              <label>Fenêtre d'estimation (années)</label>
-              <span class="label-value" id="estwin_display">5 ans</span>
-            </div>
-            <input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5"
-              oninput="document.getElementById('estwin_display').textContent=this.value+' ans'" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>8 ans</span><span>15 ans</span></div>
-          </div>
-          <div class="field">
-            <div class="label-inline">
-              <label>Départs aléatoires (multi-start MVO)</label>
-              <span class="label-value" id="nstarts_display">15</span>
-            </div>
-            <input type="range" id="n_random_starts" min="5" max="50" step="1" value="15"
-              oninput="document.getElementById('nstarts_display').textContent=this.value" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>5</span><span>25</span><span>50</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Black-Litterman</div>
-        <div class="form-grid">
-          <div class="field">
-            <div class="label-inline">
-              <label>Tau (τ) — incertitude sur le prior</label>
-              <span class="label-value" id="bl_tau_display">0.050</span>
-            </div>
-            <input type="range" id="bl_tau" min="0.01" max="0.20" step="0.005" value="0.05"
-              oninput="document.getElementById('bl_tau_display').textContent=parseFloat(this.value).toFixed(3)" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.01</span><span>0.10</span><span>0.20</span></div>
-            <small style="color:var(--text-muted);font-size:11px;">Valeur typique : 1/T où T = nb de jours. Faible τ = fort prior d'équilibre.</small>
-          </div>
-          <div class="field" style="align-self:start">
-            <label>Informations</label>
-            <div style="background:rgba(88,166,255,.07);border:1px solid rgba(88,166,255,.2);border-radius:6px;padding:10px;font-size:12px;line-height:1.6;color:var(--text-muted)">
-              Le modèle BL combine un <strong style="color:var(--text)">prior d'équilibre de marché</strong> (Π = λ·Σ·w_mkt) avec des vues du gestionnaire. τ contrôle le poids du prior vs les données.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">EWMA (Exponentially Weighted Moving Average)</div>
-        <div class="form-grid">
-          <div class="field">
-            <div class="label-inline">
-              <label>Lambda (λ) — facteur d'oubli</label>
-              <span class="label-value" id="ewma_display">0.940</span>
-            </div>
-            <input type="range" id="ewma_lambda" min="0.80" max="0.99" step="0.005" value="0.94"
-              oninput="document.getElementById('ewma_display').textContent=parseFloat(this.value).toFixed(3)" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.80</span><span>0.90</span><span>0.99</span></div>
-            <small style="color:var(--text-muted);font-size:11px;">0.94 = demi-vie ≈ 11 jours (RiskMetrics standard)</small>
-          </div>
-          <div class="field" style="align-self:start">
-            <label>Demi-vie calculée</label>
-            <div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:13px;color:var(--accent)">
-              ≈ <span id="ewma_halflife">11.0</span> jours
-            </div>
-            <small style="color:var(--text-muted);font-size:11px;">= log(0.5) / log(λ)</small>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════ SECTION: FILTRES ════════════════════ -->
-    <section class="section" id="sec-filters">
-      <div class="section-title">Filtres de l'Univers d'Actifs</div>
-      <div class="section-desc">Critères d'inclusion des actifs dans l'univers d'optimisation.</div>
-
-      <div class="card">
-        <div class="form-grid">
-          <div class="field">
-            <div class="label-inline">
-              <label>Corrélation maximale</label>
-              <span class="label-value" id="maxcorr_display">0.90</span>
-            </div>
-            <input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90"
-              oninput="document.getElementById('maxcorr_display').textContent=parseFloat(this.value).toFixed(2)" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.50</span><span>0.75</span><span>0.99</span></div>
-            <small style="color:var(--text-muted);font-size:11px;">Élimine les actifs redondants (corr > seuil avec un autre actif déjà présent)</small>
-          </div>
-          <div class="field">
-            <div class="label-inline">
-              <label>Historique minimum (années)</label>
-              <span class="label-value" id="minhist_display">3 ans</span>
-            </div>
-            <input type="range" id="min_history_years" min="1" max="10" step="1" value="3"
-              oninput="document.getElementById('minhist_display').textContent=this.value+' ans'" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
-          </div>
-          <div class="field">
-            <div class="label-inline">
-              <label>Volatilité annuelle minimale</label>
-              <span class="label-value" id="minvol_display">1.0%</span>
-            </div>
-            <input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1"
-              oninput="document.getElementById('minvol_display').textContent=parseFloat(this.value).toFixed(1)+'%'" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0%</span><span>2.5%</span><span>5%</span></div>
-            <small style="color:var(--text-muted);font-size:11px;">Exclut les actifs trop peu volatils (quasi-cash)</small>
-          </div>
-          <div class="field" style="align-self:start">
-            <label>Résumé des filtres</label>
-            <div id="filter-summary" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;line-height:2;font-family:monospace"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════ SECTION: BACKTEST ══════════════════ -->
-    <section class="section" id="sec-backtest">
-      <div class="section-title">Paramètres du Backtest Walk-Forward</div>
-      <div class="section-desc">Configuration du backtest out-of-sample. Le walk-forward partitionne les données en fenêtres d'entraînement et de test successives pour éviter le look-ahead bias.</div>
-
-      <div class="card">
-        <div class="form-grid">
-          <div class="field">
-            <div class="label-inline">
-              <label>Fenêtre d'entraînement (années)</label>
-              <span class="label-value" id="train_display">3 ans</span>
-            </div>
-            <input type="range" id="backtest_train_years" min="1" max="10" step="1" value="3"
-              oninput="document.getElementById('train_display').textContent=this.value+' ans'" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
-          </div>
-          <div class="field">
-            <div class="label-inline">
-              <label>Fenêtre de test (mois)</label>
-              <span class="label-value" id="test_display">1 mois</span>
-            </div>
-            <input type="range" id="backtest_test_months" min="1" max="12" step="1" value="1"
-              oninput="document.getElementById('test_display').textContent=this.value+(this.value>1?' mois':' mois')" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
-          </div>
-          <div class="field">
-            <div class="label-inline">
-              <label>Coûts de transaction (bps)</label>
-              <span class="label-value" id="tc_display">10 bps</span>
-            </div>
-            <input type="range" id="transaction_cost_bps" min="0" max="50" step="1" value="10"
-              oninput="document.getElementById('tc_display').textContent=this.value+' bps'" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0 bps</span><span>25 bps</span><span>50 bps</span></div>
-            <small style="color:var(--text-muted);font-size:11px;">1 bps = 0.01%. Appliqué sur le turnover à chaque rééquilibrage.</small>
-          </div>
-          <div class="field" style="align-self:start">
-            <label>Facteur d'annualisation</label>
-            <input type="number" id="annualization_factor" value="252" min="200" max="365" />
-            <small style="color:var(--text-muted);font-size:11px;">252 = jours de trading US par an. Modifier si marché non-US.</small>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════ SECTION: MONTE CARLO ══════════════ -->
-    <section class="section" id="sec-montecarlo">
-      <div class="section-title">Simulation Monte Carlo</div>
-      <div class="section-desc">Paramètres pour la génération de scénarios futurs. Plus de simulations = meilleure précision mais temps de calcul plus long.</div>
-
-      <div class="card">
-        <div class="form-grid">
-          <div class="field">
-            <label>Nombre de simulations</label>
-            <div class="method-group" id="method-nsim" style="margin-top:4px">
-              <div class="method-btn" data-val="1000" onclick="selectMethod('nsim', this)">1 000</div>
-              <div class="method-btn" data-val="2000" onclick="selectMethod('nsim', this)">2 000</div>
-              <div class="method-btn selected" data-val="5000" onclick="selectMethod('nsim', this)">5 000</div>
-              <div class="method-btn" data-val="10000" onclick="selectMethod('nsim', this)">10 000</div>
-            </div>
-          </div>
-          <div class="field">
-            <div class="label-inline">
-              <label>Horizon de projection (années)</label>
-              <span class="label-value" id="horizon_display">10 ans</span>
-            </div>
-            <input type="range" id="simulation_horizon_years" min="1" max="30" step="1" value="10"
-              oninput="document.getElementById('horizon_display').textContent=this.value+' ans'" />
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 an</span><span>15 ans</span><span>30 ans</span></div>
-          </div>
-          <div class="field">
-            <label>Capital initial (€)</label>
-            <input type="number" id="initial_wealth" value="100000" min="1000" step="1000" />
-          </div>
-          <div class="field">
-            <label>Graine aléatoire (reproductibilité)</label>
-            <input type="number" id="random_state" value="42" min="0" max="999999" />
-            <small style="color:var(--text-muted);font-size:11px;">Fixe la graine numpy pour des résultats reproductibles</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Méthodes Monte Carlo activées</div>
-        <div class="toggle-row">
-          <div class="toggle-info">
-            <div class="toggle-name">Simulation Gaussienne paramétrique</div>
-            <div class="toggle-desc">Rapide · Sous-estime les queues lourdes</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="mc_gaussian" checked />
-            <span class="slider-track"></span>
-          </label>
-        </div>
-        <div class="toggle-row">
-          <div class="toggle-info">
-            <div class="toggle-name">Bootstrap par blocs</div>
-            <div class="toggle-desc">Préserve les autocorrélations et la volatilité clustering</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="mc_bootstrap" checked />
-            <span class="slider-track"></span>
-          </label>
-        </div>
-        <div class="toggle-row">
-          <div class="toggle-info">
-            <div class="toggle-name">Régimes HMM (Markov)</div>
-            <div class="toggle-desc">Modélise les transitions expansion/crise · Nécessite hmmlearn</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="mc_hmm" />
-            <span class="slider-track"></span>
-          </label>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════ SECTION: TACTICAL ══════════════════ -->
-    <section class="section" id="sec-tactical">
-      <div class="section-title">Overlay Tactique (TAA)</div>
-      <div class="section-desc">L'overlay tactique ajuste l'allocation stratégique (SAA) en fonction du momentum et du régime de volatilité, sous contrainte de tracking error.</div>
-
-      <div class="card">
-        <div class="toggle-row" style="padding-bottom:16px">
-          <div class="toggle-info">
-            <div class="toggle-name" style="font-size:14px;font-weight:600">Activer l'overlay tactique</div>
-            <div class="toggle-desc">Applique les signaux de momentum et régime à la SAA</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="taa_enabled" checked onchange="toggleTAA()" />
-            <span class="slider-track"></span>
-          </label>
-        </div>
-      </div>
-
-      <div id="taa-params">
-        <div class="card">
+      <div class="block">
+        <div class="block-header">Taux sans risque</div>
+        <div class="block-body">
           <div class="form-grid">
             <div class="field">
-              <div class="label-inline">
-                <label>Fenêtre momentum (jours)</label>
-                <span class="label-value" id="momentum_display">63 j (~3 mois)</span>
+              <div class="label-row">
+                <label>Taux annualisé</label>
+                <span class="label-val" id="rf_display">4.50%</span>
               </div>
-              <input type="range" id="momentum_lookback" min="21" max="252" step="21" value="63"
-                oninput="updateMomentumDisplay(this.value)" />
-              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
+              <input type="range" id="risk_free_rate" min="0" max="10" step="0.1" value="4.5"
+                oninput="rfUpdate()" />
+              <div class="range-labels"><span>0%</span><span>5%</span><span>10%</span></div>
             </div>
             <div class="field">
-              <div class="label-inline">
-                <label>Budget de Tracking Error max</label>
-                <span class="label-value" id="te_display">2.0%</span>
-              </div>
-              <input type="range" id="te_budget" min="0.5" max="10" step="0.5" value="2"
-                oninput="document.getElementById('te_display').textContent=parseFloat(this.value).toFixed(1)+'%'" />
-              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)"><span>0.5%</span><span>5%</span><span>10%</span></div>
-              <small style="color:var(--text-muted);font-size:11px;">TE = √((w_TAA−w_SAA)ᵀ·Σ·(w_TAA−w_SAA)) ≤ TE_max</small>
+              <label>Taux journalier</label>
+              <input type="text" id="rf_daily" value="0.01786% / jour" readonly style="color:var(--muted);background:var(--surface)" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Dates</div>
+        <div class="block-body">
+          <div class="form-grid">
+            <div class="field">
+              <label>Début de l'historique</label>
+              <input type="date" id="data_start" value="2010-01-01" />
+            </div>
+            <div class="field">
+              <label>Début du backtest</label>
+              <input type="date" id="backtest_start" value="2015-01-01" />
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ════════════════ SECTION: EXPORT ════════════════════ -->
-    <section class="section" id="sec-export">
-      <div class="section-title">Code Python généré</div>
-      <div class="section-desc">Copiez ce bloc dans les sections 3 et 4 de votre notebook pour appliquer votre configuration.</div>
+    <!-- ══ UNIVERS ════════════════════════════════════════ -->
+    <section class="section" id="sec-universe">
+      <div class="section-title">Univers d'actifs</div>
+      <div class="section-desc">Tickers Yahoo Finance par classe. Cliquez × pour supprimer, ou ajoutez via le champ de saisie.</div>
 
-      <div style="display:flex;gap:10px;margin-bottom:16px;">
-        <button class="btn btn-success" onclick="copyCode()">📋 Copier le code</button>
-        <button class="btn btn-secondary" onclick="downloadCode()">⬇️ Télécharger .py</button>
+      <div class="block">
+        <div class="block-header">Actions — Equity</div>
+        <div class="block-body">
+          <div class="tag-area" id="tags-equity"></div>
+          <div class="tag-add-row">
+            <input type="text" id="input-equity" placeholder="SPY, QQQ…" onkeydown="if(event.key==='Enter')addTag('equity')" style="text-transform:uppercase" />
+            <button class="tag-add-btn" onclick="addTag('equity')">Ajouter</button>
+          </div>
+        </div>
       </div>
 
-      <div class="code-output" id="code-preview"></div>
+      <div class="block">
+        <div class="block-header">Obligations — Fixed Income</div>
+        <div class="block-body">
+          <div class="tag-area" id="tags-fixed_income"></div>
+          <div class="tag-add-row">
+            <input type="text" id="input-fixed_income" placeholder="AGG, TLT…" onkeydown="if(event.key==='Enter')addTag('fixed_income')" style="text-transform:uppercase" />
+            <button class="tag-add-btn" onclick="addTag('fixed_income')">Ajouter</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Matières premières — Commodity</div>
+        <div class="block-body">
+          <div class="tag-area" id="tags-commodity"></div>
+          <div class="tag-add-row">
+            <input type="text" id="input-commodity" placeholder="GLD, SLV…" onkeydown="if(event.key==='Enter')addTag('commodity')" style="text-transform:uppercase" />
+            <button class="tag-add-btn" onclick="addTag('commodity')">Ajouter</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Immobilier coté — Real Estate</div>
+        <div class="block-body">
+          <div class="tag-area" id="tags-real_estate"></div>
+          <div class="tag-add-row">
+            <input type="text" id="input-real_estate" placeholder="VNQ, VNQI…" onkeydown="if(event.key==='Enter')addTag('real_estate')" style="text-transform:uppercase" />
+            <button class="tag-add-btn" onclick="addTag('real_estate')">Ajouter</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Crypto-monnaies</div>
+        <div class="block-body">
+          <div class="tag-area" id="tags-crypto"></div>
+          <div class="tag-add-row">
+            <input type="text" id="input-crypto" placeholder="BTC-USD, ETH-USD…" onkeydown="if(event.key==='Enter')addTag('crypto')" style="text-transform:uppercase" />
+            <button class="tag-add-btn" onclick="addTag('crypto')">Ajouter</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MÉTHODES ═══════════════════════════════════════ -->
+    <section class="section" id="sec-methods">
+      <div class="section-title">Méthodes</div>
+      <div class="section-desc">Algorithmes d'estimation et d'optimisation.</div>
+
+      <div class="block">
+        <div class="block-header">Estimation des rendements (μ)</div>
+        <div class="block-body">
+          <div class="method-group" id="mg-return">
+            <button class="method-btn selected" data-val="black_litterman" onclick="selMethod('return',this)">Black-Litterman</button>
+            <button class="method-btn" data-val="shrinkage" onclick="selMethod('return',this)">James-Stein Shrinkage</button>
+            <button class="method-btn" data-val="historical" onclick="selMethod('return',this)">Historique</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Estimation de la covariance (Σ)</div>
+        <div class="block-body">
+          <div class="method-group" id="mg-cov">
+            <button class="method-btn selected" data-val="ledoit_wolf" onclick="selMethod('cov',this)">Ledoit-Wolf</button>
+            <button class="method-btn" data-val="ewma" onclick="selMethod('cov',this)">EWMA</button>
+            <button class="method-btn" data-val="sample" onclick="selMethod('cov',this)">Sample</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Optimisation du portefeuille</div>
+        <div class="block-body">
+          <div class="method-group" id="mg-optim">
+            <button class="method-btn selected" data-val="risk_budget" onclick="selMethod('optim',this)">Risk Budgeting</button>
+            <button class="method-btn" data-val="mvo" onclick="selMethod('optim',this)">MVO — Max Sharpe</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Fréquence de rééquilibrage</div>
+        <div class="block-body">
+          <div class="method-group" id="mg-rebalance">
+            <button class="method-btn" data-val="weekly" onclick="selMethod('rebalance',this)">Hebdomadaire</button>
+            <button class="method-btn selected" data-val="monthly" onclick="selMethod('rebalance',this)">Mensuel</button>
+            <button class="method-btn" data-val="quarterly" onclick="selMethod('rebalance',this)">Trimestriel</button>
+            <button class="method-btn" data-val="annual" onclick="selMethod('rebalance',this)">Annuel</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ESTIMATION ════════════════════════════════════ -->
+    <section class="section" id="sec-estimation">
+      <div class="section-title">Paramètres d'estimation</div>
+      <div class="section-desc">Hyperparamètres des estimateurs μ et Σ.</div>
+
+      <div class="block">
+        <div class="block-header">Général</div>
+        <div class="block-body">
+          <div class="form-grid">
+            <div class="field">
+              <div class="label-row">
+                <label>Fenêtre d'estimation</label>
+                <span class="label-val" id="estwin_v">5 ans</span>
+              </div>
+              <input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5"
+                oninput="document.getElementById('estwin_v').textContent=this.value+' ans'" />
+              <div class="range-labels"><span>1 an</span><span>8 ans</span><span>15 ans</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Départs aléatoires (MVO)</label>
+                <span class="label-val" id="nstarts_v">15</span>
+              </div>
+              <input type="range" id="n_random_starts" min="5" max="50" step="1" value="15"
+                oninput="document.getElementById('nstarts_v').textContent=this.value" />
+              <div class="range-labels"><span>5</span><span>25</span><span>50</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Black-Litterman</div>
+        <div class="block-body">
+          <div class="form-grid">
+            <div class="field">
+              <div class="label-row">
+                <label>Tau (τ) — incertitude prior</label>
+                <span class="label-val" id="tau_v">0.050</span>
+              </div>
+              <input type="range" id="bl_tau" min="0.01" max="0.20" step="0.005" value="0.05"
+                oninput="document.getElementById('tau_v').textContent=parseFloat(this.value).toFixed(3)" />
+              <div class="range-labels"><span>0.01</span><span>0.10</span><span>0.20</span></div>
+            </div>
+            <div class="field" style="align-self:start">
+              <label>Note</label>
+              <div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">
+                Faible τ → fort prior d'équilibre. Valeur typique : 1/T (nb de jours).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">EWMA</div>
+        <div class="block-body">
+          <div class="form-grid">
+            <div class="field">
+              <div class="label-row">
+                <label>Lambda (λ) — facteur d'oubli</label>
+                <span class="label-val" id="ewma_v">0.940</span>
+              </div>
+              <input type="range" id="ewma_lambda" min="0.80" max="0.99" step="0.005" value="0.94"
+                oninput="ewmaUpdate()" />
+              <div class="range-labels"><span>0.80</span><span>0.90</span><span>0.99</span></div>
+            </div>
+            <div class="field">
+              <label>Demi-vie calculée</label>
+              <input type="text" id="ewma_hl" value="≈ 11.0 jours" readonly style="color:var(--muted);background:var(--surface)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FILTRES ════════════════════════════════════════ -->
+    <section class="section" id="sec-filters">
+      <div class="section-title">Filtres de l'univers</div>
+      <div class="section-desc">Critères d'inclusion des actifs dans l'univers d'optimisation.</div>
+
+      <div class="block">
+        <div class="block-body">
+          <div class="form-grid">
+            <div class="field">
+              <div class="label-row">
+                <label>Corrélation maximale</label>
+                <span class="label-val" id="corr_v">0.90</span>
+              </div>
+              <input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90"
+                oninput="document.getElementById('corr_v').textContent=parseFloat(this.value).toFixed(2)" />
+              <div class="range-labels"><span>0.50</span><span>0.75</span><span>0.99</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Historique minimum</label>
+                <span class="label-val" id="hist_v">3 ans</span>
+              </div>
+              <input type="range" id="min_history_years" min="1" max="10" step="1" value="3"
+                oninput="document.getElementById('hist_v').textContent=this.value+' ans'" />
+              <div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Volatilité annuelle minimale</label>
+                <span class="label-val" id="vol_v">1.0%</span>
+              </div>
+              <input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1"
+                oninput="document.getElementById('vol_v').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+              <div class="range-labels"><span>0%</span><span>2.5%</span><span>5%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ BACKTEST ═══════════════════════════════════════ -->
+    <section class="section" id="sec-backtest">
+      <div class="section-title">Backtest walk-forward</div>
+      <div class="section-desc">Fenêtres d'entraînement et de test out-of-sample, coûts de transaction.</div>
+
+      <div class="block">
+        <div class="block-body">
+          <div class="form-grid">
+            <div class="field">
+              <div class="label-row">
+                <label>Fenêtre d'entraînement</label>
+                <span class="label-val" id="train_v">3 ans</span>
+              </div>
+              <input type="range" id="backtest_train_years" min="1" max="10" step="1" value="3"
+                oninput="document.getElementById('train_v').textContent=this.value+' ans'" />
+              <div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Fenêtre de test</label>
+                <span class="label-val" id="test_v">1 mois</span>
+              </div>
+              <input type="range" id="backtest_test_months" min="1" max="12" step="1" value="1"
+                oninput="document.getElementById('test_v').textContent=this.value+' mois'" />
+              <div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Coûts de transaction</label>
+                <span class="label-val" id="tc_v">10 bps</span>
+              </div>
+              <input type="range" id="transaction_cost_bps" min="0" max="50" step="1" value="10"
+                oninput="document.getElementById('tc_v').textContent=this.value+' bps'" />
+              <div class="range-labels"><span>0 bps</span><span>25 bps</span><span>50 bps</span></div>
+            </div>
+            <div class="field">
+              <label>Facteur d'annualisation</label>
+              <input type="number" id="annualization_factor" value="252" min="200" max="365" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MONTE CARLO ════════════════════════════════════ -->
+    <section class="section" id="sec-montecarlo">
+      <div class="section-title">Monte Carlo</div>
+      <div class="section-desc">Génération de scénarios de rendements futurs.</div>
+
+      <div class="block">
+        <div class="block-body">
+          <div class="form-grid">
+            <div class="field">
+              <label>Nombre de simulations</label>
+              <div class="method-group" id="mg-nsim" style="margin-top:2px">
+                <button class="method-btn" data-val="1000" onclick="selMethod('nsim',this)">1 000</button>
+                <button class="method-btn" data-val="2000" onclick="selMethod('nsim',this)">2 000</button>
+                <button class="method-btn selected" data-val="5000" onclick="selMethod('nsim',this)">5 000</button>
+                <button class="method-btn" data-val="10000" onclick="selMethod('nsim',this)">10 000</button>
+              </div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Horizon de projection</label>
+                <span class="label-val" id="horizon_v">10 ans</span>
+              </div>
+              <input type="range" id="simulation_horizon_years" min="1" max="30" step="1" value="10"
+                oninput="document.getElementById('horizon_v').textContent=this.value+' ans'" />
+              <div class="range-labels"><span>1 an</span><span>15 ans</span><span>30 ans</span></div>
+            </div>
+            <div class="field">
+              <label>Capital initial (€)</label>
+              <input type="number" id="initial_wealth" value="100000" min="1000" step="1000" />
+            </div>
+            <div class="field">
+              <label>Graine aléatoire</label>
+              <input type="number" id="random_state" value="42" min="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">Méthodes activées</div>
+        <div class="block-body">
+          <div class="toggle-row">
+            <div><div class="toggle-name">Gaussienne paramétrique</div><div class="toggle-desc">Rapide · Sous-estime les queues lourdes</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="mc_gaussian" checked /><span class="track"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-name">Bootstrap par blocs</div><div class="toggle-desc">Préserve les autocorrélations</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="mc_bootstrap" checked /><span class="track"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-name">Régimes HMM</div><div class="toggle-desc">Transitions expansion/crise · Nécessite hmmlearn</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="mc_hmm" /><span class="track"></span></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ TACTICAL ═══════════════════════════════════════ -->
+    <section class="section" id="sec-tactical">
+      <div class="section-title">Overlay tactique (TAA)</div>
+      <div class="section-desc">Ajustements dynamiques basés sur le momentum et le régime de volatilité, sous contrainte de tracking error.</div>
+
+      <div class="block">
+        <div class="block-body">
+          <div class="toggle-row" style="padding:0 0 14px">
+            <div><div class="toggle-name">Activer l'overlay tactique</div><div class="toggle-desc">Applique les signaux momentum/régime à la SAA</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="taa_enabled" checked onchange="taaToggle()" /><span class="track"></span></label>
+          </div>
+          <hr style="margin:0 0 14px">
+          <div id="taa-fields">
+            <div class="form-grid">
+              <div class="field">
+                <div class="label-row">
+                  <label>Fenêtre momentum</label>
+                  <span class="label-val" id="mom_v">63 j (~3 mois)</span>
+                </div>
+                <input type="range" id="momentum_lookback" min="21" max="252" step="21" value="63"
+                  oninput="momUpdate(this.value)" />
+                <div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div>
+              </div>
+              <div class="field">
+                <div class="label-row">
+                  <label>Tracking error max</label>
+                  <span class="label-val" id="te_v">2.0%</span>
+                </div>
+                <input type="range" id="te_budget" min="0.5" max="10" step="0.5" value="2"
+                  oninput="document.getElementById('te_v').textContent=parseFloat(this.value).toFixed(1)+'%'" />
+                <div class="range-labels"><span>0.5%</span><span>5%</span><span>10%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ EXPORT ══════════════════════════════════════════ -->
+    <section class="section" id="sec-export">
+      <div class="section-title">Code Python généré</div>
+      <div class="section-desc">Copiez ce bloc dans les cellules 3 et 4 de votre notebook.</div>
+
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button class="btn btn-dark" onclick="copyCode()">Copier</button>
+        <button class="btn" onclick="downloadCode()">Télécharger .py</button>
+      </div>
+
+      <div class="code-box" id="code-out"></div>
     </section>
 
   </main>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast">✅ Copié dans le presse-papiers !</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ── State ───────────────────────────────────────────────────────
-const state = {
-  profile: 'Very Conservative',
-  fred_api_key: '',
-  risk_free_rate: 4.5,
-  data_start: '2010-01-01',
-  backtest_start: '2015-01-01',
-  universe: {
-    equity: ['SPY', 'QQQ', 'VGK', 'EEM', 'VWO'],
-    fixed_income: ['AGG', 'TLT', 'IEF', 'LQD', 'HYG', 'EMB'],
-    commodity: ['GLD', 'SLV', 'DJP'],
-    real_estate: ['VNQ', 'VNQI'],
-    crypto: ['BTC-USD', 'ETH-USD'],
-  },
-  methods: {
-    return: 'black_litterman',
-    cov: 'ledoit_wolf',
-    optim: 'risk_budget',
-    rebalance: 'monthly',
-    nsim: '5000',
-  },
-  estimation_window_years: 5,
-  n_random_starts: 15,
-  bl_tau: 0.05,
-  ewma_lambda: 0.94,
-  max_correlation: 0.90,
-  min_history_years: 3,
-  min_annual_vol: 1.0,
-  backtest_train_years: 3,
-  backtest_test_months: 1,
-  transaction_cost_bps: 10,
-  annualization_factor: 252,
-  simulation_horizon_years: 10,
-  initial_wealth: 100000,
-  random_state: 42,
-  taa_enabled: true,
-  momentum_lookback: 63,
-  te_budget: 2.0,
+const PROFILES = {
+  'Very Conservative': { lambda_: 8, vol: '5%', max_eq: '30%', max_cr: '0%', crypto: false, budgets: { equity:.20, fixed_income:.65, commodity:.10, real_estate:.05, crypto:.00 } },
+  'Conservative':      { lambda_: 6, vol: '8%', max_eq: '50%', max_cr: '0%', crypto: false, budgets: { equity:.35, fixed_income:.50, commodity:.10, real_estate:.05, crypto:.00 } },
+  'Balanced':          { lambda_: 4, vol:'12%', max_eq: '70%', max_cr: '5%', crypto: true,  budgets: { equity:.50, fixed_income:.30, commodity:.10, real_estate:.05, crypto:.05 } },
+  'Growth':            { lambda_:2.5, vol:'18%', max_eq: '85%', max_cr:'10%', crypto: true,  budgets: { equity:.65, fixed_income:.15, commodity:.08, real_estate:.05, crypto:.07 } },
+  'Aggressive':        { lambda_:1.5, vol:'25%', max_eq:'100%', max_cr:'20%', crypto: true,  budgets: { equity:.70, fixed_income:.05, commodity:.05, real_estate:.05, crypto:.15 } },
 };
 
-const PROFILES_INFO = {
-  'Very Conservative': { lambda_: 8, target_vol: '5%', max_equity: '30%', max_crypto: '0%', include_crypto: false, risk_budgets: { equity: 0.20, fixed_income: 0.65, commodity: 0.10, real_estate: 0.05, crypto: 0.00 } },
-  'Conservative': { lambda_: 6, target_vol: '8%', max_equity: '50%', max_crypto: '0%', include_crypto: false, risk_budgets: { equity: 0.35, fixed_income: 0.50, commodity: 0.10, real_estate: 0.05, crypto: 0.00 } },
-  'Balanced': { lambda_: 4, target_vol: '12%', max_equity: '70%', max_crypto: '5%', include_crypto: true, risk_budgets: { equity: 0.50, fixed_income: 0.30, commodity: 0.10, real_estate: 0.05, crypto: 0.05 } },
-  'Growth': { lambda_: 2.5, target_vol: '18%', max_equity: '85%', max_crypto: '10%', include_crypto: true, risk_budgets: { equity: 0.65, fixed_income: 0.15, commodity: 0.08, real_estate: 0.05, crypto: 0.07 } },
-  'Aggressive': { lambda_: 1.5, target_vol: '25%', max_equity: '100%', max_crypto: '20%', include_crypto: true, risk_budgets: { equity: 0.70, fixed_income: 0.05, commodity: 0.05, real_estate: 0.05, crypto: 0.15 } },
+const universe = {
+  equity: ['SPY','QQQ','VGK','EEM','VWO'],
+  fixed_income: ['AGG','TLT','IEF','LQD','HYG','EMB'],
+  commodity: ['GLD','SLV','DJP'],
+  real_estate: ['VNQ','VNQI'],
+  crypto: ['BTC-USD','ETH-USD'],
 };
 
-// ── Navigation ──────────────────────────────────────────────────
+const methods = { return:'black_litterman', cov:'ledoit_wolf', optim:'risk_budget', rebalance:'monthly', nsim:'5000' };
+let selectedProfile = 'Balanced';
+
+// Nav
 function showSection(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1115,252 +954,168 @@ function showSection(name) {
   if (name === 'export') generateCode();
 }
 
-// ── Profile ─────────────────────────────────────────────────────
+// Profile
 function selectProfile(el) {
   document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  state.profile = el.dataset.profile;
-  renderProfileDetails();
+  selectedProfile = el.dataset.profile;
+  renderProfile();
 }
 
-function renderProfileDetails() {
-  const p = PROFILES_INFO[state.profile];
-  const container = document.getElementById('profile-details');
-  const items = [
-    ['Aversion au risque (λ)', p.lambda_],
-    ['Volatilité cible', p.target_vol],
-    ['Max. exposition actions', p.max_equity],
-    ['Max. exposition crypto', p.max_crypto],
-    ['Crypto incluse', p.include_crypto ? '✅ Oui' : '❌ Non'],
-    ['Eq. risk budget', (p.risk_budgets.equity*100).toFixed(0)+'%'],
-    ['Fixed inc. risk budget', (p.risk_budgets.fixed_income*100).toFixed(0)+'%'],
-    ['Commodity risk budget', (p.risk_budgets.commodity*100).toFixed(0)+'%'],
-  ];
-  container.innerHTML = items.map(([k, v]) => `
-    <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 12px;">
-      <div style="font-size:11px;color:var(--text-muted);margin-bottom:3px;">${k}</div>
-      <div style="font-size:15px;font-weight:700;color:var(--accent)">${v}</div>
+function renderProfile() {
+  const p = PROFILES[selectedProfile];
+  document.getElementById('profile-stats').innerHTML = [
+    ['Aversion (λ)', p.lambda_],
+    ['Vol. cible', p.vol],
+    ['Max actions', p.max_eq],
+    ['Crypto', p.crypto ? 'Oui' : 'Non'],
+  ].map(([l,v]) => `<div class="stat-item"><div class="stat-label">${l}</div><div class="stat-value">${v}</div></div>`).join('');
+
+  const classes = { equity:'Actions', fixed_income:'Obligations', commodity:'Matières premières', real_estate:'Immobilier', crypto:'Crypto' };
+  document.getElementById('risk-budgets').innerHTML = Object.entries(p.budgets).map(([k, v]) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:7px 0;${k!=='equity'?'border-top:1px solid var(--border)':''}">
+      <div style="width:120px;font-size:12px;color:var(--muted)">${classes[k]}</div>
+      <div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="width:${v*100}%;height:100%;background:#111;border-radius:3px;transition:width .3s"></div>
+      </div>
+      <div style="width:32px;text-align:right;font-size:12px;font-weight:600">${(v*100).toFixed(0)}%</div>
     </div>
   `).join('');
 }
 
-// ── Tags ────────────────────────────────────────────────────────
+// Tags
 function renderTags(cls) {
-  const container = document.getElementById('tags-' + cls);
-  container.innerHTML = state.universe[cls].map(ticker => `
-    <div class="tag">
-      ${ticker}
-      <span class="tag-remove" onclick="removeTag('${cls}','${ticker}')">×</span>
-    </div>
-  `).join('');
+  document.getElementById('tags-'+cls).innerHTML = universe[cls].map(t =>
+    `<div class="tag">${t}<span class="tag-x" onclick="removeTag('${cls}','${t}')">×</span></div>`
+  ).join('');
 }
-
-function removeTag(cls, ticker) {
-  state.universe[cls] = state.universe[cls].filter(t => t !== ticker);
+function removeTag(cls, t) {
+  universe[cls] = universe[cls].filter(x => x !== t);
   renderTags(cls);
 }
-
 function addTag(cls) {
-  const input = document.getElementById('input-' + cls);
-  const val = input.value.trim().toUpperCase();
-  if (!val) return;
-  val.split(/[\s,;]+/).forEach(t => {
+  const inp = document.getElementById('input-'+cls);
+  inp.value.toUpperCase().split(/[\s,;]+/).forEach(t => {
     t = t.trim();
-    if (t && !state.universe[cls].includes(t)) state.universe[cls].push(t);
+    if (t && !universe[cls].includes(t)) universe[cls].push(t);
   });
-  input.value = '';
+  inp.value = '';
   renderTags(cls);
 }
 
-// ── Methods ─────────────────────────────────────────────────────
-function selectMethod(type, el) {
-  const group = el.parentElement;
-  group.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+// Methods
+function selMethod(type, el) {
+  el.parentElement.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
-  state.methods[type] = el.dataset.val;
+  methods[type] = el.dataset.val;
 }
 
-// ── EWMA half-life ──────────────────────────────────────────────
-function updateEWMAHalflife() {
-  const lambda = parseFloat(document.getElementById('ewma_lambda').value);
-  const hl = Math.log(0.5) / Math.log(lambda);
-  document.getElementById('ewma_halflife').textContent = hl.toFixed(1);
+// Live updates
+function rfUpdate() {
+  const v = parseFloat(document.getElementById('risk_free_rate').value);
+  document.getElementById('rf_display').textContent = v.toFixed(2) + '%';
+  document.getElementById('rf_daily').value = (v/252).toFixed(5) + '% / jour';
+}
+function ewmaUpdate() {
+  const v = parseFloat(document.getElementById('ewma_lambda').value);
+  document.getElementById('ewma_v').textContent = v.toFixed(3);
+  document.getElementById('ewma_hl').value = '≈ ' + (Math.log(.5)/Math.log(v)).toFixed(1) + ' jours';
+}
+function momUpdate(v) {
+  document.getElementById('mom_v').textContent = `${v} j (~${Math.round(v/21)} mois)`;
+}
+function taaToggle() {
+  const on = document.getElementById('taa_enabled').checked;
+  document.getElementById('taa-fields').style.opacity = on ? '1' : '0.35';
+  document.getElementById('taa-fields').style.pointerEvents = on ? '' : 'none';
 }
 
-// ── RF rate ─────────────────────────────────────────────────────
-function updateRFDaily() {
-  const rf = parseFloat(document.getElementById('risk_free_rate').value);
-  document.getElementById('rf_daily_display').textContent = (rf / 252).toFixed(5);
-}
-
-// ── Momentum display ────────────────────────────────────────────
-function updateMomentumDisplay(val) {
-  const months = Math.round(val / 21);
-  document.getElementById('momentum_display').textContent = `${val} j (~${months} mois)`;
-}
-
-// ── Filter summary ──────────────────────────────────────────────
-function updateFilterSummary() {
-  const corr = parseFloat(document.getElementById('max_correlation').value);
-  const hist = document.getElementById('min_history_years').value;
-  const vol = parseFloat(document.getElementById('min_annual_vol').value);
-  document.getElementById('filter-summary').innerHTML =
-    `max_corr = ${corr.toFixed(2)}\nmin_hist = ${hist} ans\nmin_vol  = ${vol.toFixed(1)}%`;
-}
-
-// ── TAA toggle ──────────────────────────────────────────────────
-function toggleTAA() {
-  const enabled = document.getElementById('taa_enabled').checked;
-  document.getElementById('taa-params').style.opacity = enabled ? '1' : '0.4';
-  document.getElementById('taa-params').style.pointerEvents = enabled ? '' : 'none';
-}
-
-// ── Code Generation ─────────────────────────────────────────────
+// Code generation
 function generateCode() {
-  const rf = parseFloat(document.getElementById('risk_free_rate').value);
-  const estwin = document.getElementById('estimation_window_years').value;
-  const nstarts = document.getElementById('n_random_starts').value;
-  const bl_tau = parseFloat(document.getElementById('bl_tau').value);
-  const ewma = parseFloat(document.getElementById('ewma_lambda').value);
-  const maxcorr = parseFloat(document.getElementById('max_correlation').value);
-  const minhist = document.getElementById('min_history_years').value;
-  const minvol = parseFloat(document.getElementById('min_annual_vol').value);
-  const train = document.getElementById('backtest_train_years').value;
-  const test = document.getElementById('backtest_test_months').value;
-  const tc = document.getElementById('transaction_cost_bps').value;
-  const ann = document.getElementById('annualization_factor').value;
-  const horizon = document.getElementById('simulation_horizon_years').value;
-  const nsim = state.methods.nsim;
-  const wealth = document.getElementById('initial_wealth').value;
-  const seed = document.getElementById('random_state').value;
+  const g = id => document.getElementById(id).value;
+  const rf = parseFloat(g('risk_free_rate'));
   const taa = document.getElementById('taa_enabled').checked;
-  const momentum = document.getElementById('momentum_lookback').value;
-  const te = parseFloat(document.getElementById('te_budget').value);
-  const fred = document.getElementById('fred_api_key').value;
-  const ds = document.getElementById('data_start').value;
-  const bs = document.getElementById('backtest_start').value;
-
-  const lines = [];
-  lines.push(`# ═══════════════════════════════════════════════════════`);
-  lines.push(`# CONFIGURATION GÉNÉRÉE — Portfolio Investment System`);
-  lines.push(`# ═══════════════════════════════════════════════════════`);
-  lines.push(``);
-  lines.push(`# ── Section 3 : Clés API & Paramètres de base ───────────`);
-  lines.push(`FRED_API_KEY = '${fred}'`);
-  lines.push(`DEFAULT_RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}  # ${rf.toFixed(2)}%`);
-  lines.push(`RISK_FREE_RATE_DAILY = DEFAULT_RISK_FREE_RATE_ANNUAL / 252`);
-  lines.push(``);
-  lines.push(`SELECTED_PROFILE = '${state.profile}'`);
-  lines.push(`BACKTEST_START = '${bs}'`);
-  lines.push(`DATA_START = '${ds}'`);
-  lines.push(``);
-  lines.push(`# ── Section 4 : Configuration globale ───────────────────`);
-  lines.push(`RANDOM_STATE = ${seed}`);
-  lines.push(`np.random.seed(RANDOM_STATE)`);
-  lines.push(``);
-  lines.push(`DEFAULT_PARAMS = {`);
-  lines.push(`    'profile':                  '${state.profile}',`);
-  lines.push(`    'estimation_window_years':  ${estwin},`);
-  lines.push(`    'covariance_method':        '${state.methods.cov}',`);
-  lines.push(`    'return_method':            '${state.methods.return}',`);
-  lines.push(`    'optimization_method':      '${state.methods.optim}',`);
-  lines.push(`    'rebalance_frequency':      '${state.methods.rebalance}',`);
-  lines.push(`    'transaction_cost_bps':     ${tc},`);
-  lines.push(`    'annualization_factor':     ${ann},`);
-  lines.push(`    'ewma_lambda':              ${ewma.toFixed(3)},`);
-  lines.push(`    'bl_tau':                   ${bl_tau.toFixed(3)},`);
-  lines.push(`    'n_random_starts':          ${nstarts},`);
-  lines.push(`    'backtest_train_years':     ${train},`);
-  lines.push(`    'backtest_test_months':     ${test},`);
-  lines.push(`    'n_simulations':            ${nsim},`);
-  lines.push(`    'simulation_horizon_years': ${horizon},`);
-  lines.push(`    'min_history_years':        ${minhist},`);
-  lines.push(`    'max_correlation':          ${maxcorr.toFixed(2)},`);
-  lines.push(`    'min_annual_vol':           ${(minvol/100).toFixed(4)},`);
-  lines.push(`}`);
-  lines.push(``);
-  lines.push(`# ── Section 5 : Univers d'actifs ─────────────────────────`);
-  lines.push(`ASSET_UNIVERSE: Dict[str, List[str]] = {`);
-  for (const [cls, tickers] of Object.entries(state.universe)) {
-    lines.push(`    '${cls}': ${JSON.stringify(tickers)},`);
-  }
-  lines.push(`}`);
-  lines.push(``);
-  lines.push(`# ── Overlay Tactique (TAA) ───────────────────────────────`);
-  lines.push(`TAA_ENABLED = ${taa ? 'True' : 'False'}`);
-  if (taa) {
-    lines.push(`MOMENTUM_LOOKBACK_DAYS = ${momentum}  # ~${Math.round(momentum/21)} mois`);
-    lines.push(`TE_BUDGET = ${(te/100).toFixed(4)}  # ${te.toFixed(1)}%`);
-  }
-  lines.push(``);
-  lines.push(`# ── Monte Carlo ──────────────────────────────────────────`);
-  lines.push(`INITIAL_WEALTH = ${wealth}`);
-  lines.push(`HORIZON = ${horizon}`);
-  lines.push(``);
-  lines.push(`print('✅ Configuration chargée avec succès.')`);
-  lines.push(`print(f'   Profil : {SELECTED_PROFILE}')`);
-  lines.push(`print(f'   Méthodes : {DEFAULT_PARAMS[\"return_method\"]} / {DEFAULT_PARAMS[\"covariance_method\"]} / {DEFAULT_PARAMS[\"optimization_method\"]}')`);
-
-  const code = lines.join('\n');
-  document.getElementById('code-preview').textContent = code;
+  const lines = [
+    `# ═══════════════════════════════════════════════`,
+    `# Configuration — Portfolio Investment System`,
+    `# ═══════════════════════════════════════════════`,
+    ``,
+    `# Section 3 — API & paramètres de base`,
+    `FRED_API_KEY = '${g('fred_api_key')}'`,
+    `DEFAULT_RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}  # ${rf.toFixed(2)}%`,
+    `RISK_FREE_RATE_DAILY = DEFAULT_RISK_FREE_RATE_ANNUAL / 252`,
+    ``,
+    `SELECTED_PROFILE = '${selectedProfile}'`,
+    `DATA_START      = '${g('data_start')}'`,
+    `BACKTEST_START  = '${g('backtest_start')}'`,
+    ``,
+    `# Section 4 — Configuration globale`,
+    `RANDOM_STATE = ${g('random_state')}`,
+    `np.random.seed(RANDOM_STATE)`,
+    ``,
+    `DEFAULT_PARAMS = {`,
+    `    'profile':                  '${selectedProfile}',`,
+    `    'estimation_window_years':  ${g('estimation_window_years')},`,
+    `    'covariance_method':        '${methods.cov}',`,
+    `    'return_method':            '${methods.return}',`,
+    `    'optimization_method':      '${methods.optim}',`,
+    `    'rebalance_frequency':      '${methods.rebalance}',`,
+    `    'transaction_cost_bps':     ${g('transaction_cost_bps')},`,
+    `    'annualization_factor':     ${g('annualization_factor')},`,
+    `    'ewma_lambda':              ${parseFloat(g('ewma_lambda')).toFixed(3)},`,
+    `    'bl_tau':                   ${parseFloat(g('bl_tau')).toFixed(3)},`,
+    `    'n_random_starts':          ${g('n_random_starts')},`,
+    `    'backtest_train_years':     ${g('backtest_train_years')},`,
+    `    'backtest_test_months':     ${g('backtest_test_months')},`,
+    `    'n_simulations':            ${methods.nsim},`,
+    `    'simulation_horizon_years': ${g('simulation_horizon_years')},`,
+    `    'min_history_years':        ${g('min_history_years')},`,
+    `    'max_correlation':          ${parseFloat(g('max_correlation')).toFixed(2)},`,
+    `    'min_annual_vol':           ${(parseFloat(g('min_annual_vol'))/100).toFixed(4)},`,
+    `}`,
+    ``,
+    `# Section 5 — Univers d'actifs`,
+    `ASSET_UNIVERSE = {`,
+    ...Object.entries(universe).map(([k,v]) => `    '${k}': ${JSON.stringify(v)},`),
+    `}`,
+    ``,
+    `# Overlay tactique`,
+    `TAA_ENABLED = ${taa ? 'True' : 'False'}`,
+    ...(taa ? [
+      `MOMENTUM_LOOKBACK_DAYS = ${g('momentum_lookback')}`,
+      `TE_BUDGET = ${(parseFloat(g('te_budget'))/100).toFixed(4)}`,
+    ] : []),
+    ``,
+    `# Monte Carlo`,
+    `INITIAL_WEALTH = ${g('initial_wealth')}`,
+    `HORIZON = ${g('simulation_horizon_years')}`,
+    ``,
+    `print(f'✅ Config chargée — profil : {SELECTED_PROFILE}')`,
+  ];
+  document.getElementById('code-out').textContent = lines.join('\n');
 }
 
-// ── Copy / Download ─────────────────────────────────────────────
 function copyCode() {
-  const code = document.getElementById('code-preview').textContent;
-  navigator.clipboard.writeText(code).then(() => showToast('✅ Code copié dans le presse-papiers !'));
+  navigator.clipboard.writeText(document.getElementById('code-out').textContent).then(() => toast('Copié !'));
 }
-
 function downloadCode() {
-  const code = document.getElementById('code-preview').textContent;
-  const blob = new Blob([code], { type: 'text/plain' });
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = URL.createObjectURL(new Blob([document.getElementById('code-out').textContent], {type:'text/plain'}));
   a.download = 'portfolio_config.py';
   a.click();
-  showToast('⬇️ Fichier téléchargé !');
+  toast('Téléchargé !');
 }
-
-function showToast(msg) {
+function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 2000);
 }
+function resetDefaults() { location.reload(); }
 
-// ── Reset ───────────────────────────────────────────────────────
-function resetDefaults() {
-  location.reload();
-}
-
-// ── Init ────────────────────────────────────────────────────────
-function init() {
-  // Render profile
-  renderProfileDetails();
-
-  // Render tags
-  for (const cls of Object.keys(state.universe)) renderTags(cls);
-
-  // Select the Balanced profile card by default (matching original notebook)
-  document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
-  document.querySelector('[data-profile="Balanced"]').classList.add('selected');
-  state.profile = 'Balanced';
-  renderProfileDetails();
-
-  // Live listeners
-  document.getElementById('risk_free_rate').addEventListener('input', updateRFDaily);
-  document.getElementById('ewma_lambda').addEventListener('input', updateEWMAHalflife);
-  document.getElementById('max_correlation').addEventListener('input', updateFilterSummary);
-  document.getElementById('min_history_years').addEventListener('input', updateFilterSummary);
-  document.getElementById('min_annual_vol').addEventListener('input', updateFilterSummary);
-
-  // Initial state
-  updateRFDaily();
-  updateEWMAHalflife();
-  updateFilterSummary();
-}
-
-init();
+// Init
+renderProfile();
+Object.keys(universe).forEach(renderTags);
 </script>
 </body>
 </html>
