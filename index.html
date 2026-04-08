@@ -114,20 +114,18 @@
 
     /* ── Blocks ─────────────────────────── */
     .block {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 14px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+      border-top: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .block:last-of-type {
+      border-bottom: 1px solid var(--border);
     }
     .block-header {
-      padding: 11px 18px;
-      border-bottom: 1px solid var(--border);
-      font-size: 11.5px; font-weight: 700; color: var(--muted);
-      background: var(--surface);
-      text-transform: uppercase; letter-spacing: .6px;
+      padding: 14px 0 6px;
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .7px;
     }
-    .block-body { padding: 18px; }
+    .block-body { padding: 0 0 20px; }
 
     /* ── Forms ──────────────────────────── */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -156,31 +154,32 @@
     .range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 3px; }
 
     /* ── Profiles ───────────────────────── */
-    .profile-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .profile-grid {
+      display: flex; flex-wrap: wrap; gap: 0;
+      background: transparent;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 4px 0;
+    }
     .profile-card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 8px 12px;
-      cursor: pointer; text-align: center;
-      transition: border-color .15s, background .15s, box-shadow .15s;
-      background: #fff;
+      flex: 1; min-width: 120px;
+      display: flex; align-items: center; gap: 10px;
+      border: none; border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background .15s, box-shadow .15s;
+      background: transparent;
     }
-    .profile-card:hover {
-      background: var(--surface);
-      border-color: #c4c8d0;
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    }
+    .profile-card:hover { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
     .profile-card.selected {
-      background: #0f1117;
-      color: #fff;
-      border-color: #0f1117;
-      box-shadow: 0 2px 12px rgba(15,17,23,.18);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(15,17,23,.1);
     }
-    .profile-card.selected .p-risk { color: rgba(255,255,255,.6); }
-    .profile-card.selected svg { stroke: #fff; }
-    .p-icon { font-size: 18px; margin-bottom: 6px; }
-    .p-name { font-size: 11px; font-weight: 700; }
-    .p-risk { font-size: 10px; color: var(--muted); margin-top: 3px; }
+    .profile-card.selected .p-name { color: #0f1117; }
+    .profile-card.selected .p-risk { color: var(--muted); }
+    .p-icon { flex-shrink: 0; display: flex; align-items: center; }
+    .p-name { font-size: 13px; font-weight: 600; color: #374151; }
+    .p-risk { font-size: 11px; color: #9ca3af; margin-top: 1px; }
 
     /* ── Stats ──────────────────────────── */
     .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -247,13 +246,14 @@
       border-radius: var(--radius);
       margin-bottom: 24px; gap: 12px; flex-wrap: wrap;
     }
-    .run-config { display: flex; gap: 8px; flex-wrap: wrap; }
+    .run-config { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
     .run-tag {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-size: 12px; font-weight: 500; color: #374151;
+      font-size: 12.5px; font-weight: 500; color: #374151;
+      padding: 0 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .run-tag + .run-tag {
+      border-left: 1px solid var(--border);
     }
     .run-btn {
       padding: 10px 26px;
@@ -348,27 +348,51 @@
 
     /* ── Footer ─────────────────────────── */
     footer {
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      padding: 32px 44px;
+      background: #0f1117;
+      color: #e5e7eb;
+      padding: 48px 44px 28px;
+      margin-top: 0;
     }
-    .footer-inner { max-width: 860px; }
-    .footer-title { font-size: 13px; font-weight: 700; color: #0f1117; margin-bottom: 4px; }
-    .footer-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-    .footer-authors {
-      font-size: 12.5px; font-weight: 500; color: #374151;
-      margin-bottom: 16px; line-height: 1.9;
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .footer-brand-name {
+      font-size: 14px; font-weight: 700; color: #fff;
+      margin-bottom: 8px; letter-spacing: -.2px;
+    }
+    .footer-brand-desc {
+      font-size: 12px; color: #9ca3af; line-height: 1.7; max-width: 280px;
+    }
+    .footer-col-title {
+      font-size: 10.5px; font-weight: 700; color: #6b7280;
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+    .footer-col-list {
+      list-style: none; display: flex; flex-direction: column; gap: 8px;
+    }
+    .footer-col-list li {
+      font-size: 12.5px; color: #d1d5db; font-weight: 400;
+    }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 24px; padding-top: 24px; flex-wrap: wrap;
     }
     .footer-legal {
-      font-size: 11px; color: #9ca3af; line-height: 1.7;
-      border-top: 1px solid var(--border); padding-top: 14px;
-      margin-bottom: 10px;
+      font-size: 11px; color: #4b5563; line-height: 1.7; max-width: 680px;
     }
-    .footer-copy { font-size: 11px; color: #c4c8d0; }
+    .footer-copy {
+      font-size: 11.5px; color: #4b5563; white-space: nowrap; padding-top: 2px;
+    }
 
     @media (max-width: 768px) {
-      footer { padding: 24px 14px; }
-      .footer-authors { line-height: 2; }
+      footer { padding: 36px 16px 24px; }
+      .footer-top { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 12px; }
     }
 
     /* ── Flatpickr custom theme ─────────── */
@@ -514,7 +538,8 @@
       .section-desc { font-size: 13px; margin-bottom: 20px; }
 
       /* Grids */
-      .profile-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .profile-grid { gap: 6px; }
+      .profile-card { min-width: 0; flex: 1 1 calc(50% - 6px); }
       .form-grid { grid-template-columns: 1fr; }
       .charts-row { grid-template-columns: 1fr; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -595,17 +620,12 @@
     <section class="section active" id="sec-profile">
       <div class="section-title">Profil investisseur</div>
       <div class="section-desc">Définit l'aversion au risque, la volatilité cible et les budgets de risque par classe d'actifs.</div>
-      <div class="block">
-        <div class="block-header">Sélection du profil</div>
-        <div class="block-body">
-          <div class="profile-grid">
+      <div class="profile-grid">
             <div class="profile-card" data-profile="Very Conservative" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="p-name">Très conservateur</div><div class="p-risk">λ = 8 · 5% vol</div></div>
             <div class="profile-card" data-profile="Conservative" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11"/><path d="M3 10l9-7 9 7"/><line x1="7" y1="10" x2="7" y2="21"/><line x1="12" y1="10" x2="12" y2="21"/><line x1="17" y1="10" x2="17" y2="21"/></svg></div><div class="p-name">Conservateur</div><div class="p-risk">λ = 6 · 8% vol</div></div>
             <div class="profile-card selected" data-profile="Balanced" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 9l9-6 9 6"/><path d="M5 9l-2 7h4z"/><path d="M19 9l-2 7h4z"/><line x1="3" y1="21" x2="21" y2="21"/></svg></div><div class="p-name">Équilibré</div><div class="p-risk">λ = 4 · 12% vol</div></div>
             <div class="profile-card" data-profile="Growth" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="p-name">Croissance</div><div class="p-risk">λ = 2.5 · 18% vol</div></div>
             <div class="profile-card" data-profile="Aggressive" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="p-name">Agressif</div><div class="p-risk">λ = 1.5 · 25% vol</div></div>
-          </div>
-        </div>
       </div>
       <div class="block">
         <div class="block-header">Paramètres du profil</div>
@@ -1553,16 +1573,36 @@ flatpickr('#backtest_start', {
 </script>
 
 <footer>
-  <div class="footer-inner">
-    <div class="footer-title">Portfolio Investment System</div>
-    <div class="footer-desc">Projet académique réalisé dans le cadre d'un cours de gestion de portefeuille.</div>
-    <div class="footer-authors">
-      Hugo Puigventos &nbsp;·&nbsp; Maxime Cervasel &nbsp;·&nbsp; Kader Diop &nbsp;·&nbsp;
-      Arthur Baumont &nbsp;·&nbsp; Lorenzo Millucio &nbsp;·&nbsp; Sacha Fedeli
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">Portfolio Investment System</div>
+      <div class="footer-brand-desc">Outil académique d'optimisation de portefeuille multi-actifs basé sur des modèles quantitatifs — Black-Litterman, Risk Budgeting, Monte Carlo.</div>
     </div>
+    <div>
+      <div class="footer-col-title">Équipe</div>
+      <ul class="footer-col-list">
+        <li>Hugo Puigventos</li>
+        <li>Maxime Cervasel</li>
+        <li>Kader Diop</li>
+        <li>Arthur Baumont</li>
+        <li>Lorenzo Millucio</li>
+        <li>Sacha Fedeli</li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Modules</div>
+      <ul class="footer-col-list">
+        <li>Profil investisseur</li>
+        <li>Optimisation MVO / Risk Budget</li>
+        <li>Simulation Monte Carlo</li>
+        <li>Backtest & Performance</li>
+        <li>Export Python</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
     <div class="footer-legal">
-      Ce site est fourni à titre pédagogique uniquement. Les résultats présentés ne constituent pas un conseil en investissement.
-      Les performances passées ne préjugent pas des performances futures. Aucune des informations contenues sur ce site ne saurait être interprétée comme un conseil financier, fiscal ou juridique.
+      Ce site est fourni à titre pédagogique uniquement. Les résultats présentés ne constituent pas un conseil en investissement. Les performances passées ne préjugent pas des performances futures. Aucune information contenue sur ce site ne saurait être interprétée comme un conseil financier, fiscal ou juridique.
     </div>
     <div class="footer-copy">© 2026 — Tous droits réservés</div>
   </div>
