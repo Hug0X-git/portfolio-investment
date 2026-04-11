@@ -592,20 +592,17 @@
 
 <div class="container">
   <aside>
+    <div class="nav-group">Démarrer</div>
+    <div class="nav-item" onclick="showSection('questionnaire')" data-section="questionnaire">Questionnaire</div>
+
     <div class="nav-group">Configuration</div>
     <div class="nav-item active" onclick="showSection('profile')" data-section="profile">Profil</div>
-    <div class="nav-item" onclick="showSection('api')" data-section="api">API & Taux</div>
+    <div class="nav-item" onclick="showSection('api')" data-section="api">Taux sans risque</div>
     <div class="nav-item" onclick="showSection('universe')" data-section="universe">Univers d'actifs</div>
 
     <div class="nav-group">Modèle</div>
-    <div class="nav-item" onclick="showSection('methods')" data-section="methods">Méthodes</div>
     <div class="nav-item" onclick="showSection('estimation')" data-section="estimation">Estimation</div>
     <div class="nav-item" onclick="showSection('filters')" data-section="filters">Filtres</div>
-
-    <div class="nav-group">Simulation</div>
-    <div class="nav-item" onclick="showSection('backtest')" data-section="backtest">Backtest</div>
-    <div class="nav-item" onclick="showSection('montecarlo')" data-section="montecarlo">Monte Carlo</div>
-    <div class="nav-item" onclick="showSection('tactical')" data-section="tactical">Overlay tactique</div>
 
     <div class="nav-group">Résultats</div>
     <div class="nav-item" onclick="showSection('analyse')" data-section="analyse">▶ Lancer l'analyse</div>
@@ -615,6 +612,118 @@
   </aside>
 
   <main>
+
+    <!-- ═══ QUESTIONNAIRE ════════════════════════════ -->
+    <section class="section" id="sec-questionnaire">
+      <div class="section-title">Questionnaire investisseur</div>
+      <div class="section-desc">Répondez aux 5 questions pour déterminer automatiquement votre profil de risque.</div>
+
+      <div class="block">
+        <div class="block-header">1 — Tolérance au risque</div>
+        <div class="block-body">
+          <div class="field">
+            <div class="label-row">
+              <label>Quel est votre niveau de tolérance aux pertes potentielles ?</label>
+              <span class="label-val" id="q_rt_v">6 / 10</span>
+            </div>
+            <input type="range" id="q_rt" min="1" max="10" step="1" value="6" oninput="qUpdate()" />
+            <div class="range-labels"><span>Très faible</span><span>Modérée</span><span>Très élevée</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">2 — Horizon d'investissement</div>
+        <div class="block-body">
+          <div class="field">
+            <div class="label-row">
+              <label>Sur combien d'années prévoyez-vous d'investir ?</label>
+              <span class="label-val" id="q_hz_v">10 ans</span>
+            </div>
+            <input type="range" id="q_hz" min="1" max="40" step="1" value="10" oninput="qUpdate()" />
+            <div class="range-labels"><span>1 an</span><span>20 ans</span><span>40 ans</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">3 — Stabilité des revenus</div>
+        <div class="block-body">
+          <div class="field">
+            <div class="label-row">
+              <label>À quel point vos revenus sont-ils stables et prévisibles ?</label>
+              <span class="label-val" id="q_inc_v">7 / 10</span>
+            </div>
+            <input type="range" id="q_inc" min="1" max="10" step="1" value="7" oninput="qUpdate()" />
+            <div class="range-labels"><span>Instables</span><span>Modérés</span><span>Très stables</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">4 — Niveau de patrimoine</div>
+        <div class="block-body">
+          <div class="field">
+            <div class="label-row">
+              <label>Comment évaluez-vous votre patrimoine actuel ?</label>
+              <span class="label-val" id="q_wlth_v">5 / 10</span>
+            </div>
+            <input type="range" id="q_wlth" min="1" max="10" step="1" value="5" oninput="qUpdate()" />
+            <div class="range-labels"><span>Faible</span><span>Moyen</span><span>Élevé</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-header">5 — Connaissances financières</div>
+        <div class="block-body">
+          <div class="field">
+            <div class="label-row">
+              <label>Quel est votre niveau de connaissance des marchés financiers ?</label>
+              <span class="label-val" id="q_know_v">6 / 10</span>
+            </div>
+            <input type="range" id="q_know" min="1" max="10" step="1" value="6" oninput="qUpdate()" />
+            <div class="range-labels"><span>Débutant</span><span>Intermédiaire</span><span>Expert</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Score result -->
+      <div id="q-result" style="margin-top:24px;padding:24px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px">Score de risque calculé</div>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <span id="q-score-num" style="font-size:32px;font-weight:800;color:#0f1117">57.4</span>
+              <span style="font-size:14px;color:var(--muted)">/100</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px">Profil recommandé</div>
+            <div id="q-profile-badge" style="display:inline-block;padding:6px 18px;border-radius:999px;font-size:14px;font-weight:700;background:#0f1117;color:#fff">Équilibré</div>
+          </div>
+        </div>
+        <!-- Score bar -->
+        <div style="margin-top:18px">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px">
+            <span>Très conservateur</span><span>Conservateur</span><span>Équilibré</span><span>Croissance</span><span>Agressif</span>
+          </div>
+          <div style="position:relative;height:8px;border-radius:4px;background:linear-gradient(to right,#3b82f6,#22c55e,#f59e0b,#ef4444);overflow:visible">
+            <div id="q-score-cursor" style="position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#0f1117;border:3px solid #fff;box-shadow:0 0 0 2px #0f1117;transition:left .3s;left:57.4%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px">
+            <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span>
+          </div>
+        </div>
+        <!-- Weights breakdown -->
+        <div id="q-weights" style="margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px"></div>
+        <!-- CTA -->
+        <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="run-btn" style="font-size:13px;padding:10px 22px" onclick="applyQuestionnaire()">Appliquer ce profil →</button>
+          <button class="btn" onclick="showSection('profile')">Modifier manuellement</button>
+        </div>
+      </div>
+    </section>
 
     <!-- ═══ PROFIL ══════════════════════════════════ -->
     <section class="section active" id="sec-profile">
@@ -639,16 +748,10 @@
 
     <!-- ═══ API ════════════════════════════════════ -->
     <section class="section" id="sec-api">
-      <div class="section-title">API & Taux de référence</div>
-      <div class="section-desc">Clé FRED et taux sans risque utilisé pour le Sharpe et Black-Litterman.</div>
+      <div class="section-title">Taux de référence</div>
+      <div class="section-desc">Taux sans risque utilisé pour le calcul du ratio de Sharpe (r_f).</div>
       <div class="block">
-        <div class="block-header">FRED API</div>
-        <div class="block-body">
-          <div class="field"><label>Clé API (optionnel)</label><input type="password" id="fred_api_key" placeholder="Laisser vide = taux par défaut (4.5%)" /></div>
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-header">Taux sans risque</div>
+        <div class="block-header">Taux sans risque (r_f)</div>
         <div class="block-body">
           <div class="form-grid">
             <div class="field">
@@ -657,15 +760,6 @@
               <div class="range-labels"><span>0%</span><span>5%</span><span>10%</span></div>
             </div>
             <div class="field"><label>Taux journalier</label><input type="text" id="rf_daily" value="0.01786% / jour" readonly style="color:var(--muted);background:var(--surface)" /></div>
-          </div>
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-header">Dates</div>
-        <div class="block-body">
-          <div class="form-grid">
-            <div class="field"><label>Début de l'historique</label><input type="date" id="data_start" value="2010-01-01" /></div>
-            <div class="field"><label>Début du backtest</label><input type="date" id="backtest_start" value="2015-01-01" /></div>
           </div>
         </div>
       </div>
@@ -682,23 +776,13 @@
       <div class="block"><div class="block-header">Crypto-monnaies</div><div class="block-body"><div class="tag-area" id="tags-crypto"></div><div class="tag-add-row"><input type="text" id="input-crypto" placeholder="BTC-USD, ETH-USD…" onkeydown="if(event.key==='Enter')addTag('crypto')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('crypto')">Ajouter</button></div></div></div>
     </section>
 
-    <!-- ═══ MÉTHODES ═══════════════════════════════ -->
-    <section class="section" id="sec-methods">
-      <div class="section-title">Méthodes</div>
-      <div class="section-desc">Algorithmes d'estimation et d'optimisation.</div>
-      <div class="block"><div class="block-header">Estimation des rendements (μ)</div><div class="block-body"><div class="method-group" id="mg-return"><button class="method-btn selected" data-val="black_litterman" onclick="selMethod('return',this)">Black-Litterman</button><button class="method-btn" data-val="shrinkage" onclick="selMethod('return',this)">James-Stein Shrinkage</button><button class="method-btn" data-val="historical" onclick="selMethod('return',this)">Historique</button></div></div></div>
-      <div class="block"><div class="block-header">Estimation de la covariance (Σ)</div><div class="block-body"><div class="method-group" id="mg-cov"><button class="method-btn selected" data-val="ledoit_wolf" onclick="selMethod('cov',this)">Ledoit-Wolf</button><button class="method-btn" data-val="ewma" onclick="selMethod('cov',this)">EWMA</button><button class="method-btn" data-val="sample" onclick="selMethod('cov',this)">Sample</button></div></div></div>
-      <div class="block"><div class="block-header">Optimisation du portefeuille</div><div class="block-body"><div class="method-group" id="mg-optim"><button class="method-btn selected" data-val="risk_budget" onclick="selMethod('optim',this)">Risk Budgeting</button><button class="method-btn" data-val="mvo" onclick="selMethod('optim',this)">MVO — Max Sharpe</button></div></div></div>
-      <div class="block"><div class="block-header">Fréquence de rééquilibrage</div><div class="block-body"><div class="method-group" id="mg-rebalance"><button class="method-btn" data-val="weekly" onclick="selMethod('rebalance',this)">Hebdomadaire</button><button class="method-btn selected" data-val="monthly" onclick="selMethod('rebalance',this)">Mensuel</button><button class="method-btn" data-val="quarterly" onclick="selMethod('rebalance',this)">Trimestriel</button><button class="method-btn" data-val="annual" onclick="selMethod('rebalance',this)">Annuel</button></div></div></div>
-    </section>
 
     <!-- ═══ ESTIMATION ════════════════════════════ -->
     <section class="section" id="sec-estimation">
       <div class="section-title">Paramètres d'estimation</div>
-      <div class="section-desc">Hyperparamètres des estimateurs μ et Σ.</div>
-      <div class="block"><div class="block-header">Général</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Fenêtre d'estimation</label><span class="label-val" id="estwin_v">5 ans</span></div><input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5" oninput="document.getElementById('estwin_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>8 ans</span><span>15 ans</span></div></div><div class="field"><div class="label-row"><label>Départs aléatoires (MVO)</label><span class="label-val" id="nstarts_v">15</span></div><input type="range" id="n_random_starts" min="5" max="50" step="1" value="15" oninput="document.getElementById('nstarts_v').textContent=this.value" /><div class="range-labels"><span>5</span><span>25</span><span>50</span></div></div></div></div></div>
-      <div class="block"><div class="block-header">Black-Litterman</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Tau (τ)</label><span class="label-val" id="tau_v">0.050</span></div><input type="range" id="bl_tau" min="0.01" max="0.20" step="0.005" value="0.05" oninput="document.getElementById('tau_v').textContent=parseFloat(this.value).toFixed(3)" /><div class="range-labels"><span>0.01</span><span>0.10</span><span>0.20</span></div></div><div class="field" style="align-self:start"><label>Note</label><div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">Faible τ → fort prior d'équilibre. Valeur typique : 1/T.</div></div></div></div></div>
-      <div class="block"><div class="block-header">EWMA</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Lambda (λ)</label><span class="label-val" id="ewma_v">0.940</span></div><input type="range" id="ewma_lambda" min="0.80" max="0.99" step="0.005" value="0.94" oninput="ewmaUpdate()" /><div class="range-labels"><span>0.80</span><span>0.90</span><span>0.99</span></div></div><div class="field"><label>Demi-vie calculée</label><input type="text" id="ewma_hl" value="≈ 11.0 jours" readonly style="color:var(--muted);background:var(--surface)" /></div></div></div></div>
+      <div class="section-desc">Fenêtre historique et intensité de shrinkage pour μ (James-Stein) et Σ (Ledoit-Wolf).</div>
+      <div class="block"><div class="block-header">Fenêtre d'estimation</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Historique utilisé</label><span class="label-val" id="estwin_v">5 ans</span></div><input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5" oninput="document.getElementById('estwin_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>8 ans</span><span>15 ans</span></div></div><div class="field" style="align-self:start"><label>Note</label><div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">Minimum recommandé : 3 ans. La qualité de la matrice de covariance Ledoit-Wolf croît avec T.</div></div></div></div></div>
+      <div class="block"><div class="block-header">Shrinkage des rendements (α)</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Intensité de shrinkage</label><span class="label-val" id="shrink_v">0.20</span></div><input type="range" id="shrinkage_alpha" min="0.05" max="0.50" step="0.05" value="0.20" oninput="document.getElementById('shrink_v').textContent=parseFloat(this.value).toFixed(2)" /><div class="range-labels"><span>0.05</span><span>0.25</span><span>0.50</span></div></div><div class="field" style="align-self:start"><label>Formule</label><div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">μ̂ = (1−α)·μ_hist + α·μ_grand_mean<br>α = 0 → historique pur · α = 1 → poolé</div></div></div></div></div>
     </section>
 
     <!-- ═══ FILTRES ════════════════════════════════ -->
@@ -706,27 +790,6 @@
       <div class="section-title">Filtres de l'univers</div>
       <div class="section-desc">Critères d'inclusion des actifs dans l'univers d'optimisation.</div>
       <div class="block"><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Corrélation maximale</label><span class="label-val" id="corr_v">0.90</span></div><input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90" oninput="document.getElementById('corr_v').textContent=parseFloat(this.value).toFixed(2)" /><div class="range-labels"><span>0.50</span><span>0.75</span><span>0.99</span></div></div><div class="field"><div class="label-row"><label>Historique minimum</label><span class="label-val" id="hist_v">3 ans</span></div><input type="range" id="min_history_years" min="1" max="10" step="1" value="3" oninput="document.getElementById('hist_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div></div><div class="field"><div class="label-row"><label>Volatilité annuelle min.</label><span class="label-val" id="vol_v">1.0%</span></div><input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1" oninput="document.getElementById('vol_v').textContent=parseFloat(this.value).toFixed(1)+'%'" /><div class="range-labels"><span>0%</span><span>2.5%</span><span>5%</span></div></div></div></div></div>
-    </section>
-
-    <!-- ═══ BACKTEST ═══════════════════════════════ -->
-    <section class="section" id="sec-backtest">
-      <div class="section-title">Backtest walk-forward</div>
-      <div class="section-desc">Fenêtres d'entraînement et de test out-of-sample, coûts de transaction.</div>
-      <div class="block"><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Fenêtre d'entraînement</label><span class="label-val" id="train_v">3 ans</span></div><input type="range" id="backtest_train_years" min="1" max="10" step="1" value="3" oninput="document.getElementById('train_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div></div><div class="field"><div class="label-row"><label>Fenêtre de test</label><span class="label-val" id="test_v">1 mois</span></div><input type="range" id="backtest_test_months" min="1" max="12" step="1" value="1" oninput="document.getElementById('test_v').textContent=this.value+' mois'" /><div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div></div><div class="field"><div class="label-row"><label>Coûts de transaction</label><span class="label-val" id="tc_v">10 bps</span></div><input type="range" id="transaction_cost_bps" min="0" max="50" step="1" value="10" oninput="document.getElementById('tc_v').textContent=this.value+' bps'" /><div class="range-labels"><span>0 bps</span><span>25 bps</span><span>50 bps</span></div></div><div class="field"><label>Facteur d'annualisation</label><input type="number" id="annualization_factor" value="252" min="200" max="365" /></div></div></div></div>
-    </section>
-
-    <!-- ═══ MONTE CARLO ════════════════════════════ -->
-    <section class="section" id="sec-montecarlo">
-      <div class="section-title">Monte Carlo</div>
-      <div class="section-desc">Génération de scénarios de rendements futurs.</div>
-      <div class="block"><div class="block-body"><div class="form-grid"><div class="field"><label>Nombre de simulations</label><div class="method-group" id="mg-nsim" style="margin-top:2px"><button class="method-btn" data-val="500" onclick="selMethod('nsim',this)">500</button><button class="method-btn" data-val="1000" onclick="selMethod('nsim',this)">1 000</button><button class="method-btn selected" data-val="2000" onclick="selMethod('nsim',this)">2 000</button><button class="method-btn" data-val="5000" onclick="selMethod('nsim',this)">5 000</button></div></div><div class="field"><div class="label-row"><label>Horizon de projection</label><span class="label-val" id="horizon_v">10 ans</span></div><input type="range" id="simulation_horizon_years" min="1" max="30" step="1" value="10" oninput="document.getElementById('horizon_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>15 ans</span><span>30 ans</span></div></div><div class="field"><label>Capital initial (€)</label><input type="number" id="initial_wealth" value="100000" min="1000" step="1000" /></div><div class="field"><label>Graine aléatoire</label><input type="number" id="random_state" value="42" min="0" /></div></div></div></div>
-    </section>
-
-    <!-- ═══ TACTICAL ═══════════════════════════════ -->
-    <section class="section" id="sec-tactical">
-      <div class="section-title">Overlay tactique (TAA)</div>
-      <div class="section-desc">Ajustements dynamiques basés sur le momentum et le régime de volatilité.</div>
-      <div class="block"><div class="block-body"><div class="toggle-row" style="padding:0 0 14px"><div><div class="toggle-name">Activer l'overlay tactique</div><div class="toggle-desc">Applique les signaux momentum/régime à la SAA</div></div><label class="toggle-switch"><input type="checkbox" id="taa_enabled" checked onchange="taaToggle()" /><span class="track"></span></label></div><hr style="margin:0 0 14px"><div id="taa-fields"><div class="form-grid"><div class="field"><div class="label-row"><label>Fenêtre momentum</label><span class="label-val" id="mom_v">63 j (~3 mois)</span></div><input type="range" id="momentum_lookback" min="21" max="252" step="21" value="63" oninput="momUpdate(this.value)" /><div class="range-labels"><span>1 mois</span><span>6 mois</span><span>12 mois</span></div></div><div class="field"><div class="label-row"><label>Tracking error max</label><span class="label-val" id="te_v">2.0%</span></div><input type="range" id="te_budget" min="0.5" max="10" step="0.5" value="2" oninput="document.getElementById('te_v').textContent=parseFloat(this.value).toFixed(1)+'%'" /><div class="range-labels"><span>0.5%</span><span>5%</span><span>10%</span></div></div></div></div></div></div>
     </section>
 
     <!-- ═══ ANALYSE ════════════════════════════════ -->
@@ -770,20 +833,6 @@
           <div id="weights-table-wrap"></div>
         </div>
 
-        <!-- Performance chart -->
-        <div class="chart-card-full">
-          <div class="chart-title">Performance cumulée</div>
-          <div class="chart-subtitle">Portefeuille vs SPY (buy-and-hold)</div>
-          <div style="position:relative;height:280px"><canvas id="chart-perf"></canvas></div>
-        </div>
-
-        <!-- Monte Carlo -->
-        <div class="chart-card-full">
-          <div class="chart-title">Simulation Monte Carlo</div>
-          <div class="chart-subtitle" id="mc-subtitle"></div>
-          <div style="position:relative;height:300px"><canvas id="chart-mc"></canvas></div>
-        </div>
-
         <!-- Correlation heatmap -->
         <div class="chart-card-full">
           <div class="chart-title">Matrice de corrélation</div>
@@ -809,6 +858,82 @@
 
 <script>
 // ════════════════════════════════════════════════════
+// QUESTIONNAIRE
+// ════════════════════════════════════════════════════
+const Q_PROFILES = [
+  { name: 'Very Conservative', label: 'Très conservateur', range: [0, 20],  color: '#3b82f6' },
+  { name: 'Conservative',      label: 'Conservateur',      range: [21, 40], color: '#22c55e' },
+  { name: 'Balanced',          label: 'Équilibré',         range: [41, 60], color: '#f59e0b' },
+  { name: 'Growth',            label: 'Croissance',        range: [61, 80], color: '#f97316' },
+  { name: 'Aggressive',        label: 'Agressif',          range: [81, 100],color: '#ef4444' },
+];
+
+function qScore() {
+  const rt   = parseInt(document.getElementById('q_rt').value);
+  const hz   = parseInt(document.getElementById('q_hz').value);
+  const inc  = parseInt(document.getElementById('q_inc').value);
+  const wlth = parseInt(document.getElementById('q_wlth').value);
+  const know = parseInt(document.getElementById('q_know').value);
+  const rtS   = (rt   - 1) / 9 * 100;
+  const hzS   = Math.min(hz / 40 * 100, 100);
+  const incS  = (inc  - 1) / 9 * 100;
+  const wlthS = (wlth - 1) / 9 * 100;
+  const knowS = (know - 1) / 9 * 100;
+  return 0.35 * rtS + 0.25 * hzS + 0.20 * incS + 0.10 * wlthS + 0.10 * knowS;
+}
+
+function qProfileFromScore(score) {
+  return Q_PROFILES.find(p => score >= p.range[0] && score <= p.range[1]) || Q_PROFILES[2];
+}
+
+function qUpdate() {
+  document.getElementById('q_rt_v').textContent   = document.getElementById('q_rt').value + ' / 10';
+  document.getElementById('q_hz_v').textContent   = document.getElementById('q_hz').value + ' ans';
+  document.getElementById('q_inc_v').textContent  = document.getElementById('q_inc').value + ' / 10';
+  document.getElementById('q_wlth_v').textContent = document.getElementById('q_wlth').value + ' / 10';
+  document.getElementById('q_know_v').textContent = document.getElementById('q_know').value + ' / 10';
+
+  const score = qScore();
+  const prof  = qProfileFromScore(score);
+
+  document.getElementById('q-score-num').textContent = score.toFixed(1);
+  document.getElementById('q-score-cursor').style.left = score + '%';
+  const badge = document.getElementById('q-profile-badge');
+  badge.textContent = prof.label;
+  badge.style.background = prof.color;
+
+  // Weights breakdown
+  const budgets = PROFILES[prof.name]?.budgets || {};
+  const entries = [
+    ['equity',       'Actions',      CLASS_COLORS.equity],
+    ['fixed_income', 'Obligations',  CLASS_COLORS.fixed_income],
+    ['commodity',    'Mat. prem.',   CLASS_COLORS.commodity],
+    ['real_estate',  'Immobilier',   CLASS_COLORS.real_estate],
+    ['crypto',       'Crypto',       CLASS_COLORS.crypto],
+  ];
+  document.getElementById('q-weights').innerHTML = entries.map(([k, label, color]) => {
+    const pct = ((budgets[k] || 0) * 100).toFixed(0);
+    return `<div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center">
+      <div style="font-size:18px;font-weight:800;color:${color}">${pct}%</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function applyQuestionnaire() {
+  const score = qScore();
+  const prof  = qProfileFromScore(score);
+  // Select the matching profile card
+  document.querySelectorAll('.profile-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.profile === prof.name);
+  });
+  selectedProfile = prof.name;
+  renderProfile();
+  toast(`Profil « ${prof.label} » appliqué (score ${score.toFixed(0)}/100)`);
+  showSection('profile');
+}
+
+// ════════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════════
 const PROFILES = {
@@ -830,7 +955,7 @@ const universe = {
   crypto: ['BTC-USD','ETH-USD'],
 };
 
-const methods = { return:'black_litterman', cov:'ledoit_wolf', optim:'risk_budget', rebalance:'monthly', nsim:'2000' };
+const methods = { return:'shrinkage', cov:'ledoit_wolf', optim:'mvo', rebalance:'monthly' };
 let selectedProfile = 'Balanced';
 let charts = {};
 
@@ -913,25 +1038,16 @@ function rfUpdate() {
   document.getElementById('rf_display').textContent = v.toFixed(2) + '%';
   document.getElementById('rf_daily').value = (v/252).toFixed(5) + '% / jour';
 }
-function ewmaUpdate() {
-  const v = parseFloat(document.getElementById('ewma_lambda').value);
-  document.getElementById('ewma_v').textContent = v.toFixed(3);
-  document.getElementById('ewma_hl').value = '≈ ' + (Math.log(.5)/Math.log(v)).toFixed(1) + ' jours';
-}
-function momUpdate(v) { document.getElementById('mom_v').textContent = `${v} j (~${Math.round(v/21)} mois)`; }
-function taaToggle() { const on = document.getElementById('taa_enabled').checked; document.getElementById('taa-fields').style.opacity = on?'1':'0.35'; document.getElementById('taa-fields').style.pointerEvents = on?'':'none'; }
 
 function updateRunSummary() {
   const tickers = getAllTickers();
   const iconUser = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
   const iconGear = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
   const iconChart = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`;
-  const iconDice = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><rect x="2" y="2" width="20" height="20" rx="4"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/><circle cx="16" cy="8" r="1.5" fill="currentColor"/><circle cx="16" cy="16" r="1.5" fill="currentColor"/><circle cx="8" cy="16" r="1.5" fill="currentColor"/></svg>`;
   document.getElementById('run-summary').innerHTML = [
     `<span class="run-tag">${iconUser}${selectedProfile}</span>`,
-    `<span class="run-tag">${iconGear}${methods.optim === 'risk_budget' ? 'Risk Budget' : 'MVO'} / ${methods.return === 'black_litterman' ? 'BL' : methods.return} / ${methods.cov}</span>`,
+    `<span class="run-tag">${iconGear}Max Sharpe · Shrinkage μ · Ledoit-Wolf Σ</span>`,
     `<span class="run-tag">${iconChart}${tickers.length} actifs</span>`,
-    `<span class="run-tag">${iconDice}${parseInt(methods.nsim).toLocaleString()} simulations</span>`,
   ].join('');
 }
 
@@ -1007,42 +1123,17 @@ function ledoitWolfCov(returns, ann=252) {
   return S.map((row,i) => row.map((v,j) => (1-alpha)*v + alpha*(i===j?mu_hat:0)));
 }
 
-// EWMA covariance
-function ewmaCov(returns, lambda=0.94, ann=252) {
-  const n = returns.length, T = returns[0].length;
-  const cov = sampleCov(returns.map(r => r.slice(0,Math.min(60,T))), ann);
-  for (let t=60;t<T;t++) {
-    const r = returns.map(ri => ri[t]);
-    for (let i=0;i<n;i++) for (let j=0;j<n;j++)
-      cov[i][j] = lambda*cov[i][j] + (1-lambda)*r[i]*r[j]*ann;
-  }
-  return cov;
-}
-
 // Annualized mean returns
 function historicalMu(returns, ann=252) {
   const T = returns[0].length;
   return returns.map(r => r.reduce((a,b)=>a+b,0)/T*ann);
 }
 
-// James-Stein shrinkage
-function shrinkageMu(returns, ann=252) {
-  const n = returns.length, T = returns[0].length;
+// James-Stein shrinkage toward grand mean (α controls intensity)
+function shrinkageMu(returns, ann=252, alpha=0.20) {
   const mu = historicalMu(returns, ann);
-  const gm = mu.reduce((a,b)=>a+b,0)/n;
-  const v = mu.reduce((s,m)=>s+(m-gm)**2,0)/n;
-  const a = Math.min(0.9, Math.max(0.1, (n-2)/(n*T*v/ann+n-2)));
-  return mu.map(m => (1-a)*m+a*gm);
-}
-
-// Black-Litterman (no views)
-function blackLittermanMu(returns, cov, lambda=4, ann=252) {
-  const n = returns.length;
-  const w_eq = Array(n).fill(1/n);
-  const pi = matVec(cov, w_eq).map(x => x*lambda);
-  const mu_h = shrinkageMu(returns, ann);
-  const tau = 0.05;
-  return mu_h.map((m,i) => m/(1+tau) + pi[i]*tau/(1+tau));
+  const gm = mu.reduce((a,b)=>a+b,0)/mu.length;
+  return mu.map(m => (1-alpha)*m + alpha*gm);
 }
 
 // Portfolio variance
@@ -1113,75 +1204,11 @@ function maxDrawdown(cumReturns) {
   return mdd;
 }
 
-// Cholesky decomposition
-function cholesky(A) {
-  const n = A.length;
-  const L = Array.from({length:n},()=>Array(n).fill(0));
-  for (let i=0;i<n;i++) for (let j=0;j<=i;j++) {
-    let s = A[i][j];
-    for (let k=0;k<j;k++) s -= L[i][k]*L[j][k];
-    L[i][j] = i===j ? Math.sqrt(Math.max(s,1e-12)) : (L[j][j]>1e-10 ? s/L[j][j] : 0);
-  }
-  return L;
-}
-
-// Box-Muller normal random
-function randn() {
-  let u, v;
-  do { u = Math.random(); } while (!u);
-  do { v = Math.random(); } while (!v);
-  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
-}
-
-// Monte Carlo Gaussian
-function monteCarlo(weights, mu, cov, nSim, horizonYears, ann=252) {
-  const T = horizonYears*ann, n = weights.length;
-  const muD = mu.map(m => m/ann);
-  const covD = cov.map(row => row.map(v => v/ann));
-  // Regularize
-  for (let i=0;i<n;i++) covD[i][i] = Math.max(covD[i][i], 1e-8);
-  const L = cholesky(covD);
-  const paths = [];
-  for (let s=0;s<nSim;s++) {
-    let nav=1; const path=[1];
-    for (let t=0;t<T;t++) {
-      const z = Array(n).fill(0).map(randn);
-      let pr=0;
-      for (let i=0;i<n;i++) {
-        const ri = muD[i] + L[i].reduce((sum,lij,j)=>sum+lij*z[j],0);
-        pr += weights[i]*ri;
-      }
-      nav *= (1+pr); path.push(nav);
-    }
-    paths.push(path);
-  }
-  return paths;
-}
-
-// Percentiles of MC paths
-function mcPercentiles(paths, percs=[5,25,50,75,95]) {
-  const T = paths[0].length;
-  return percs.map(p => Array.from({length:T}, (_,t) => {
-    const vals = paths.map(path=>path[t]).sort((a,b)=>a-b);
-    return vals[Math.floor(p/100*(vals.length-1))];
-  }));
-}
-
 // Correlation matrix from covariance
 function covToCorr(cov) {
   const n = cov.length;
   const std = cov.map((row,i) => Math.sqrt(Math.max(row[i], 1e-10)));
   return cov.map((row,i) => row.map((v,j) => v/(std[i]*std[j])));
-}
-
-// Simple buy-and-hold backtest
-function backtestBH(weights, returns, dates) {
-  // Portfolio daily returns
-  const portRet = returns[0].map((_,t) => weights.reduce((s,w,i) => s+w*returns[i][t], 0));
-  // Cumulative
-  let nav=1; const cumPort=[1];
-  for (const r of portRet) { nav*=(1+r); cumPort.push(nav); }
-  return { portRet, cumPort, dates: dates.slice(0, dates.length) };
 }
 
 // ════════════════════════════════════════════════════
@@ -1190,10 +1217,10 @@ function backtestBH(weights, returns, dates) {
 const STEPS = [
   { id:'s1', label:'Téléchargement des données de marché' },
   { id:'s2', label:'Alignement et nettoyage des séries' },
-  { id:'s3', label:'Estimation de la covariance (Σ)' },
-  { id:'s4', label:'Estimation des rendements (μ)' },
-  { id:'s5', label:'Optimisation du portefeuille' },
-  { id:'s6', label:'Simulation Monte Carlo' },
+  { id:'s3', label:'Estimation de la covariance Ledoit-Wolf (Σ)' },
+  { id:'s4', label:'Estimation des rendements par shrinkage (μ)' },
+  { id:'s5', label:'Optimisation Max Sharpe' },
+  { id:'s6', label:'Décomposition du risque (MRC / TRC / %RC)' },
   { id:'s7', label:'Affichage des résultats' },
 ];
 
@@ -1262,28 +1289,21 @@ async function runAnalysis() {
     const retEst = returns.map(r => r.slice(-estDays));
     setStep(2);
 
-    // ── Step 3: Covariance ──
+    // ── Step 3: Covariance (Ledoit-Wolf) ──
     await tick();
-    let cov;
-    if (methods.cov === 'ledoit_wolf') cov = ledoitWolfCov(retEst);
-    else if (methods.cov === 'ewma') cov = ewmaCov(retEst, parseFloat(document.getElementById('ewma_lambda').value));
-    else cov = sampleCov(retEst);
+    const cov = ledoitWolfCov(retEst);
     setStep(3);
 
-    // ── Step 4: Expected returns ──
+    // ── Step 4: Expected returns (Shrinkage) ──
     await tick();
-    let mu;
-    if (methods.return === 'black_litterman') mu = blackLittermanMu(retEst, cov, PROFILES[selectedProfile].lambda_);
-    else if (methods.return === 'shrinkage') mu = shrinkageMu(retEst);
-    else mu = historicalMu(retEst);
+    const alpha = parseFloat(document.getElementById('shrinkage_alpha').value);
+    const mu = shrinkageMu(retEst, 252, alpha);
     setStep(4);
 
-    // ── Step 5: Optimize ──
+    // ── Step 5: Optimize (Max Sharpe) ──
     await tick();
     const budgets = buildBudgets(validTickers);
-    let weights;
-    if (methods.optim === 'mvo') weights = mvoWeights(mu, cov, rf);
-    else weights = riskParityWeights(cov, budgets);
+    const weights = mvoWeights(mu, cov, rf);
 
     const rc = riskContribs(weights, cov);
     const pRet = weights.reduce((s,w,i)=>s+w*mu[i],0);
@@ -1291,30 +1311,18 @@ async function runAnalysis() {
     const pSharpe = (pRet - rf) / Math.max(pVol, 1e-8);
     setStep(5);
 
-    // ── Step 6: Monte Carlo ──
+    // ── Step 6: Risk decomposition ──
     await tick();
-    const nSim = Math.min(parseInt(methods.nsim), 2000);
-    const horizonYears = parseInt(document.getElementById('simulation_horizon_years').value);
-    const initWealth = parseInt(document.getElementById('initial_wealth').value);
-    const mcPaths = monteCarlo(weights, mu, cov, nSim, horizonYears);
-    const mcPercs = mcPercentiles(mcPaths, [5, 25, 50, 75, 95]);
-
-    // Backtest (buy-and-hold with optimal weights)
-    const bh = backtestBH(weights, returns, dates);
-
-    // SPY benchmark (first equity ticker or SPY if present)
-    const spyIdx = validTickers.indexOf('SPY');
-    const bmkIdx = spyIdx >= 0 ? spyIdx : 0;
-    const bmkRet = returns[bmkIdx];
-    let bmkNav=1; const bmkCum=[1];
-    for (const r of bmkRet) { bmkNav*=(1+r); bmkCum.push(bmkNav); }
-
-    const mdd = maxDrawdown(bh.cumPort);
+    const mdd = maxDrawdown((() => {
+      let nav=1; const cum=[1];
+      returns[0].map((_,t) => weights.reduce((s,w,i)=>s+w*returns[i][t],0)).forEach(r=>{nav*=(1+r);cum.push(nav);});
+      return cum;
+    })());
     setStep(6);
 
     // ── Step 7: Render ──
     await tick();
-    renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd, dates, cumPort: bh.cumPort, bmkCum, bmkName: validTickers[bmkIdx], mcPercs, horizonYears, initWealth, nSim });
+    renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd });
     setStep(7);
 
     document.getElementById('status-title').textContent = '✅ Analyse terminée';
@@ -1360,14 +1368,14 @@ function resetBtn(btn) {
 // ════════════════════════════════════════════════════
 // RENDER RESULTS
 // ════════════════════════════════════════════════════
-function renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd, dates, cumPort, bmkCum, bmkName, mcPercs, horizonYears, initWealth, nSim }) {
+function renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd }) {
 
   // KPIs
   document.getElementById('kpi-grid').innerHTML = [
-    { label: 'Rendement annuel', value: (pRet*100).toFixed(1)+'%', cls: pRet>=0?'positive':'negative' },
-    { label: 'Volatilité annuelle', value: (pVol*100).toFixed(1)+'%', cls: '' },
+    { label: 'Rendement annuel (μ)', value: (pRet*100).toFixed(1)+'%', cls: pRet>=0?'positive':'negative' },
+    { label: 'Volatilité annuelle (σ)', value: (pVol*100).toFixed(1)+'%', cls: '' },
     { label: 'Ratio de Sharpe', value: pSharpe.toFixed(2), cls: pSharpe>=1?'positive':'' },
-    { label: 'Max Drawdown (BH)', value: (mdd*100).toFixed(1)+'%', cls: 'negative' },
+    { label: 'Max Drawdown', value: (mdd*100).toFixed(1)+'%', cls: 'negative' },
   ].map(k => `<div class="kpi-card"><div class="kpi-label">${k.label}</div><div class="kpi-value ${k.cls}">${k.value}</div></div>`).join('');
 
   // Allocation donut
@@ -1418,54 +1426,6 @@ function renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol
       </tbody>
     </table>`;
 
-  // Performance line chart
-  const perfDates = dates.filter((_,i) => i % 5 === 0);
-  const perfPort = cumPort.filter((_,i) => i % 5 === 0);
-  const perfBmk = bmkCum.filter((_,i) => i % 5 === 0);
-  charts.perf = new Chart(document.getElementById('chart-perf'), {
-    type: 'line',
-    data: {
-      labels: perfDates,
-      datasets: [
-        { label: 'Portefeuille', data: perfPort.map(v=>+((v-1)*100).toFixed(2)), borderColor: '#4a90d9', backgroundColor: 'rgba(74,144,217,.08)', fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2 },
-        { label: bmkName+' (benchmark)', data: perfBmk.map(v=>+((v-1)*100).toFixed(2)), borderColor: '#aaa', backgroundColor: 'transparent', tension: 0.3, pointRadius: 0, borderWidth: 1.5, borderDash: [4,4] }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y>=0?'+':''}${ctx.parsed.y.toFixed(1)}%` } }, legend: { labels: { font: { size: 11 } } } },
-      scales: { y: { ticks: { callback: v => v+'%' }, grid: { color: '#f0f0f0' } }, x: { ticks: { maxTicksLimit: 8, font: { size: 10 } }, grid: { display: false } } }
-    }
-  });
-
-  // Monte Carlo fan chart
-  const T = mcPercs[0].length;
-  const stride = Math.max(1, Math.floor(T / 200));
-  const mcLabels = Array.from({length: Math.ceil(T/stride)}, (_,i) => {
-    const yr = (i*stride/252);
-    return yr % 1 < 0.1 ? 'An '+Math.round(yr) : '';
-  });
-  const [p5,p25,p50,p75,p95] = mcPercs.map(arr => arr.filter((_,i)=>i%stride===0).map(v=>+(v*initWealth/1000).toFixed(1)));
-  document.getElementById('mc-subtitle').textContent = `${nSim.toLocaleString()} simulations · Horizon ${horizonYears} ans · Capital initial ${initWealth.toLocaleString()}€`;
-  charts.mc = new Chart(document.getElementById('chart-mc'), {
-    type: 'line',
-    data: {
-      labels: mcLabels,
-      datasets: [
-        { label: 'P95', data: p95, borderColor: 'rgba(74,144,217,.3)', backgroundColor: 'rgba(74,144,217,.05)', fill: '+1', pointRadius: 0, borderWidth: 1, tension: 0.3 },
-        { label: 'P75', data: p75, borderColor: 'rgba(74,144,217,.4)', backgroundColor: 'rgba(74,144,217,.08)', fill: '+1', pointRadius: 0, borderWidth: 1, tension: 0.3 },
-        { label: 'Médiane (P50)', data: p50, borderColor: '#4a90d9', backgroundColor: 'transparent', pointRadius: 0, borderWidth: 2.5, tension: 0.3 },
-        { label: 'P25', data: p25, borderColor: 'rgba(74,144,217,.4)', backgroundColor: 'rgba(74,144,217,.08)', fill: '+1', pointRadius: 0, borderWidth: 1, tension: 0.3 },
-        { label: 'P5', data: p5, borderColor: 'rgba(74,144,217,.3)', backgroundColor: 'rgba(74,144,217,.05)', fill: false, pointRadius: 0, borderWidth: 1, tension: 0.3 },
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}k€` } }, legend: { labels: { font: { size: 11 } } } },
-      scales: { y: { ticks: { callback: v => v+'k€' }, grid: { color: '#f0f0f0' } }, x: { ticks: { font: { size: 10 } }, grid: { display: false } } }
-    }
-  });
-
   // Correlation heatmap
   const corr = covToCorr(cov);
   const cols = validTickers;
@@ -1494,49 +1454,48 @@ function renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol
 // CODE GENERATION
 // ════════════════════════════════════════════════════
 function generateCode() {
-  const g = id => document.getElementById(id).value;
+  const g = id => document.getElementById(id)?.value ?? '';
   const rf = parseFloat(g('risk_free_rate'));
-  const taa = document.getElementById('taa_enabled').checked;
+  const profile = PROFILES[selectedProfile];
   const lines = [
-    `# ═══════════════════════════════════════════════`,
-    `# Configuration — Portfolio Investment System`,
-    `# ═══════════════════════════════════════════════`,``,
-    `FRED_API_KEY = '${g('fred_api_key')}'`,
-    `DEFAULT_RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}`,
-    `RISK_FREE_RATE_DAILY = DEFAULT_RISK_FREE_RATE_ANNUAL / 252`,``,
+    `# ═══════════════════════════════════════════════════════`,
+    `# Multi-Asset Portfolio Construction System — Config`,
+    `# Generated by portfolio-investments.vercel.app`,
+    `# ═══════════════════════════════════════════════════════`,
+    ``,
+    `# ── Profil investisseur ─────────────────────────────────`,
     `SELECTED_PROFILE = '${selectedProfile}'`,
-    `DATA_START = '${g('data_start')}'`,
-    `BACKTEST_START = '${g('backtest_start')}'`,``,
-    `RANDOM_STATE = ${g('random_state')}`,
-    `np.random.seed(RANDOM_STATE)`,``,
-    `DEFAULT_PARAMS = {`,
-    `    'profile':                  '${selectedProfile}',`,
-    `    'estimation_window_years':  ${g('estimation_window_years')},`,
-    `    'covariance_method':        '${methods.cov}',`,
-    `    'return_method':            '${methods.return}',`,
-    `    'optimization_method':      '${methods.optim}',`,
-    `    'rebalance_frequency':      '${methods.rebalance}',`,
-    `    'transaction_cost_bps':     ${g('transaction_cost_bps')},`,
-    `    'annualization_factor':     ${g('annualization_factor')},`,
-    `    'ewma_lambda':              ${parseFloat(g('ewma_lambda')).toFixed(3)},`,
-    `    'bl_tau':                   ${parseFloat(g('bl_tau')).toFixed(3)},`,
-    `    'n_random_starts':          ${g('n_random_starts')},`,
-    `    'backtest_train_years':     ${g('backtest_train_years')},`,
-    `    'backtest_test_months':     ${g('backtest_test_months')},`,
-    `    'n_simulations':            ${methods.nsim},`,
-    `    'simulation_horizon_years': ${g('simulation_horizon_years')},`,
-    `    'min_history_years':        ${g('min_history_years')},`,
-    `    'max_correlation':          ${parseFloat(g('max_correlation')).toFixed(2)},`,
-    `    'min_annual_vol':           ${(parseFloat(g('min_annual_vol'))/100).toFixed(4)},`,
-    `}`,``,
+    `RISK_AVERSION_LAMBDA = ${profile.lambda_}`,
+    `TARGET_VOLATILITY    = ${parseFloat(profile.vol) / 100}`,
+    `MAX_EQUITY_EXPOSURE  = ${parseFloat(profile.max_eq) / 100}`,
+    ``,
+    `# ── Taux sans risque ────────────────────────────────────`,
+    `RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}   # ${rf.toFixed(2)}%`,
+    `RISK_FREE_RATE_DAILY  = RISK_FREE_RATE_ANNUAL / 252`,
+    ``,
+    `# ── Estimation ──────────────────────────────────────────`,
+    `ESTIMATION_WINDOW_YEARS = ${g('estimation_window_years')}`,
+    `SHRINKAGE_ALPHA         = ${parseFloat(g('shrinkage_alpha')).toFixed(2)}  # μ̂ = (1−α)·μ_hist + α·μ_grand_mean`,
+    `COVARIANCE_METHOD       = 'ledoit_wolf'`,
+    `RETURN_METHOD           = 'shrinkage'`,
+    `OPTIMIZATION_METHOD     = 'max_sharpe'`,
+    ``,
+    `# ── Filtres univers ─────────────────────────────────────`,
+    `MAX_CORRELATION    = ${parseFloat(g('max_correlation')).toFixed(2)}`,
+    `MIN_HISTORY_YEARS  = ${g('min_history_years')}`,
+    `MIN_ANNUAL_VOL     = ${(parseFloat(g('min_annual_vol'))/100).toFixed(4)}`,
+    ``,
+    `# ── Univers d'actifs ────────────────────────────────────`,
     `ASSET_UNIVERSE = {`,
     ...Object.entries(universe).map(([k,v]) => `    '${k}': ${JSON.stringify(v)},`),
-    `}`,``,
-    `TAA_ENABLED = ${taa ? 'True' : 'False'}`,
-    ...(taa?[`MOMENTUM_LOOKBACK_DAYS = ${g('momentum_lookback')}`, `TE_BUDGET = ${(parseFloat(g('te_budget'))/100).toFixed(4)}`]:[]),``,
-    `INITIAL_WEALTH = ${g('initial_wealth')}`,
-    `HORIZON = ${g('simulation_horizon_years')}`,``,
-    `print(f'✅ Config chargée — profil : {SELECTED_PROFILE}')`,
+    `}`,
+    ``,
+    `# ── Budgets de risque par classe ────────────────────────`,
+    `RISK_BUDGETS = {`,
+    ...Object.entries(profile.budgets).map(([k,v]) => `    '${k}': ${v.toFixed(2)},`),
+    `}`,
+    ``,
+    `print(f'✅  Config chargée — profil : {SELECTED_PROFILE} | λ = {RISK_AVERSION_LAMBDA}')`,
   ];
   document.getElementById('code-out').textContent = lines.join('\n');
 }
@@ -1552,31 +1511,15 @@ function resetDefaults() { location.reload(); }
 renderProfile();
 Object.keys(universe).forEach(renderTags);
 updateRunSummary();
+qUpdate();
 
-// Flatpickr calendars
-flatpickr('#data_start', {
-  locale: 'fr',
-  dateFormat: 'Y-m-d',
-  defaultDate: '2010-01-01',
-  disableMobile: true,
-  prevArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>',
-  nextArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
-});
-flatpickr('#backtest_start', {
-  locale: 'fr',
-  dateFormat: 'Y-m-d',
-  defaultDate: '2015-01-01',
-  disableMobile: true,
-  prevArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>',
-  nextArrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
-});
 </script>
 
 <footer>
   <div class="footer-top">
     <div>
       <div class="footer-brand-name">Portfolio Investment System</div>
-      <div class="footer-brand-desc">Outil académique d'optimisation de portefeuille multi-actifs basé sur des modèles quantitatifs — Black-Litterman, Risk Budgeting, Monte Carlo.</div>
+      <div class="footer-brand-desc">Outil académique d'optimisation de portefeuille multi-actifs — Profilage investisseur, Shrinkage μ, Ledoit-Wolf Σ, Max Sharpe, Décomposition du risque.</div>
     </div>
     <div>
       <div class="footer-col-title">Équipe</div>
