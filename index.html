@@ -194,13 +194,63 @@
       border-color: var(--ink);
       box-shadow: 0 0 0 3px rgba(0,0,0,.06);
     }
+    /* ── Custom sliders ─────────────────────── */
     input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
       width: 100%;
-      accent-color: var(--ink);
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(to right, var(--ink) var(--fill, 0%), #e2e4e8 var(--fill, 0%));
       cursor: pointer;
-      margin: 4px 0;
+      margin: 10px 0 6px;
+      outline: none;
+      border: none;
+      transition: background .05s;
     }
-    .range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 4px; }
+    /* Webkit thumb */
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--ink);
+      box-shadow: 0 1px 6px rgba(0,0,0,.18);
+      cursor: pointer;
+      transition: transform .12s, box-shadow .12s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+      box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+    input[type="range"]:active::-webkit-slider-thumb {
+      transform: scale(1.08);
+      box-shadow: 0 1px 4px rgba(0,0,0,.18);
+    }
+    /* Firefox thumb */
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--ink);
+      box-shadow: 0 1px 6px rgba(0,0,0,.18);
+      cursor: pointer;
+      transition: transform .12s;
+    }
+    input[type="range"]::-moz-range-track {
+      height: 4px;
+      border-radius: 2px;
+      background: #e2e4e8;
+    }
+    input[type="range"]::-moz-range-progress {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--ink);
+    }
+    .range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
 
     /* ── Profiles ───────────────────────── */
     .profile-grid {
@@ -1579,6 +1629,20 @@ function copyCode() { navigator.clipboard.writeText(document.getElementById('cod
 function downloadCode() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([document.getElementById('code-out').textContent],{type:'text/plain'})); a.download='portfolio_config.py'; a.click(); toast('Téléchargé !'); }
 function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
 function resetDefaults() { location.reload(); }
+
+// ════════════════════════════════════════════════════
+// SLIDER FILL
+// ════════════════════════════════════════════════════
+function updateSliderFill(input) {
+  const min = parseFloat(input.min) || 0;
+  const max = parseFloat(input.max) || 100;
+  const pct = ((parseFloat(input.value) - min) / (max - min)) * 100;
+  input.style.setProperty('--fill', pct.toFixed(1) + '%');
+}
+document.querySelectorAll('input[type="range"]').forEach(input => {
+  updateSliderFill(input);
+  input.addEventListener('input', () => updateSliderFill(input));
+});
 
 // ════════════════════════════════════════════════════
 // INIT
