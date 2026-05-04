@@ -1,1693 +1,2626 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio Investment System</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
   <style>
     :root {
-      --bg: #fff;
-      --surface: #f7f8fa;
-      --border: #e2e4e8;
-      --muted: #6b7280;
-      --radius: 4px;
-      --radius-sm: 4px;
-      --positive: #059669;
-      --negative: #dc2626;
-      --ink: #000000;
-      --font: 'IBM Plex Sans', system-ui, sans-serif;
-      --mono: 'IBM Plex Mono', 'Cascadia Code', monospace;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--font);
-      font-size: 14px;
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-    }
-    *, *::before, *::after {
-      font-family: var(--font);
+      --ink: #050505;
+      --ink-soft: #111111;
+      --muted: #050505;
+      --rule: #e8e8e8;
+      --paper: #ffffff;
+      --box: #fcfcfc;
+      --code-bg: #f7f7f7;
+      --link: #050505;
+      --thesis: #1a1a1a;
+
+      --serif: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
+      --sans: var(--serif);
+      --mono: var(--serif);
+
+      --col: 1180px;
     }
 
-    /* ── Header ─────────────────────────── */
-    header {
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      height: 56px;
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { color: inherit; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    @keyframes rise {
+      0% { opacity: 0; transform: translateY(14px); filter: blur(2px); }
+      60% { opacity: 1; filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+    @keyframes brandIn {
+      0% { opacity: 0; transform: scale(0.92); filter: blur(4px); }
+      50% { opacity: 1; filter: blur(0); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .28; transform: scale(.72); }
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--paper);
+    }
+    .topbar-inner {
+      max-width: var(--col);
+      margin: 0 auto;
+      min-height: 68px;
+      padding: 12px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      background: rgba(255,255,255,.97);
-      backdrop-filter: blur(12px);
-      z-index: 100;
+      gap: 24px;
     }
-    .logo {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: .3px;
-      color: var(--ink);
-    }
-    .logo span { color: var(--muted); font-weight: 400; }
-    .header-actions { display: flex; gap: 8px; }
-    .btn {
-      padding: 7px 18px;
-      border-radius: 2px;
-      border: 1px solid var(--ink);
-      cursor: pointer;
-      font-size: 12.5px;
-      font-weight: 500;
-      background: #fff;
-      color: var(--ink);
-      font-family: var(--font);
-      letter-spacing: .2px;
-      transition: background .15s, transform .1s;
-    }
-    .btn:hover { background: #f5f5f5; }
-    .btn:active { transform: scale(.98); }
-
-    /* ── Layout ─────────────────────────── */
-    .container {
-      display: grid;
-      grid-template-columns: 224px 1fr;
-      min-height: calc(100vh - 56px);
-    }
-
-    /* ── Sidebar ────────────────────────── */
-    aside {
-      border-right: 1px solid var(--border);
-      padding: 24px 10px;
-      position: sticky;
-      top: 56px;
-      height: calc(100vh - 56px);
-      overflow-y: auto;
-      background: #fafafa;
-    }
-    .nav-group {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: #aaa;
-      padding: 0 12px;
-      margin: 24px 0 6px;
-    }
-    .nav-group:first-child { margin-top: 0; }
-    .nav-item {
+    .brand {
       display: flex;
       align-items: center;
-      padding: 8px 12px;
-      border-radius: 2px;
-      cursor: pointer;
-      color: #555;
-      font-size: 13px;
-      font-weight: 400;
-      transition: background .12s, color .12s, border-left .12s;
-      margin-bottom: 1px;
-      user-select: none;
-      border-left: 2px solid transparent;
-    }
-    .nav-item:hover { background: #efefef; color: var(--ink); border-left-color: #ccc; }
-    .nav-item.active {
-      background: #fff;
+      gap: 14px;
       color: var(--ink);
+      animation: brandIn 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) .05s both;
+    }
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-mark img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .brand-word {
       font-weight: 600;
-      border-left: 2px solid var(--ink);
-      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      font-size: 17px;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+    .brand-sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .04em;
+      margin-top: 5px;
+      color: var(--thesis);
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .icon-btn,
+    .btn,
+    .primary-btn {
+      appearance: none;
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      background: var(--paper);
+      min-height: 32px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 11px;
+      transition: background .15s, color .15s, transform .1s;
+    }
+    .primary-btn {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 8px 14px;
+    }
+    .btn:hover,
+    .icon-btn:hover { background: var(--code-bg); }
+    .primary-btn:hover { background: var(--ink-soft); }
+    .btn:active,
+    .icon-btn:active,
+    .primary-btn:active { transform: scale(.98); }
+    .primary-btn:disabled { opacity: .35; cursor: wait; transform: none; }
+    .icon-btn {
+      width: 34px;
+      padding: 0;
+      display: none;
+      place-items: center;
+      font-size: 18px;
+      line-height: 1;
     }
 
-    /* Section entrance animation */
-    @keyframes sectionIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .app {
+      max-width: var(--col);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      min-height: calc(100vh - 69px);
+    }
+    aside {
+      border-right: 1px solid var(--rule);
+      padding: 28px 18px 44px 40px;
+      position: sticky;
+      top: 69px;
+      height: calc(100vh - 69px);
+      overflow-y: auto;
+      background: var(--paper);
+    }
+    .nav-label {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0 0 16px;
+    }
+    .nav-item {
+      width: 100%;
+      appearance: none;
+      border: 0;
+      border-bottom: 1px solid var(--rule);
+      background: transparent;
+      text-align: left;
+      padding: 12px 0;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      align-items: baseline;
+      color: var(--ink);
+    }
+    .nav-item .num {
+      font-family: var(--mono);
+      font-size: 10px;
+      background: var(--code-bg);
+      padding: 3px 6px;
+      justify-self: start;
+    }
+    .nav-item .txt {
+      font-family: var(--serif);
+      font-size: 15px;
+    }
+    .nav-item:hover .txt { text-decoration: underline; }
+    .nav-item.active .txt { font-weight: 600; }
+    .side-summary {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--rule);
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .side-kpi {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .side-kpi span:last-child {
+      font-family: var(--mono);
+      background: var(--code-bg);
+      padding: 1px 7px;
+      font-size: 11px;
+      align-self: start;
     }
 
-    /* ── Main ───────────────────────────── */
-    main { padding: 40px 48px; width: 100%; background: #fff; }
-    .section { display: none; }
+    main {
+      padding: 76px 52px 108px;
+      min-width: 0;
+    }
+    .section {
+      display: none;
+      opacity: 0;
+      transform: translateY(14px);
+    }
     .section.active {
       display: block;
-      animation: sectionIn .3s ease both;
+      animation: rise .8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+    .section-head {
+      max-width: 820px;
+      margin-bottom: 28px;
+    }
+    .section-kicker {
+      display: inline-block;
+      background: var(--code-bg);
+      padding: 5px 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .01em;
+      margin-bottom: 18px;
     }
     .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--ink);
-      letter-spacing: -.2px;
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 44px;
+      line-height: 1.12;
+      letter-spacing: .03em;
+      font-variant: small-caps;
     }
-    .section-desc { color: var(--muted); font-size: 13px; margin-bottom: 32px; line-height: 1.6; }
-
-    /* ── Blocks ─────────────────────────── */
-    .block { border-top: 1px solid var(--border); margin-bottom: 0; }
-    .block:last-of-type { border-bottom: 1px solid var(--border); }
-    .block-header {
-      padding: 14px 0 6px;
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .8px;
+    .section-desc {
+      max-width: 680px;
+      margin: 18px 0 0;
+      font-family: var(--serif);
+      color: var(--thesis);
+      font-size: 16px;
+      line-height: 1.7;
     }
-    .block-body { padding: 0 0 22px; }
-
-    /* ── Forms ──────────────────────────── */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .form-grid.cols-1 { grid-template-columns: 1fr; }
-    .field { display: flex; flex-direction: column; gap: 6px; }
-    .field.full { grid-column: 1 / -1; }
-    label {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: .5px;
-      text-transform: uppercase;
+    .section-guide {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      margin: 0 0 42px;
+      background: var(--paper);
     }
-    .label-row { display: flex; justify-content: space-between; align-items: center; }
-    .label-val {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--ink);
+    .guide-item {
+      padding: 20px 22px 22px 0;
+      margin-right: 22px;
+      border-right: 1px solid var(--rule);
+    }
+    .guide-item:last-child {
+      border-right: 0;
+      margin-right: 0;
+    }
+    .guide-label {
+      display: inline-block;
+      background: var(--code-bg);
+      padding: 4px 9px;
       font-family: var(--mono);
+      font-size: 10.5px;
+      margin-bottom: 12px;
     }
-    input[type="text"], input[type="password"], input[type="number"], input[type="date"], select, textarea {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 2px;
+    .guide-text {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--thesis);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+    }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.one { grid-template-columns: 1fr; }
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
+    .panel {
+      background: var(--box);
+      border: 1px solid var(--rule);
+      padding: 34px;
+      min-width: 0;
+      min-height: 100%;
+    }
+    .panel.ruled {
+      background: transparent;
+      border-top: 1px solid var(--rule);
+      padding: 18px 0 26px;
+    }
+    .panel-title {
+      margin: 0 0 10px;
+      font-family: var(--serif);
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .panel-copy {
+      margin: 0 0 26px;
+      max-width: 520px;
+      font-family: var(--serif);
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: var(--thesis);
+    }
+    .panel-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    .fine {
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--thesis);
+    }
+    .mono { font-family: var(--mono); }
+    .muted { color: var(--thesis); }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .field:last-child { margin-bottom: 0; }
+    .label-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    label,
+    .label {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 500;
       color: var(--ink);
-      padding: 8px 12px;
-      font-size: 13px;
+    }
+    .value-chip,
+    .chip {
+      display: inline-block;
+      background: var(--code-bg);
+      padding: 4px 9px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
       width: 100%;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 42px;
+      padding: 10px 12px;
       outline: none;
-      font-family: var(--font);
-      transition: border-color .15s, box-shadow .15s;
+      border-radius: 0;
+      font-family: var(--sans);
+      font-size: 13px;
     }
-    input:focus, select:focus {
+    input:focus,
+    select:focus,
+    textarea:focus {
       border-color: var(--ink);
-      box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+      box-shadow: 0 0 0 2px rgba(5, 5, 5, .06);
     }
-    /* ── Custom sliders ─────────────────────── */
     input[type="range"] {
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
       height: 4px;
-      border-radius: 2px;
-      background: linear-gradient(to right, var(--ink) var(--fill, 0%), #e2e4e8 var(--fill, 0%));
+      border-radius: 999px;
+      background: linear-gradient(to right, var(--ink) var(--fill, 0%), var(--rule) var(--fill, 0%));
       cursor: pointer;
-      margin: 10px 0 6px;
       outline: none;
-      border: none;
-      transition: background .05s;
+      border: 0;
+      margin: 10px 0 2px;
     }
-    /* Webkit thumb */
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
-      background: #fff;
-      border: 2px solid var(--ink);
-      box-shadow: 0 1px 6px rgba(0,0,0,.18);
-      cursor: pointer;
-      transition: transform .12s, box-shadow .12s;
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
     }
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.18);
-      box-shadow: 0 2px 10px rgba(0,0,0,.25);
-    }
-    input[type="range"]:active::-webkit-slider-thumb {
-      transform: scale(1.08);
-      box-shadow: 0 1px 4px rgba(0,0,0,.18);
-    }
-    /* Firefox thumb */
     input[type="range"]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
-      background: #fff;
-      border: 2px solid var(--ink);
-      box-shadow: 0 1px 6px rgba(0,0,0,.18);
-      cursor: pointer;
-      transition: transform .12s;
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
     }
-    input[type="range"]::-moz-range-track {
-      height: 4px;
-      border-radius: 2px;
-      background: #e2e4e8;
-    }
-    input[type="range"]::-moz-range-progress {
-      height: 4px;
-      border-radius: 2px;
-      background: var(--ink);
-    }
-    .range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-    /* ── Profiles ───────────────────────── */
-    .profile-grid {
+    .range-labels {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0;
-      background: transparent;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 6px 0;
-    }
-    .profile-card {
-      flex: 1;
-      min-width: 120px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: none;
-      border-radius: 2px;
-      padding: 10px 16px;
-      cursor: pointer;
-      transition: background .15s, box-shadow .15s, transform .1s;
-      background: transparent;
-    }
-    .profile-card:hover {
-      background: #fff;
-      box-shadow: 0 1px 6px rgba(0,0,0,.08);
-      transform: translateY(-1px);
-    }
-    .profile-card.selected {
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0,0,0,.1);
-      transform: translateY(-1px);
-    }
-    .profile-card.selected .p-name { color: var(--ink); font-weight: 700; }
-    .profile-card.selected .p-risk { color: var(--muted); }
-    .p-icon { flex-shrink: 0; display: flex; align-items: center; }
-    .p-name { font-size: 13px; font-weight: 500; color: #444; }
-    .p-risk { font-size: 11px; color: #aaa; margin-top: 1px; }
-
-    /* ── Stats ──────────────────────────── */
-    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .stat-item {
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 12px 14px;
-      background: var(--surface);
-    }
-    .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
-    .stat-value { font-size: 17px; font-weight: 700; margin-top: 3px; font-family: var(--mono); }
-
-    /* ── Method buttons ─────────────────── */
-    .method-group { display: flex; flex-wrap: wrap; gap: 7px; }
-    .method-btn {
-      padding: 7px 16px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      background: #fff;
-      color: #555;
-      cursor: pointer;
-      font-size: 12.5px;
-      font-weight: 400;
-      font-family: var(--font);
-      transition: all .15s;
-    }
-    .method-btn:hover { border-color: var(--ink); color: var(--ink); }
-    .method-btn.selected {
-      background: var(--ink);
-      color: #fff;
-      border-color: var(--ink);
-    }
-
-    /* ── Toggles ────────────────────────── */
-    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
-    .toggle-row + .toggle-row { border-top: 1px solid var(--border); }
-    .toggle-name { font-size: 13.5px; font-weight: 500; color: var(--ink); }
-    .toggle-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .toggle-switch { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .track { position: absolute; inset: 0; background: #d1d5db; border-radius: 11px; cursor: pointer; transition: background .2s; }
-    .track::before { content: ''; position: absolute; width: 16px; height: 16px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: transform .2s; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
-    .toggle-switch input:checked + .track { background: var(--ink); }
-    .toggle-switch input:checked + .track::before { transform: translateX(16px); }
-
-    /* ── Tags ───────────────────────────── */
-    .tag-area { display: flex; flex-wrap: wrap; gap: 5px; padding: 9px; border: 1px solid var(--border); border-radius: 2px; min-height: 44px; background: var(--surface); }
-    .tag {
-      display: flex; align-items: center; gap: 5px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 3px 9px;
-      font-size: 12px;
-      font-weight: 500;
+      justify-content: space-between;
       font-family: var(--mono);
+      font-size: 10px;
+      color: var(--thesis);
+      padding-top: 3px;
     }
-    .tag-x { color: #aaa; cursor: pointer; font-size: 14px; line-height: 1; transition: color .1s; }
-    .tag-x:hover { color: var(--ink); }
-    .tag-add-row { display: flex; gap: 7px; margin-top: 8px; }
-    .tag-add-row input { flex: 1; }
-    .tag-add-btn {
-      padding: 8px 14px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      background: #fff;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      font-family: var(--font);
-      transition: background .12s, border-color .12s;
-    }
-    .tag-add-btn:hover { border-color: var(--ink); }
-
-    /* ── Code box ───────────────────────── */
-    .code-box {
-      background: #fafafa;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 20px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.8;
-      white-space: pre;
-      overflow-x: auto;
-      color: var(--ink);
-      max-height: 520px;
-      overflow-y: auto;
-    }
-
-    /* ── Run panel ──────────────────────── */
-    .run-panel {
+    .toggle-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 20px;
-      background: #fafafa;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      margin-bottom: 28px;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--rule);
     }
-    .run-config { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
-    .run-tag {
-      font-size: 12px;
-      font-weight: 400;
-      color: #555;
-      padding: 0 16px;
+    .toggle-copy {
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .switch {
+      position: relative;
+      width: 34px;
+      height: 20px;
+      flex: none;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .track {
+      position: absolute;
+      inset: 0;
+      background: var(--rule);
+      cursor: pointer;
+      border-radius: 999px;
+      transition: background .16s;
+    }
+    .track:before {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left: 3px;
+      top: 3px;
+      background: var(--paper);
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .18);
+      transition: transform .16s;
+    }
+    .switch input:checked + .track { background: var(--ink); }
+    .switch input:checked + .track:before { transform: translateX(14px); }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 34px;
+    }
+    .profile-card {
+      appearance: none;
+      border: 0;
+      border-right: 1px solid var(--rule);
+      background: transparent;
+      text-align: left;
+      padding: 24px 18px;
+      min-height: 140px;
+      cursor: pointer;
+    }
+    .profile-card:last-child { border-right: 0; }
+    .profile-card:hover,
+    .profile-card.selected { background: var(--code-bg); }
+    .profile-card .name {
+      display: block;
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .profile-card .risk {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      line-height: 1.7;
+    }
+
+    .tag-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 42px;
+      padding: 14px 0;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--code-bg);
+      padding: 5px 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .tag button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1;
+    }
+    .tag-add {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      gap: 16px;
+      background: transparent;
+      border: 0;
+    }
+    .metric {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      padding: 20px 18px;
+      min-width: 0;
+    }
+    .metric .label {
+      display: block;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .metric .value {
+      display: block;
+      font-family: var(--mono);
+      font-size: clamp(14px, 1.1vw, 18px);
+      font-weight: 500;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.25;
+    }
+
+    .run-panel {
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 22px 0;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-family: var(--mono);
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
     }
-    .run-tag + .run-tag { border-left: 1px solid var(--border); }
-    .run-btn {
-      padding: 10px 28px;
-      background: var(--ink);
-      color: #fff;
-      border: 1px solid var(--ink);
-      border-radius: 2px;
-      cursor: pointer;
-      font-size: 13px;
+    .run-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .status-box {
+      display: none;
+      background: var(--box);
+      border: 1px solid var(--rule);
+      padding: 24px 28px;
+      margin-bottom: 34px;
+    }
+    .status-title {
+      font-family: var(--serif);
       font-weight: 600;
-      font-family: var(--font);
-      letter-spacing: .3px;
-      transition: background .15s, transform .1s, box-shadow .15s;
-      white-space: nowrap;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px 16px;
+    }
+    .step {
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.15);
-    }
-    .run-btn:hover {
-      background: #222;
-      box-shadow: 0 4px 16px rgba(0,0,0,.2);
-      transform: translateY(-1px);
-    }
-    .run-btn:active { transform: scale(.98); }
-    .run-btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; transform: none; }
-
-    /* ── Status ─────────────────────────── */
-    .status-box {
-      padding: 16px 20px;
-      border-radius: 2px;
-      border: 1px solid var(--border);
-      background: #fafafa;
-      font-size: 13px;
-      margin-bottom: 20px;
-      display: none;
-    }
-    .status-steps { margin-top: 12px; }
-    .step { display: flex; align-items: center; gap: 9px; padding: 4px 0; font-size: 12.5px; color: var(--muted); }
-    .step.done { color: var(--positive); }
-    .step.active { color: var(--ink); font-weight: 600; }
-    .step-dot { width: 7px; height: 7px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
-    .step.done .step-dot { background: var(--positive); }
-    .step.active .step-dot { background: var(--ink); animation: pulse 1.2s ease infinite; }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .3; transform: scale(.7); }
-    }
-
-    /* ── KPI cards ──────────────────────── */
-    @keyframes countUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
-    .kpi-card {
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 18px 20px;
-      background: #fafafa;
-      transition: box-shadow .2s, transform .2s;
-    }
-    .kpi-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); }
-    .kpi-label {
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .8px;
-      font-weight: 600;
-    }
-    .kpi-value {
-      font-size: 26px;
-      font-weight: 700;
-      margin-top: 6px;
-      letter-spacing: -.5px;
       font-family: var(--mono);
-      animation: countUp .4s ease both;
+      font-size: 10.5px;
+      color: var(--thesis);
     }
-    .kpi-value.positive { color: var(--positive); }
-    .kpi-value.negative { color: var(--negative); }
-
-    /* ── Charts ─────────────────────────── */
-    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-    .chart-card {
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 22px;
-      background: #fff;
-      transition: box-shadow .2s;
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--rule);
+      flex: none;
     }
-    .chart-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.06); }
-    .chart-card-full {
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 22px;
-      background: #fff;
-      margin-bottom: 14px;
-    }
-    .chart-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; color: var(--ink); letter-spacing: .1px; }
-    .chart-subtitle { font-size: 11px; color: var(--muted); margin-bottom: 18px; }
-
-    /* ── Heatmap ────────────────────────── */
-    .heatmap-wrap { overflow-x: auto; }
-    .heatmap-table { border-collapse: collapse; font-size: 11px; width: 100%; font-family: var(--mono); }
-    .heatmap-table th { padding: 5px 7px; text-align: center; font-weight: 700; color: var(--muted); background: #fafafa; }
-    .heatmap-table td { padding: 6px 7px; text-align: center; font-weight: 500; font-size: 11px; border: 1px solid #f0f2f5; }
-
-    /* ── Weights table ──────────────────── */
-    .weights-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .weights-table th {
-      text-align: left;
-      padding: 9px 14px;
-      border-bottom: 1px solid var(--border);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .6px;
-      color: var(--muted);
-      font-weight: 700;
-      background: #fafafa;
-    }
-    .weights-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); }
-    .weights-table td:first-child { font-family: var(--mono); font-weight: 600; }
-    .weights-table tr:last-child td { border-bottom: none; }
-    .weights-table tbody tr { transition: background .1s; }
-    .weights-table tbody tr:hover td { background: #f7f7f7; }
-    .w-bar-bg { height: 4px; background: #e8eaed; border-radius: 2px; margin-top: 5px; overflow: hidden; }
-    .w-bar-fill { height: 100%; border-radius: 2px; background: var(--ink); }
-
-    /* ── Alert ──────────────────────────── */
-    .alert { padding: 12px 16px; border-radius: 2px; font-size: 13px; margin-bottom: 14px; display: none; }
-    .alert-warn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
-    .alert-error { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
-
-    /* ── Toast ──────────────────────────── */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
+    .step.done .dot { background: var(--ink); }
+    .step.active .dot {
       background: var(--ink);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 2px;
-      font-size: 12.5px;
-      font-weight: 500;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity .25s, transform .25s;
-      pointer-events: none;
-      z-index: 999;
-      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+      animation: pulse 1.1s ease infinite;
     }
-    .toast.show { opacity: 1; transform: translateY(0); }
 
-    hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-
-    /* ── Footer ─────────────────────────── */
-    footer {
-      background: #fff;
-      color: #555;
-      padding: 52px 48px 32px;
-      margin-top: 0;
-      border-top: 1px solid var(--border);
+    .alert {
+      display: none;
+      border: 1px solid var(--rule);
+      background: var(--code-bg);
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      font-family: var(--serif);
+      font-size: 14px;
     }
-    .footer-top {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr;
-      gap: 52px;
-      padding-bottom: 40px;
-      border-bottom: 1px solid var(--border);
+    .results-area { display: none; }
+    .chart-panel {
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      padding: 28px;
+      min-width: 0;
+      margin-top: 28px;
     }
-    .footer-brand-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 10px;
-      letter-spacing: .2px;
-    }
-    .footer-brand-desc {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.75;
-      max-width: 280px;
-    }
-    .footer-col-title {
-      font-size: 10px;
-      font-weight: 700;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
+    .chart-title {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 16px;
       margin-bottom: 16px;
     }
-    .footer-col-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-    .footer-col-list li { font-size: 12.5px; color: #555; font-weight: 400; }
-    .footer-bottom {
+    .chart-copy {
+      margin: -6px 0 22px;
+      max-width: 620px;
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--thesis);
+    }
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--rule);
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid var(--rule);
+      vertical-align: top;
+    }
+    td.mono,
+    th.mono { font-family: var(--mono); font-style: normal; font-size: 11px; }
+    .bar-bg {
+      height: 4px;
+      background: var(--rule);
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--ink);
+    }
+    .heatmap {
+      overflow-x: auto;
+    }
+    .heatmap table {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      min-width: 520px;
+    }
+    .heatmap th,
+    .heatmap td {
+      text-align: center;
+      padding: 6px;
+    }
+    .code-box {
+      background: var(--code-bg);
+      padding: 28px;
+      white-space: pre;
+      overflow: auto;
+      max-height: 540px;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.8;
+      border: 1px solid var(--rule);
+    }
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
+      z-index: 90;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .footer {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 34px 40px 54px;
+      border-top: 1px solid var(--rule);
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
       gap: 24px;
-      padding-top: 28px;
       flex-wrap: wrap;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 13px;
     }
-    .footer-legal { font-size: 11px; color: #aaa; line-height: 1.75; max-width: 680px; }
-    .footer-copy { font-size: 11px; color: #aaa; white-space: nowrap; padding-top: 2px; }
 
-    /* ── Mobile menu button ─────────────── */
-    .mob-menu-btn {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      width: 36px; height: 36px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      background: #fff;
-      cursor: pointer;
-      flex-shrink: 0;
-      padding: 0;
-    }
-    .mob-menu-btn svg { display: block; }
-
-    /* ── Mobile overlay ─────────────────── */
-    .mob-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.3);
-      z-index: 150;
-      opacity: 0;
-      transition: opacity .25s;
-      pointer-events: none;
-    }
-    .mob-overlay.visible { opacity: 1; pointer-events: auto; }
-
-    @media (max-width: 768px) {
-      footer { padding: 36px 16px 24px; }
-      .footer-top { grid-template-columns: 1fr; gap: 28px; }
-      .footer-bottom { flex-direction: column; gap: 12px; }
-
-      header { padding: 10px 14px; gap: 8px; }
-      .logo span { display: none; }
-      .header-actions .btn:first-child { display: none; }
-      .btn { padding: 6px 12px; font-size: 12px; }
-      .mob-menu-btn { display: flex; }
-
-      .container { grid-template-columns: 1fr; }
-
+    @media (max-width: 980px) {
+      .topbar-inner { padding: 12px 22px; }
+      .icon-btn { display: grid; }
+      .app { grid-template-columns: 1fr; }
       aside {
         position: fixed;
-        left: -280px;
         top: 0;
+        left: -280px;
         width: 260px;
         height: 100vh;
-        z-index: 200;
-        background: #fff;
-        box-shadow: 4px 0 24px rgba(0,0,0,.12);
-        transition: left .25s ease;
-        padding-top: 16px;
-        overflow-y: auto;
-        border-right: 1px solid var(--border);
+        z-index: 80;
+        padding: 24px;
+        border-right: 1px solid var(--rule);
+        transition: left .22s ease;
       }
       aside.open { left: 0; }
-      .mob-overlay { display: block; }
-
-      main { padding: 20px 16px; }
-      .section-title { font-size: 17px; }
-      .section-desc { font-size: 13px; margin-bottom: 20px; }
-
-      .profile-grid { gap: 6px; }
-      .profile-card { min-width: 0; flex: 1 1 calc(50% - 6px); }
-      .form-grid { grid-template-columns: 1fr; }
-      .charts-row { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .kpi-value { font-size: 20px; }
-
-      .run-panel { flex-direction: column; align-items: stretch; gap: 10px; }
-      .run-config { gap: 6px; }
-      .run-btn { width: 100%; justify-content: center; padding: 12px; }
-
-      #weights-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .weights-table { font-size: 11px; min-width: 400px; }
-      .weights-table th, .weights-table td { padding: 6px 8px; }
-
-      .chart-card, .chart-card-full { padding: 12px; }
-      .chart-card canvas { height: 200px !important; }
-
-      .status-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
-      .toast { bottom: 12px; right: 12px; left: 12px; text-align: center; }
+      main { padding: 46px 22px 80px; }
+      .section-title { font-size: 34px; }
+      .section-guide { grid-template-columns: 1fr; }
+      .guide-item {
+        border-right: 0;
+        border-bottom: 1px solid var(--rule);
+        margin-right: 0;
+        padding-right: 0;
+      }
+      .guide-item:last-child { border-bottom: 0; }
+      .grid,
+      .grid.cols-3,
+      .grid.cols-4 { grid-template-columns: 1fr; }
+      .span-2,
+      .span-3 { grid-column: span 1; }
+      .profile-grid { grid-template-columns: 1fr; }
+      .profile-card { border-right: 0; border-bottom: 1px solid var(--rule); min-height: auto; }
+      .profile-card:last-child { border-bottom: 0; }
+      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .footer { padding: 28px 22px 46px; }
     }
-
-    @media (max-width: 400px) {
-      .profile-grid { grid-template-columns: 1fr 1fr; }
-      .kpi-grid { grid-template-columns: 1fr 1fr; }
-      .run-tag { font-size: 11px; padding: 3px 8px; }
+    @media (max-width: 560px) {
+      .brand-mark { width: 44px; height: 44px; }
+      .brand-word { font-size: 15px; }
+      .brand-sub { display: none; }
+      .top-actions .btn { display: none; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .tag-add { grid-template-columns: 1fr; }
+      .panel, .chart-panel { padding: 22px; }
     }
   </style>
 </head>
 <body>
-
-<header>
-  <button class="mob-menu-btn" id="mob-menu-btn" onclick="toggleDrawer()" aria-label="Menu">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
-  <div class="logo">Portfolio Investment System <span>— Configuration</span></div>
-  <div class="header-actions">
-    <button class="btn" onclick="resetDefaults()">Réinitialiser</button>
-    <button class="btn" onclick="showSection('export')">Générer le code →</button>
-  </div>
-</header>
-<div class="mob-overlay" id="mob-overlay" onclick="closeDrawer()"></div>
-
-<div class="container">
-  <aside>
-    <div class="nav-group">Démarrer</div>
-    <div class="nav-item" onclick="showSection('questionnaire')" data-section="questionnaire">Questionnaire</div>
-
-    <div class="nav-group">Configuration</div>
-    <div class="nav-item active" onclick="showSection('profile')" data-section="profile">Profil</div>
-    <div class="nav-item" onclick="showSection('api')" data-section="api">Taux sans risque</div>
-    <div class="nav-item" onclick="showSection('universe')" data-section="universe">Univers d'actifs</div>
-
-    <div class="nav-group">Modèle</div>
-    <div class="nav-item" onclick="showSection('estimation')" data-section="estimation">Estimation</div>
-    <div class="nav-item" onclick="showSection('filters')" data-section="filters">Filtres</div>
-
-    <div class="nav-group">Résultats</div>
-    <div class="nav-item" onclick="showSection('analyse')" data-section="analyse">▶ Lancer l'analyse</div>
-
-    <div class="nav-group">Export</div>
-    <div class="nav-item" onclick="showSection('export')" data-section="export">Générer le code</div>
-  </aside>
-
-  <main>
-
-    <!-- ═══ QUESTIONNAIRE ════════════════════════════ -->
-    <section class="section" id="sec-questionnaire">
-      <div class="section-title">Questionnaire investisseur</div>
-      <div class="section-desc">Répondez aux 5 questions pour déterminer automatiquement votre profil de risque.</div>
-
-      <div class="block">
-        <div class="block-header">1 — Tolérance au risque</div>
-        <div class="block-body">
-          <div class="field">
-            <div class="label-row">
-              <label>Quel est votre niveau de tolérance aux pertes potentielles ?</label>
-              <span class="label-val" id="q_rt_v">6 / 10</span>
-            </div>
-            <input type="range" id="q_rt" min="1" max="10" step="1" value="6" oninput="qUpdate()" />
-            <div class="range-labels"><span>Très faible</span><span>Modérée</span><span>Très élevée</span></div>
-          </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><img src="assets/z1-logo.png" alt="" /></div>
+        <div>
+          <div class="brand-word">Portfolio<br />Investment System</div>
+          <div class="brand-sub">Risk-budgeted multi-asset allocation</div>
         </div>
       </div>
+      <div class="top-actions">
+        <button class="icon-btn" type="button" onclick="toggleDrawer()" aria-label="Menu">=</button>
+        <button class="btn" type="button" onclick="resetDefaults()">Reset</button>
+        <button class="btn" type="button" onclick="showSection('export')">Export Python</button>
+        <button class="primary-btn" type="button" onclick="showSection('analysis'); runAnalysis()">Run</button>
+      </div>
+    </div>
+  </header>
 
-      <div class="block">
-        <div class="block-header">2 — Horizon d'investissement</div>
-        <div class="block-body">
-          <div class="field">
-            <div class="label-row">
-              <label>Sur combien d'années prévoyez-vous d'investir ?</label>
-              <span class="label-val" id="q_hz_v">10 ans</span>
-            </div>
-            <input type="range" id="q_hz" min="1" max="40" step="1" value="10" oninput="qUpdate()" />
-            <div class="range-labels"><span>1 an</span><span>20 ans</span><span>40 ans</span></div>
+  <div class="app">
+    <aside id="side-nav">
+      <div class="nav-label">Pipeline</div>
+      <button class="nav-item active" type="button" onclick="showSection('questionnaire')" data-section="questionnaire"><span class="num">01</span><span class="txt">Questionnaire</span></button>
+      <button class="nav-item" type="button" onclick="showSection('profile')" data-section="profile"><span class="num">02</span><span class="txt">Profile</span></button>
+      <button class="nav-item" type="button" onclick="showSection('universe')" data-section="universe"><span class="num">03</span><span class="txt">Universe</span></button>
+      <button class="nav-item" type="button" onclick="showSection('model')" data-section="model"><span class="num">04</span><span class="txt">Model</span></button>
+      <button class="nav-item" type="button" onclick="showSection('constraints')" data-section="constraints"><span class="num">05</span><span class="txt">Constraints</span></button>
+      <button class="nav-item" type="button" onclick="showSection('analysis')" data-section="analysis"><span class="num">06</span><span class="txt">Analysis</span></button>
+      <button class="nav-item" type="button" onclick="showSection('backtest')" data-section="backtest"><span class="num">07</span><span class="txt">Backtest</span></button>
+      <button class="nav-item" type="button" onclick="showSection('montecarlo')" data-section="montecarlo"><span class="num">08</span><span class="txt">Monte Carlo</span></button>
+      <button class="nav-item" type="button" onclick="showSection('export')" data-section="export"><span class="num">09</span><span class="txt">Export</span></button>
+
+      <div class="side-summary">
+        <div class="side-kpi"><span>Profile</span><span id="side-profile">Balanced</span></div>
+        <div class="side-kpi"><span>Assets</span><span id="side-assets">0</span></div>
+        <div class="side-kpi"><span>Optimizer</span><span id="side-optim">MVO</span></div>
+        <div class="side-kpi"><span>TAA</span><span id="side-taa">Off</span></div>
+      </div>
+    </aside>
+
+    <main>
+      <section class="section active" id="sec-questionnaire">
+        <div class="section-head">
+          <span class="section-kicker">01 / investor profiling</span>
+          <h1 class="section-title">Translate the investor into constraints.</h1>
+          <p class="section-desc">The score follows the paper: 35% risk tolerance, 25% horizon, 20% income stability, 10% wealth level, 10% financial knowledge.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Input</span>
+            <p class="guide-text">You specify risk tolerance, investment horizon, income stability, wealth level, and financial knowledge.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Computation</span>
+            <p class="guide-text">The application converts these answers into a composite score and assigns the corresponding investor profile.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Output</span>
+            <p class="guide-text">The profile determines lambda, target volatility, and the risk budgets used by the optimization engine.</p>
           </div>
         </div>
-      </div>
 
-      <div class="block">
-        <div class="block-header">3 — Stabilité des revenus</div>
-        <div class="block-body">
-          <div class="field">
-            <div class="label-row">
-              <label>À quel point vos revenus sont-ils stables et prévisibles ?</label>
-              <span class="label-val" id="q_inc_v">7 / 10</span>
-            </div>
-            <input type="range" id="q_inc" min="1" max="10" step="1" value="7" oninput="qUpdate()" />
-            <div class="range-labels"><span>Instables</span><span>Modérés</span><span>Très stables</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">4 — Niveau de patrimoine</div>
-        <div class="block-body">
-          <div class="field">
-            <div class="label-row">
-              <label>Comment évaluez-vous votre patrimoine actuel ?</label>
-              <span class="label-val" id="q_wlth_v">5 / 10</span>
-            </div>
-            <input type="range" id="q_wlth" min="1" max="10" step="1" value="5" oninput="qUpdate()" />
-            <div class="range-labels"><span>Faible</span><span>Moyen</span><span>Élevé</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="block-header">5 — Connaissances financières</div>
-        <div class="block-body">
-          <div class="field">
-            <div class="label-row">
-              <label>Quel est votre niveau de connaissance des marchés financiers ?</label>
-              <span class="label-val" id="q_know_v">6 / 10</span>
-            </div>
-            <input type="range" id="q_know" min="1" max="10" step="1" value="6" oninput="qUpdate()" />
-            <div class="range-labels"><span>Débutant</span><span>Intermédiaire</span><span>Expert</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Score result -->
-      <div id="q-result" style="margin-top:24px;padding:24px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-          <div>
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px">Score de risque calculé</div>
-            <div style="display:flex;align-items:baseline;gap:8px">
-              <span id="q-score-num" style="font-size:32px;font-weight:800;color:#0f1117">57.4</span>
-              <span style="font-size:14px;color:var(--muted)">/100</span>
-            </div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px">Profil recommandé</div>
-            <div id="q-profile-badge" style="display:inline-block;padding:6px 18px;border-radius:999px;font-size:14px;font-weight:700;background:#0f1117;color:#fff">Équilibré</div>
-          </div>
-        </div>
-        <!-- Score bar -->
-        <div style="margin-top:18px">
-          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px">
-            <span>Très conservateur</span><span>Conservateur</span><span>Équilibré</span><span>Croissance</span><span>Agressif</span>
-          </div>
-          <div style="position:relative;height:8px;border-radius:4px;background:linear-gradient(to right,#3b82f6,#22c55e,#f59e0b,#ef4444);overflow:visible">
-            <div id="q-score-cursor" style="position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#0f1117;border:3px solid #fff;box-shadow:0 0 0 2px #0f1117;transition:left .3s;left:57.4%"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px">
-            <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span>
-          </div>
-        </div>
-        <!-- Weights breakdown -->
-        <div id="q-weights" style="margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px"></div>
-        <!-- CTA -->
-        <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="run-btn" style="font-size:13px;padding:10px 22px" onclick="applyQuestionnaire()">Appliquer ce profil →</button>
-          <button class="btn" onclick="showSection('profile')">Modifier manuellement</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ PROFIL ══════════════════════════════════ -->
-    <section class="section active" id="sec-profile">
-      <div class="section-title">Profil investisseur</div>
-      <div class="section-desc">Définit l'aversion au risque, la volatilité cible et les budgets de risque par classe d'actifs.</div>
-      <div class="profile-grid">
-            <div class="profile-card" data-profile="Very Conservative" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="p-name">Très conservateur</div><div class="p-risk">λ = 8 · 5% vol</div></div>
-            <div class="profile-card" data-profile="Conservative" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11"/><path d="M3 10l9-7 9 7"/><line x1="7" y1="10" x2="7" y2="21"/><line x1="12" y1="10" x2="12" y2="21"/><line x1="17" y1="10" x2="17" y2="21"/></svg></div><div class="p-name">Conservateur</div><div class="p-risk">λ = 6 · 8% vol</div></div>
-            <div class="profile-card selected" data-profile="Balanced" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 9l9-6 9 6"/><path d="M5 9l-2 7h4z"/><path d="M19 9l-2 7h4z"/><line x1="3" y1="21" x2="21" y2="21"/></svg></div><div class="p-name">Équilibré</div><div class="p-risk">λ = 4 · 12% vol</div></div>
-            <div class="profile-card" data-profile="Growth" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="p-name">Croissance</div><div class="p-risk">λ = 2.5 · 18% vol</div></div>
-            <div class="profile-card" data-profile="Aggressive" onclick="selectProfile(this)"><div class="p-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="p-name">Agressif</div><div class="p-risk">λ = 1.5 · 25% vol</div></div>
-      </div>
-      <div class="block">
-        <div class="block-header">Paramètres du profil</div>
-        <div class="block-body"><div class="stat-grid" id="profile-stats"></div></div>
-      </div>
-      <div class="block">
-        <div class="block-header">Budgets de risque par classe</div>
-        <div class="block-body" id="risk-budgets"></div>
-      </div>
-    </section>
-
-    <!-- ═══ API ════════════════════════════════════ -->
-    <section class="section" id="sec-api">
-      <div class="section-title">Taux de référence</div>
-      <div class="section-desc">Taux sans risque utilisé pour le calcul du ratio de Sharpe (r_f).</div>
-      <div class="block">
-        <div class="block-header">Taux sans risque (r_f)</div>
-        <div class="block-body">
-          <div class="form-grid">
+        <div class="grid">
+          <div class="panel">
+            <h2 class="panel-title">Questionnaire</h2>
+            <p class="panel-copy">Adjust the sliders from left to right. Higher values allow the system to accept greater portfolio risk.</p>
             <div class="field">
-              <div class="label-row"><label>Taux annualisé</label><span class="label-val" id="rf_display">4.50%</span></div>
-              <input type="range" id="risk_free_rate" min="0" max="10" step="0.1" value="4.5" oninput="rfUpdate()" />
-              <div class="range-labels"><span>0%</span><span>5%</span><span>10%</span></div>
+              <div class="label-row"><label for="q_rt">Risk tolerance</label><span class="value-chip" id="q_rt_v">6 / 10</span></div>
+              <input type="range" id="q_rt" min="1" max="10" step="1" value="6" oninput="qUpdate()" />
+              <div class="range-labels"><span>low</span><span>moderate</span><span>high</span></div>
             </div>
-            <div class="field"><label>Taux journalier</label><input type="text" id="rf_daily" value="0.01786% / jour" readonly style="color:var(--muted);background:var(--surface)" /></div>
+            <div class="field">
+              <div class="label-row"><label for="q_hz">Investment horizon</label><span class="value-chip" id="q_hz_v">10 years</span></div>
+              <input type="range" id="q_hz" min="1" max="40" step="1" value="10" oninput="qUpdate()" />
+              <div class="range-labels"><span>1 year</span><span>20 years</span><span>40 years</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="q_inc">Income stability</label><span class="value-chip" id="q_inc_v">7 / 10</span></div>
+              <input type="range" id="q_inc" min="1" max="10" step="1" value="7" oninput="qUpdate()" />
+              <div class="range-labels"><span>unstable</span><span>stable</span><span>highly stable</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="q_wlth">Wealth level</label><span class="value-chip" id="q_wlth_v">5 / 10</span></div>
+              <input type="range" id="q_wlth" min="1" max="10" step="1" value="5" oninput="qUpdate()" />
+              <div class="range-labels"><span>low</span><span>medium</span><span>high</span></div>
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="q_know">Financial knowledge</label><span class="value-chip" id="q_know_v">6 / 10</span></div>
+              <input type="range" id="q_know" min="1" max="10" step="1" value="6" oninput="qUpdate()" />
+              <div class="range-labels"><span>beginner</span><span>intermediate</span><span>expert</span></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2 class="panel-title">Profiling result</h2>
+            <p class="panel-copy">This block summarises the financial translation of the questionnaire. Applying the profile automatically synchronises the constraints used later in the application.</p>
+            <div class="metric-grid" style="margin-bottom:28px">
+              <div class="metric"><span class="label">Score</span><span class="value" id="q-score-num">57.4</span></div>
+              <div class="metric"><span class="label">Profile</span><span class="value" id="q-profile-badge">Balanced</span></div>
+              <div class="metric"><span class="label">Lambda</span><span class="value" id="q-lambda">4.0</span></div>
+              <div class="metric"><span class="label">Target vol</span><span class="value" id="q-vol">12%</span></div>
+            </div>
+            <div id="q-budget-bars"></div>
+            <div class="panel-actions">
+              <button class="primary-btn" type="button" onclick="applyQuestionnaire()">Apply profile</button>
+              <button class="btn" type="button" onclick="showSection('profile')">Edit</button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ═══ UNIVERS ════════════════════════════════ -->
-    <section class="section" id="sec-universe">
-      <div class="section-title">Univers d'actifs</div>
-      <div class="section-desc">Tickers Yahoo Finance par classe. Cliquez × pour supprimer, ou ajoutez via le champ de saisie.</div>
-      <div class="block"><div class="block-header">Actions — Equity</div><div class="block-body"><div class="tag-area" id="tags-equity"></div><div class="tag-add-row"><input type="text" id="input-equity" placeholder="SPY, QQQ…" onkeydown="if(event.key==='Enter')addTag('equity')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('equity')">Ajouter</button></div></div></div>
-      <div class="block"><div class="block-header">Obligations — Fixed Income</div><div class="block-body"><div class="tag-area" id="tags-fixed_income"></div><div class="tag-add-row"><input type="text" id="input-fixed_income" placeholder="AGG, TLT…" onkeydown="if(event.key==='Enter')addTag('fixed_income')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('fixed_income')">Ajouter</button></div></div></div>
-      <div class="block"><div class="block-header">Matières premières — Commodity</div><div class="block-body"><div class="tag-area" id="tags-commodity"></div><div class="tag-add-row"><input type="text" id="input-commodity" placeholder="GLD, SLV…" onkeydown="if(event.key==='Enter')addTag('commodity')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('commodity')">Ajouter</button></div></div></div>
-      <div class="block"><div class="block-header">Immobilier coté — Real Estate</div><div class="block-body"><div class="tag-area" id="tags-real_estate"></div><div class="tag-add-row"><input type="text" id="input-real_estate" placeholder="VNQ, VNQI…" onkeydown="if(event.key==='Enter')addTag('real_estate')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('real_estate')">Ajouter</button></div></div></div>
-      <div class="block"><div class="block-header">Crypto-monnaies</div><div class="block-body"><div class="tag-area" id="tags-crypto"></div><div class="tag-add-row"><input type="text" id="input-crypto" placeholder="BTC-USD, ETH-USD…" onkeydown="if(event.key==='Enter')addTag('crypto')" style="text-transform:uppercase" /><button class="tag-add-btn" onclick="addTag('crypto')">Ajouter</button></div></div></div>
-    </section>
-
-
-    <!-- ═══ ESTIMATION ════════════════════════════ -->
-    <section class="section" id="sec-estimation">
-      <div class="section-title">Paramètres d'estimation</div>
-      <div class="section-desc">Fenêtre historique et intensité de shrinkage pour μ (James-Stein) et Σ (Ledoit-Wolf).</div>
-      <div class="block"><div class="block-header">Fenêtre d'estimation</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Historique utilisé</label><span class="label-val" id="estwin_v">5 ans</span></div><input type="range" id="estimation_window_years" min="1" max="15" step="1" value="5" oninput="document.getElementById('estwin_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>8 ans</span><span>15 ans</span></div></div><div class="field" style="align-self:start"><label>Note</label><div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">Minimum recommandé : 3 ans. La qualité de la matrice de covariance Ledoit-Wolf croît avec T.</div></div></div></div></div>
-      <div class="block"><div class="block-header">Shrinkage des rendements (α)</div><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Intensité de shrinkage</label><span class="label-val" id="shrink_v">0.20</span></div><input type="range" id="shrinkage_alpha" min="0.05" max="0.50" step="0.05" value="0.20" oninput="document.getElementById('shrink_v').textContent=parseFloat(this.value).toFixed(2)" /><div class="range-labels"><span>0.05</span><span>0.25</span><span>0.50</span></div></div><div class="field" style="align-self:start"><label>Formule</label><div style="font-size:12px;color:var(--muted);line-height:1.6;padding-top:2px">μ̂ = (1−α)·μ_hist + α·μ_grand_mean<br>α = 0 → historique pur · α = 1 → poolé</div></div></div></div></div>
-    </section>
-
-    <!-- ═══ FILTRES ════════════════════════════════ -->
-    <section class="section" id="sec-filters">
-      <div class="section-title">Filtres de l'univers</div>
-      <div class="section-desc">Critères d'inclusion des actifs dans l'univers d'optimisation.</div>
-      <div class="block"><div class="block-body"><div class="form-grid"><div class="field"><div class="label-row"><label>Corrélation maximale</label><span class="label-val" id="corr_v">0.90</span></div><input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90" oninput="document.getElementById('corr_v').textContent=parseFloat(this.value).toFixed(2)" /><div class="range-labels"><span>0.50</span><span>0.75</span><span>0.99</span></div></div><div class="field"><div class="label-row"><label>Historique minimum</label><span class="label-val" id="hist_v">3 ans</span></div><input type="range" id="min_history_years" min="1" max="10" step="1" value="3" oninput="document.getElementById('hist_v').textContent=this.value+' ans'" /><div class="range-labels"><span>1 an</span><span>5 ans</span><span>10 ans</span></div></div><div class="field"><div class="label-row"><label>Volatilité annuelle min.</label><span class="label-val" id="vol_v">1.0%</span></div><input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1" oninput="document.getElementById('vol_v').textContent=parseFloat(this.value).toFixed(1)+'%'" /><div class="range-labels"><span>0%</span><span>2.5%</span><span>5%</span></div></div></div></div></div>
-    </section>
-
-    <!-- ═══ ANALYSE ════════════════════════════════ -->
-    <section class="section" id="sec-analyse">
-      <div class="section-title">Analyse du portefeuille</div>
-      <div class="section-desc">Téléchargement des données de marché, optimisation et visualisations basées sur vos paramètres.</div>
-
-      <div class="run-panel">
-        <div class="run-config" id="run-summary"></div>
-        <button class="run-btn" id="run-btn" onclick="runAnalysis()"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Lancer l'analyse</button>
-      </div>
-
-      <div class="alert alert-warn" id="alert-warn"></div>
-      <div class="alert alert-error" id="alert-err"></div>
-
-      <div class="status-box" id="status-box">
-        <div style="font-size:13px;font-weight:600" id="status-title">Analyse en cours…</div>
-        <div class="status-steps" id="status-steps"></div>
-      </div>
-
-      <div id="results-area" style="display:none">
-        <!-- KPIs -->
-        <div class="kpi-grid" id="kpi-grid"></div>
-
-        <!-- Row 1: Allocation + Risk contributions -->
-        <div class="charts-row">
-          <div class="chart-card">
-            <div class="chart-title">Allocation du portefeuille</div>
-            <canvas id="chart-alloc" height="220"></canvas>
+      <section class="section" id="sec-profile">
+        <div class="section-head">
+          <span class="section-kicker">02 / investor profile</span>
+          <h1 class="section-title">Risk preference becomes a portfolio budget.</h1>
+          <p class="section-desc">Each profile maps to lambda, target volatility, equity and crypto caps, risk budgets, and tracking error limits.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Input</span>
+            <p class="guide-text">Select a standard profile or apply the one inferred from the questionnaire.</p>
           </div>
-          <div class="chart-card">
-            <div class="chart-title">Contributions au risque</div>
-            <div class="chart-subtitle">Réelle vs budget cible</div>
-            <canvas id="chart-rc" height="220"></canvas>
+          <div class="guide-item">
+            <span class="guide-label">Computation</span>
+            <p class="guide-text">Each profile defines risk aversion, exposure ceilings, and a target risk allocation by asset class.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Output</span>
+            <p class="guide-text">These parameters become the guardrails for the optimizer and the tactical allocation overlay.</p>
           </div>
         </div>
 
-        <!-- Weights table -->
-        <div class="chart-card-full">
-          <div class="chart-title">Détail de l'allocation</div>
-          <div id="weights-table-wrap"></div>
+        <div class="profile-grid" id="profile-grid"></div>
+        <div class="grid">
+          <div class="panel">
+            <h2 class="panel-title">Profile parameters</h2>
+            <p class="panel-copy">The principal values associated with the selected profile. They frame the maximum risk exposure before the asset universe is even selected.</p>
+            <div class="metric-grid" id="profile-stats"></div>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">Risk budgets by class</h2>
+            <p class="panel-copy">The risk budget indicates how much of total volatility each asset class is permitted to carry.</p>
+            <div id="risk-budgets"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-universe">
+        <div class="section-head">
+          <span class="section-kicker">03 / asset universe</span>
+          <h1 class="section-title">Core, satellite, and diversified market exposures.</h1>
+          <p class="section-desc">The universe is filtered by data availability, annual volatility floor, and pairwise correlation redundancy before optimization.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Input</span>
+            <p class="guide-text">Add or remove tickers by class: equities, fixed income, commodities, real estate, and cryptocurrencies.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Filter</span>
+            <p class="guide-text">At runtime, assets with insufficient history, inadequate volatility, or excessive redundancy may be excluded.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Output</span>
+            <p class="guide-text">The final portfolio only uses valid assets aligned on the same market calendar.</p>
+          </div>
         </div>
 
-        <!-- Correlation heatmap -->
-        <div class="chart-card-full">
-          <div class="chart-title">Matrice de corrélation</div>
-          <div class="heatmap-wrap"><div id="corr-heatmap"></div></div>
+        <div class="grid" id="universe-panels"></div>
+      </section>
+
+      <section class="section" id="sec-model">
+        <div class="section-head">
+          <span class="section-kicker">04 / estimation and optimization</span>
+          <h1 class="section-title">Robust estimates before portfolio weights.</h1>
+          <p class="section-desc">The model includes historical returns, James-Stein shrinkage, a Black-Litterman-style market prior, Ledoit-Wolf covariance, EWMA covariance, MVO, and generalized risk budgeting.</p>
         </div>
-      </div>
-    </section>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Return</span>
+            <p class="guide-text">The model estimates expected returns through a conservative procedure designed to avoid overreacting to recent history.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Risk</span>
+            <p class="guide-text">The covariance matrix measures volatilities and correlations, which are the statistical drivers of diversification.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Weights</span>
+            <p class="guide-text">The optimizer combines returns, risk, and constraints to produce the strategic allocation.</p>
+          </div>
+        </div>
 
-    <!-- ═══ EXPORT ═════════════════════════════════ -->
-    <section class="section" id="sec-export">
-      <div class="section-title">Code Python généré</div>
-      <div class="section-desc">Copiez ce bloc dans les cellules 3 et 4 de votre notebook.</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <button class="btn" onclick="copyCode()">Copier</button>
-        <button class="btn" onclick="downloadCode()">Télécharger .py</button>
-      </div>
-      <div class="code-box" id="code-out"></div>
-    </section>
+        <div class="grid">
+          <div class="panel">
+            <h2 class="panel-title">Return estimation</h2>
+            <p class="panel-copy">Choose how the system transforms historical returns into annualized expected-return assumptions.</p>
+            <div class="field">
+              <label for="return_method">Expected-return model</label>
+              <select id="return_method" onchange="updateSideSummary()">
+                <option value="black_litterman">Black-Litterman prior + views</option>
+                <option value="shrinkage">James-Stein shrinkage</option>
+                <option value="historical">Historical mean baseline</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="shrinkage_alpha">Shrinkage alpha</label><span class="value-chip" id="shrinkage_alpha_v">0.20</span></div>
+              <input type="range" id="shrinkage_alpha" min="0" max="0.8" step="0.05" value="0.20" oninput="updateLabel('shrinkage_alpha', Number(this.value).toFixed(2))" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="bl_tau">Black-Litterman tau</label><span class="value-chip" id="bl_tau_v">0.05</span></div>
+              <input type="range" id="bl_tau" min="0.01" max="0.20" step="0.01" value="0.05" oninput="updateLabel('bl_tau', Number(this.value).toFixed(2))" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="view_confidence">View confidence</label><span class="value-chip" id="view_confidence_v">35%</span></div>
+              <input type="range" id="view_confidence" min="0" max="100" step="5" value="35" oninput="updateLabel('view_confidence', this.value + '%')" />
+            </div>
+          </div>
 
-  </main>
-</div>
-<div class="toast" id="toast"></div>
+          <div class="panel">
+            <h2 class="panel-title">Risk model</h2>
+            <p class="panel-copy">Choose how the system stabilises the covariance matrix before portfolio weights are calculated.</p>
+            <div class="field">
+              <label for="cov_method">Covariance estimator</label>
+              <select id="cov_method">
+                <option value="ledoit_wolf">Ledoit-Wolf shrinkage</option>
+                <option value="ewma">EWMA RiskMetrics</option>
+                <option value="sample">Sample covariance</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="ewma_lambda">EWMA lambda</label><span class="value-chip" id="ewma_lambda_v">0.94</span></div>
+              <input type="range" id="ewma_lambda" min="0.85" max="0.99" step="0.01" value="0.94" oninput="updateLabel('ewma_lambda', Number(this.value).toFixed(2))" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="estimation_window_years">Estimation window</label><span class="value-chip" id="estimation_window_years_v">5 years</span></div>
+              <input type="range" id="estimation_window_years" min="1" max="10" step="1" value="5" oninput="updateLabel('estimation_window_years', this.value + ' years')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="risk_free_rate">Risk-free rate annualized</label><span class="value-chip" id="risk_free_rate_v">4.50%</span></div>
+              <input type="range" id="risk_free_rate" min="0" max="10" step="0.1" value="4.5" oninput="rfUpdate()" />
+            </div>
+          </div>
+
+          <div class="panel span-2">
+            <h2 class="panel-title">Optimization and tactical overlay</h2>
+            <p class="panel-copy">The decision core: select the portfolio construction logic and decide whether short-term tactical adjustments should be activated.</p>
+            <div class="grid">
+              <div>
+                <div class="field">
+                  <label for="optim_method">Optimizer</label>
+                  <select id="optim_method" onchange="updateSideSummary()">
+                    <option value="mvo">Max Sharpe MVO</option>
+                    <option value="risk_budget">Generalized Risk Budgeting</option>
+                    <option value="blend">50/50 MVO + Risk Budget</option>
+                  </select>
+                </div>
+                <div class="toggle-row">
+                  <div class="toggle-copy">Tactical asset allocation overlay</div>
+                  <label class="switch"><input type="checkbox" id="taa_enabled" checked onchange="updateSideSummary()" /><span class="track"></span></label>
+                </div>
+                <div class="toggle-row">
+                  <div class="toggle-copy">Auto-run backtest and Monte Carlo after analysis</div>
+                  <label class="switch"><input type="checkbox" id="auto_reports" checked /><span class="track"></span></label>
+                </div>
+              </div>
+              <div>
+                <div class="field">
+                  <div class="label-row"><label for="momentum_lookback">Momentum lookback</label><span class="value-chip" id="momentum_lookback_v">126 days</span></div>
+                  <input type="range" id="momentum_lookback" min="21" max="252" step="21" value="126" oninput="updateLabel('momentum_lookback', this.value + ' days')" />
+                </div>
+                <div class="field">
+                  <div class="label-row"><label for="taa_strength">TAA intensity</label><span class="value-chip" id="taa_strength_v">15%</span></div>
+                  <input type="range" id="taa_strength" min="0" max="40" step="1" value="15" oninput="updateLabel('taa_strength', this.value + '%')" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-constraints">
+        <div class="section-head">
+          <span class="section-kicker">05 / constraints</span>
+          <h1 class="section-title">Realistic portfolios need boundaries.</h1>
+          <p class="section-desc">The optimizer enforces long-only weights, maximum concentration, asset-class exposure caps, tactical tracking error, turnover estimates, and data filters.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Exposure</span>
+            <p class="guide-text">Exposure ceilings prevent any single asset, equities, or cryptocurrencies from becoming disproportionately dominant.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Quality</span>
+            <p class="guide-text">The filters remove assets with poor data quality, excessive similarity, or limited statistical usefulness.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Discipline</span>
+            <p class="guide-text">Tracking error and transaction costs constrain tactical changes that would otherwise be too aggressive.</p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel">
+            <h2 class="panel-title">Portfolio constraints</h2>
+            <p class="panel-copy">These limits control concentration and keep the allocation coherent with the investor profile.</p>
+            <div class="field">
+              <div class="label-row"><label for="max_single_asset">Maximum single asset</label><span class="value-chip" id="max_single_asset_v">15%</span></div>
+              <input type="range" id="max_single_asset" min="5" max="35" step="1" value="15" oninput="updateLabel('max_single_asset', this.value + '%')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="min_single_asset">Minimum non-zero asset</label><span class="value-chip" id="min_single_asset_v">1.0%</span></div>
+              <input type="range" id="min_single_asset" min="0" max="5" step="0.5" value="1" oninput="updateLabel('min_single_asset', Number(this.value).toFixed(1) + '%')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="target_volatility">Target annual volatility</label><span class="value-chip" id="target_volatility_v">12%</span></div>
+              <input type="range" id="target_volatility" min="3" max="30" step="1" value="12" oninput="updateLabel('target_volatility', this.value + '%')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="max_equity">Max equity exposure</label><span class="value-chip" id="max_equity_v">60%</span></div>
+              <input type="range" id="max_equity" min="10" max="100" step="5" value="60" oninput="updateLabel('max_equity', this.value + '%')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="max_crypto">Max crypto exposure</label><span class="value-chip" id="max_crypto_v">5%</span></div>
+              <input type="range" id="max_crypto" min="0" max="20" step="1" value="5" oninput="updateLabel('max_crypto', this.value + '%')" />
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2 class="panel-title">Filters and rebalancing</h2>
+            <p class="panel-copy">These settings govern universe quality and the scale of tactical deviations around the strategic allocation.</p>
+            <div class="field">
+              <div class="label-row"><label for="max_correlation">Correlation redundancy filter</label><span class="value-chip" id="max_correlation_v">0.90</span></div>
+              <input type="range" id="max_correlation" min="0.50" max="0.99" step="0.01" value="0.90" oninput="updateLabel('max_correlation', Number(this.value).toFixed(2))" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="min_history_years">Minimum clean history</label><span class="value-chip" id="min_history_years_v">3 years</span></div>
+              <input type="range" id="min_history_years" min="1" max="10" step="1" value="3" oninput="updateLabel('min_history_years', this.value + ' years')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="min_annual_vol">Minimum annual volatility</label><span class="value-chip" id="min_annual_vol_v">1.0%</span></div>
+              <input type="range" id="min_annual_vol" min="0" max="5" step="0.1" value="1" oninput="updateLabel('min_annual_vol', Number(this.value).toFixed(1) + '%')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="te_budget">Tactical tracking error budget</label><span class="value-chip" id="te_budget_v">2.0%</span></div>
+              <input type="range" id="te_budget" min="0.5" max="6" step="0.5" value="2" oninput="updateLabel('te_budget', Number(this.value).toFixed(1) + '%')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="transaction_cost">Transaction cost estimate</label><span class="value-chip" id="transaction_cost_v">0.10%</span></div>
+              <input type="range" id="transaction_cost" min="0" max="1" step="0.05" value="0.10" oninput="updateLabel('transaction_cost', Number(this.value).toFixed(2) + '%')" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-analysis">
+        <div class="section-head">
+          <span class="section-kicker">06 / live analysis</span>
+          <h1 class="section-title">Download data, estimate risk, optimize, explain.</h1>
+          <p class="section-desc">This runs the full browser pipeline from market data to SAA, optional TAA, risk decomposition, correlation heatmap, and report inputs.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Data</span>
+            <p class="guide-text">The system downloads prices, aligns dates, and converts price series into daily returns.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Optimization</span>
+            <p class="guide-text">It estimates returns and risks, then calculates weights under the profile constraints.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Interpretation</span>
+            <p class="guide-text">The results present allocation, risk contribution, ticker-level details, and correlations.</p>
+          </div>
+        </div>
+
+        <div class="run-panel">
+          <div class="run-tags" id="run-summary"></div>
+          <button class="primary-btn" id="run-btn" type="button" onclick="runAnalysis()">Run analysis</button>
+        </div>
+        <div class="alert" id="alert-box"></div>
+        <div class="status-box" id="status-box">
+          <div class="status-title" id="status-title">Analysis in progress</div>
+          <div class="steps" id="status-steps"></div>
+        </div>
+
+        <div class="results-area" id="results-area">
+          <div class="metric-grid" id="kpi-grid"></div>
+          <div class="grid">
+            <div class="chart-panel">
+              <div class="chart-title">Portfolio allocation</div>
+              <p class="chart-copy">Capital allocation across the assets retained after filtering.</p>
+              <canvas id="chart-alloc" height="250"></canvas>
+            </div>
+            <div class="chart-panel">
+              <div class="chart-title">Risk contribution vs target budget</div>
+              <p class="chart-copy">Compares the realised risk carried by each asset with the profile's target risk budget.</p>
+              <canvas id="chart-rc" height="250"></canvas>
+            </div>
+          </div>
+          <div class="chart-panel">
+            <div class="chart-title">Allocation detail</div>
+            <p class="chart-copy">Tabular view of weights, expected returns, and risk contributions.</p>
+            <div class="table-wrap" id="weights-table-wrap"></div>
+          </div>
+          <div class="chart-panel">
+            <div class="chart-title">Correlation matrix</div>
+            <p class="chart-copy">Values close to 1 indicate assets that frequently move together.</p>
+            <div class="heatmap" id="corr-heatmap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-backtest">
+        <div class="section-head">
+          <span class="section-kicker">07 / walk-forward backtest</span>
+          <h1 class="section-title">Out-of-sample evidence, not hindsight.</h1>
+          <p class="section-desc">The backtest rolls a training window forward month by month, re-estimates the model, applies weights out-of-sample, and compares against a 60/40 proxy.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Window</span>
+            <p class="guide-text">The model learns from a past period without observing future returns.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Test</span>
+            <p class="guide-text">The calculated weights are applied to the following month, after which the window advances.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Metrics</span>
+            <p class="guide-text">Sharpe, Sortino, drawdown, VaR, CVaR, and beta offer a fuller assessment than return alone.</p>
+          </div>
+        </div>
+
+        <div class="run-panel">
+          <div class="run-tags"><span class="chip" id="backtest-state">Awaiting market data</span></div>
+          <button class="primary-btn" type="button" onclick="runBacktest(true)">Run backtest</button>
+        </div>
+        <div class="metric-grid" id="backtest-metrics"></div>
+        <div class="chart-panel">
+          <div class="chart-title">NAV walk-forward vs benchmark 60/40</div>
+          <p class="chart-copy">Compares the simulated historical path of the system with a simple 60/40 benchmark.</p>
+          <canvas id="chart-backtest" height="260"></canvas>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-title">Backtest diagnostics</div>
+          <p class="chart-copy">Audits practical points: number of rebalances, average turnover, and estimated cost.</p>
+          <div class="table-wrap" id="backtest-table"></div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-montecarlo">
+        <div class="section-head">
+          <span class="section-kicker">08 / forward simulation</span>
+          <h1 class="section-title">Possible futures as a distribution.</h1>
+          <p class="section-desc">Monte Carlo supports Gaussian portfolio paths, historical block bootstrap, and a simple two-regime crisis/expansion sampler.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Assumption</span>
+            <p class="guide-text">Choose a simulation method according to the desired level of realism.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Projection</span>
+            <p class="guide-text">The system generates numerous wealth paths over the selected horizon.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Risk</span>
+            <p class="guide-text">Percentiles and severe-loss probability reveal the uncertainty around the terminal outcome.</p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel">
+            <h2 class="panel-title">Simulation parameters</h2>
+            <p class="panel-copy">Set the method, number of paths, and loss threshold used to analyse prospective scenarios.</p>
+            <div class="field">
+              <label for="mc_method">Simulation method</label>
+              <select id="mc_method">
+                <option value="gaussian">Parametric Gaussian</option>
+                <option value="bootstrap">Historical block bootstrap</option>
+                <option value="regime">Two-regime sampler</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="mc_years">Horizon</label><span class="value-chip" id="mc_years_v">5 years</span></div>
+              <input type="range" id="mc_years" min="1" max="20" step="1" value="5" oninput="updateLabel('mc_years', this.value + ' years')" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="mc_paths">Paths</label><span class="value-chip" id="mc_paths_v">1000</span></div>
+              <input type="range" id="mc_paths" min="250" max="5000" step="250" value="1000" oninput="updateLabel('mc_paths', this.value)" />
+            </div>
+            <div class="field">
+              <div class="label-row"><label for="ruin_threshold">Ruin threshold</label><span class="value-chip" id="ruin_threshold_v">75%</span></div>
+              <input type="range" id="ruin_threshold" min="40" max="95" step="5" value="75" oninput="updateLabel('ruin_threshold', this.value + '%')" />
+            </div>
+            <button class="primary-btn" type="button" onclick="runMonteCarlo(true)">Run simulation</button>
+          </div>
+          <div>
+            <div class="metric-grid" id="mc-metrics"></div>
+            <div class="chart-panel">
+              <div class="chart-title">Terminal wealth distribution</div>
+              <p class="chart-copy">Distribution of simulated terminal values, expressed as a multiple of initial capital.</p>
+              <canvas id="chart-mc" height="250"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-export">
+        <div class="section-head">
+          <span class="section-kicker">09 / python export</span>
+          <h1 class="section-title">A reproducible configuration object.</h1>
+          <p class="section-desc">The export mirrors the architecture in the paper: profiling, data, estimation, optimization, allocation, backtest, simulation, and reporting modules.</p>
+        </div>
+        <div class="section-guide">
+          <div class="guide-item">
+            <span class="guide-label">Configuration</span>
+            <p class="guide-text">All values selected in the interface are converted into a readable Python object.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Reproduction</span>
+            <p class="guide-text">The export provides a clear audit trail for rerunning the same pipeline outside the browser.</p>
+          </div>
+          <div class="guide-item">
+            <span class="guide-label">Documentation</span>
+            <p class="guide-text">The file follows the paper's modular structure: profiling, estimation, optimization, and reporting.</p>
+          </div>
+        </div>
+
+        <div class="run-panel">
+          <div class="run-tags"><span class="chip">InvestorProfile + PortfolioSystem config</span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" type="button" onclick="copyCode()">Copy</button>
+            <button class="btn" type="button" onclick="downloadCode()">Download .py</button>
+          </div>
+        </div>
+        <div class="code-box" id="code-out"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div>Portfolio Investment System, 2026</div>
+    <div>Educational project - not investment advice</div>
+  </footer>
+  <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════════
-// QUESTIONNAIRE
-// ════════════════════════════════════════════════════
-const Q_PROFILES = [
-  { name: 'Very Conservative', label: 'Très conservateur', range: [0, 20],  color: '#3b82f6' },
-  { name: 'Conservative',      label: 'Conservateur',      range: [21, 40], color: '#22c55e' },
-  { name: 'Balanced',          label: 'Équilibré',         range: [41, 60], color: '#f59e0b' },
-  { name: 'Growth',            label: 'Croissance',        range: [61, 80], color: '#f97316' },
-  { name: 'Aggressive',        label: 'Agressif',          range: [81, 100],color: '#ef4444' },
+const PROFILES = {
+  "Very Conservative": {
+    label: "Very Conservative",
+    range: "0-20",
+    lambda_: 10,
+    vol: 4,
+    max_eq: 20,
+    max_crypto: 0,
+    max_single: 10,
+    te: 1,
+    budgets: { equity: .15, fixed_income: .65, commodity: .10, real_estate: .10, crypto: 0 }
+  },
+  Conservative: {
+    label: "Conservative",
+    range: "21-40",
+    lambda_: 6,
+    vol: 8,
+    max_eq: 40,
+    max_crypto: 3,
+    max_single: 12,
+    te: 1.5,
+    budgets: { equity: .25, fixed_income: .50, commodity: .12, real_estate: .10, crypto: .03 }
+  },
+  Balanced: {
+    label: "Balanced",
+    range: "41-60",
+    lambda_: 3,
+    vol: 12,
+    max_eq: 60,
+    max_crypto: 5,
+    max_single: 15,
+    te: 2,
+    budgets: { equity: .40, fixed_income: .35, commodity: .12, real_estate: .08, crypto: .05 }
+  },
+  Growth: {
+    label: "Growth",
+    range: "61-80",
+    lambda_: 1.5,
+    vol: 18,
+    max_eq: 80,
+    max_crypto: 8,
+    max_single: 20,
+    te: 3,
+    budgets: { equity: .55, fixed_income: .20, commodity: .12, real_estate: .05, crypto: .08 }
+  },
+  Aggressive: {
+    label: "Aggressive",
+    range: "81-100",
+    lambda_: .7,
+    vol: 25,
+    max_eq: 100,
+    max_crypto: 10,
+    max_single: 30,
+    te: 4,
+    budgets: { equity: .65, fixed_income: .10, commodity: .10, real_estate: .05, crypto: .10 }
+  }
+};
+
+const CLASS_LABELS = {
+  equity: "Global equities",
+  fixed_income: "Fixed income",
+  commodity: "Commodities",
+  real_estate: "Real estate",
+  crypto: "Cryptocurrencies"
+};
+
+const CLASS_ROLES = {
+  equity: "Growth engine",
+  fixed_income: "Stability and income",
+  commodity: "Inflation hedge",
+  real_estate: "Income and diversification",
+  crypto: "High-risk satellite"
+};
+
+const CLASS_COLORS = {
+  equity: "rgba(5,5,5,.92)",
+  fixed_income: "rgba(5,5,5,.70)",
+  commodity: "rgba(5,5,5,.52)",
+  real_estate: "rgba(5,5,5,.34)",
+  crypto: "rgba(5,5,5,.18)"
+};
+
+const CLASS_MARKET_WEIGHTS = {
+  equity: .54,
+  fixed_income: .30,
+  commodity: .05,
+  real_estate: .08,
+  crypto: .03
+};
+
+let selectedProfile = "Balanced";
+let universe = {
+  equity: ["SPY", "QQQ", "VGK", "EEM", "VWO"],
+  fixed_income: ["AGG", "TLT", "IEF", "LQD", "HYG", "EMB"],
+  commodity: ["GLD", "SLV", "PDBC", "USO"],
+  real_estate: ["VNQ", "IYR", "VNQI"],
+  crypto: ["BTC-USD", "ETH-USD"]
+};
+
+const charts = { alloc: null, rc: null, backtest: null, mc: null };
+const appState = { market: null, result: null, backtest: null, monteCarlo: null };
+const UI_FONT = "EB Garamond";
+if (typeof Chart !== "undefined" && Chart.defaults) Chart.defaults.font.family = UI_FONT;
+
+const STEPS = [
+  ["fetch", "market data"],
+  ["filter", "universe filter"],
+  ["returns", "return model"],
+  ["risk", "risk model"],
+  ["optim", "optimization"],
+  ["taa", "tactical overlay"],
+  ["render", "reporting"],
+  ["done", "complete"]
 ];
 
-function qScore() {
-  const rt   = parseInt(document.getElementById('q_rt').value);
-  const hz   = parseInt(document.getElementById('q_hz').value);
-  const inc  = parseInt(document.getElementById('q_inc').value);
-  const wlth = parseInt(document.getElementById('q_wlth').value);
-  const know = parseInt(document.getElementById('q_know').value);
-  const rtS   = (rt   - 1) / 9 * 100;
-  const hzS   = Math.min(hz / 40 * 100, 100);
-  const incS  = (inc  - 1) / 9 * 100;
-  const wlthS = (wlth - 1) / 9 * 100;
-  const knowS = (know - 1) / 9 * 100;
-  return 0.35 * rtS + 0.25 * hzS + 0.20 * incS + 0.10 * wlthS + 0.10 * knowS;
+function $(id) { return document.getElementById(id); }
+function pct(x, d = 1) { return (x * 100).toFixed(d) + "%"; }
+function num(v, fallback = 0) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+function mean(a) { return a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0; }
+function stdev(a) {
+  if (a.length < 2) return 0;
+  const m = mean(a);
+  return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1));
+}
+function sum(a) { return a.reduce((s, x) => s + x, 0); }
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+function showSection(name) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  $("sec-" + name).classList.add("active");
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.querySelector('[data-section="' + name + '"]')?.classList.add("active");
+  closeDrawer();
+  if (name === "export") generateCode();
 }
 
-function qProfileFromScore(score) {
-  return Q_PROFILES.find(p => score >= p.range[0] && score <= p.range[1]) || Q_PROFILES[2];
+function toggleDrawer() { $("side-nav").classList.toggle("open"); }
+function closeDrawer() { $("side-nav").classList.remove("open"); }
+
+function updateLabel(id, text) {
+  const el = $(id + "_v");
+  if (el) el.textContent = text;
+  const input = $(id);
+  if (input && input.type === "range") updateSliderFill(input);
+  updateRunSummary();
+  generateCode();
+}
+
+function updateSliderFill(input) {
+  const min = parseFloat(input.min) || 0;
+  const max = parseFloat(input.max) || 100;
+  const value = parseFloat(input.value) || 0;
+  const p = ((value - min) / (max - min)) * 100;
+  input.style.setProperty("--fill", p.toFixed(1) + "%");
+}
+
+function qScore() {
+  const rt = (num($("q_rt").value) - 1) / 9 * 100;
+  const hz = Math.min(num($("q_hz").value) / 40 * 100, 100);
+  const inc = (num($("q_inc").value) - 1) / 9 * 100;
+  const wlth = (num($("q_wlth").value) - 1) / 9 * 100;
+  const know = (num($("q_know").value) - 1) / 9 * 100;
+  return .35 * rt + .25 * hz + .20 * inc + .10 * wlth + .10 * know;
+}
+
+function profileFromScore(score) {
+  if (score <= 20) return "Very Conservative";
+  if (score <= 40) return "Conservative";
+  if (score <= 60) return "Balanced";
+  if (score <= 80) return "Growth";
+  return "Aggressive";
 }
 
 function qUpdate() {
-  document.getElementById('q_rt_v').textContent   = document.getElementById('q_rt').value + ' / 10';
-  document.getElementById('q_hz_v').textContent   = document.getElementById('q_hz').value + ' ans';
-  document.getElementById('q_inc_v').textContent  = document.getElementById('q_inc').value + ' / 10';
-  document.getElementById('q_wlth_v').textContent = document.getElementById('q_wlth').value + ' / 10';
-  document.getElementById('q_know_v').textContent = document.getElementById('q_know').value + ' / 10';
+  $("q_rt_v").textContent = $("q_rt").value + " / 10";
+  $("q_hz_v").textContent = $("q_hz").value + " years";
+  $("q_inc_v").textContent = $("q_inc").value + " / 10";
+  $("q_wlth_v").textContent = $("q_wlth").value + " / 10";
+  $("q_know_v").textContent = $("q_know").value + " / 10";
+  ["q_rt", "q_hz", "q_inc", "q_wlth", "q_know"].forEach(id => updateSliderFill($(id)));
 
   const score = qScore();
-  const prof  = qProfileFromScore(score);
-
-  document.getElementById('q-score-num').textContent = score.toFixed(1);
-  document.getElementById('q-score-cursor').style.left = score + '%';
-  const badge = document.getElementById('q-profile-badge');
-  badge.textContent = prof.label;
-  badge.style.background = prof.color;
-
-  // Weights breakdown
-  const budgets = PROFILES[prof.name]?.budgets || {};
-  const entries = [
-    ['equity',       'Actions',      CLASS_COLORS.equity],
-    ['fixed_income', 'Obligations',  CLASS_COLORS.fixed_income],
-    ['commodity',    'Mat. prem.',   CLASS_COLORS.commodity],
-    ['real_estate',  'Immobilier',   CLASS_COLORS.real_estate],
-    ['crypto',       'Crypto',       CLASS_COLORS.crypto],
-  ];
-  document.getElementById('q-weights').innerHTML = entries.map(([k, label, color]) => {
-    const pct = ((budgets[k] || 0) * 100).toFixed(0);
-    return `<div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center">
-      <div style="font-size:18px;font-weight:800;color:${color}">${pct}%</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:2px">${label}</div>
-    </div>`;
-  }).join('');
+  const key = profileFromScore(score);
+  const p = PROFILES[key];
+  $("q-score-num").textContent = score.toFixed(1);
+  $("q-profile-badge").textContent = p.label;
+  $("q-lambda").textContent = String(p.lambda_);
+  $("q-vol").textContent = p.vol + "%";
+  $("q-budget-bars").innerHTML = budgetBars(p.budgets);
 }
 
 function applyQuestionnaire() {
-  const score = qScore();
-  const prof  = qProfileFromScore(score);
-  // Select the matching profile card
-  document.querySelectorAll('.profile-card').forEach(c => {
-    c.classList.toggle('selected', c.dataset.profile === prof.name);
-  });
-  selectedProfile = prof.name;
+  selectedProfile = profileFromScore(qScore());
+  syncProfileControls();
   renderProfile();
-  toast(`Profil « ${prof.label} » appliqué (score ${score.toFixed(0)}/100)`);
-  showSection('profile');
+  updateSideSummary();
+  updateRunSummary();
+  toast("Profile applied");
+  showSection("profile");
 }
 
-// ════════════════════════════════════════════════════
-// STATE
-// ════════════════════════════════════════════════════
-const PROFILES = {
-  'Very Conservative': { lambda_: 8, vol: '5%', max_eq: '30%', max_cr: '0%', crypto: false, budgets: { equity:.20, fixed_income:.65, commodity:.10, real_estate:.05, crypto:.00 } },
-  'Conservative':      { lambda_: 6, vol: '8%', max_eq: '50%', max_cr: '0%', crypto: false, budgets: { equity:.35, fixed_income:.50, commodity:.10, real_estate:.05, crypto:.00 } },
-  'Balanced':          { lambda_: 4, vol:'12%', max_eq: '70%', max_cr: '5%', crypto: true,  budgets: { equity:.50, fixed_income:.30, commodity:.10, real_estate:.05, crypto:.05 } },
-  'Growth':            { lambda_:2.5, vol:'18%', max_eq: '85%', max_cr:'10%', crypto: true,  budgets: { equity:.65, fixed_income:.15, commodity:.08, real_estate:.05, crypto:.07 } },
-  'Aggressive':        { lambda_:1.5, vol:'25%', max_eq:'100%', max_cr:'20%', crypto: true,  budgets: { equity:.70, fixed_income:.05, commodity:.05, real_estate:.05, crypto:.15 } },
-};
-
-const CLASS_COLORS = { equity:'#4a90d9', fixed_income:'#5cb85c', commodity:'#e8a838', real_estate:'#9b59b6', crypto:'#f7931a' };
-const CLASS_LABELS = { equity:'Actions', fixed_income:'Obligations', commodity:'Matières premières', real_estate:'Immobilier', crypto:'Crypto' };
-
-const universe = {
-  equity: ['SPY','QQQ','VGK','EEM','VWO'],
-  fixed_income: ['AGG','TLT','IEF','LQD','HYG','EMB'],
-  commodity: ['GLD','SLV','DJP'],
-  real_estate: ['VNQ','VNQI'],
-  crypto: ['BTC-USD','ETH-USD'],
-};
-
-const methods = { return:'shrinkage', cov:'ledoit_wolf', optim:'mvo', rebalance:'monthly' };
-let selectedProfile = 'Balanced';
-let charts = {};
-
-// ════════════════════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════════════════════
-function showSection(name) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('sec-' + name).classList.add('active');
-  document.querySelector(`[data-section="${name}"]`)?.classList.add('active');
-  if (name === 'export') generateCode();
-  if (name === 'analyse') updateRunSummary();
-  closeDrawer();
-}
-function toggleDrawer() {
-  const aside = document.querySelector('aside');
-  const overlay = document.getElementById('mob-overlay');
-  const open = aside.classList.toggle('open');
-  overlay.classList.toggle('visible', open);
-}
-function closeDrawer() {
-  document.querySelector('aside').classList.remove('open');
-  document.getElementById('mob-overlay').classList.remove('visible');
-}
-
-// ════════════════════════════════════════════════════
-// PROFILE
-// ════════════════════════════════════════════════════
-function selectProfile(el) {
-  document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedProfile = el.dataset.profile;
-  renderProfile();
+function syncProfileControls() {
+  const p = PROFILES[selectedProfile];
+  $("target_volatility").value = p.vol;
+  $("max_equity").value = p.max_eq;
+  $("max_crypto").value = p.max_crypto;
+  $("max_single_asset").value = p.max_single;
+  $("te_budget").value = p.te;
+  updateLabel("target_volatility", p.vol + "%");
+  updateLabel("max_equity", p.max_eq + "%");
+  updateLabel("max_crypto", p.max_crypto + "%");
+  updateLabel("max_single_asset", p.max_single + "%");
+  updateLabel("te_budget", Number(p.te).toFixed(1) + "%");
 }
 
 function renderProfile() {
+  $("profile-grid").innerHTML = Object.entries(PROFILES).map(([key, p]) => `
+    <button type="button" class="profile-card ${key === selectedProfile ? "selected" : ""}" onclick="selectProfile('${key}')">
+      <span class="name">${p.label}</span>
+      <span class="risk">score ${p.range}<br>lambda ${p.lambda_}<br>${p.vol}% vol target</span>
+    </button>
+  `).join("");
+
   const p = PROFILES[selectedProfile];
-  document.getElementById('profile-stats').innerHTML = [
-    ['Aversion (λ)', p.lambda_], ['Vol. cible', p.vol], ['Max actions', p.max_eq], ['Crypto', p.crypto ? 'Oui' : 'Non'],
-  ].map(([l,v]) => `<div class="stat-item"><div class="stat-label">${l}</div><div class="stat-value">${v}</div></div>`).join('');
-  document.getElementById('risk-budgets').innerHTML = Object.entries(p.budgets).map(([k,v]) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:7px 0;${k!=='equity'?'border-top:1px solid var(--border)':''}">
-      <div style="width:130px;font-size:12px;color:var(--muted)">${CLASS_LABELS[k]}</div>
-      <div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
-        <div style="width:${v*100}%;height:100%;background:${CLASS_COLORS[k]};border-radius:3px;transition:width .3s"></div>
+  $("profile-stats").innerHTML = [
+    ["Risk score", p.range],
+    ["Lambda", p.lambda_],
+    ["Target vol", p.vol + "%"],
+    ["Max equity", p.max_eq + "%"],
+    ["Max crypto", p.max_crypto + "%"],
+    ["TE budget", p.te + "%"],
+    ["Max position", p.max_single + "%"],
+    ["Rebalance", "monthly"]
+  ].map(([label, value]) => `<div class="metric"><span class="label">${label}</span><span class="value">${value}</span></div>`).join("");
+  $("risk-budgets").innerHTML = budgetBars(p.budgets);
+}
+
+function budgetBars(budgets) {
+  return Object.entries(budgets).map(([cls, v]) => `
+    <div style="margin-bottom:13px">
+      <div class="label-row"><span class="label">${CLASS_LABELS[cls]}</span><span class="value-chip">${pct(v, 0)}</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${v * 100}%;background:${CLASS_COLORS[cls]}"></div></div>
+    </div>
+  `).join("");
+}
+
+function selectProfile(key) {
+  selectedProfile = key;
+  syncProfileControls();
+  renderProfile();
+  updateSideSummary();
+  updateRunSummary();
+}
+
+function renderUniverse() {
+  $("universe-panels").innerHTML = Object.keys(universe).map(cls => `
+    <div class="panel">
+      <h2 class="panel-title">${CLASS_LABELS[cls]}</h2>
+      <p class="panel-copy">${CLASS_ROLES[cls]}. Add only the instruments you wish to make eligible for optimization.</p>
+      <div class="tag-area" id="tags-${cls}"></div>
+      <div class="tag-add">
+        <input type="text" id="input-${cls}" placeholder="Ticker" onkeydown="if(event.key === 'Enter') addTag('${cls}')" />
+        <button class="btn" type="button" onclick="addTag('${cls}')">Add</button>
       </div>
-      <div style="width:32px;text-align:right;font-size:12px;font-weight:600">${(v*100).toFixed(0)}%</div>
-    </div>`).join('');
+    </div>
+  `).join("");
+  Object.keys(universe).forEach(renderTags);
 }
 
-// ════════════════════════════════════════════════════
-// TAGS / UNIVERSE
-// ════════════════════════════════════════════════════
 function renderTags(cls) {
-  document.getElementById('tags-'+cls).innerHTML = universe[cls].map(t =>
-    `<div class="tag">${t}<span class="tag-x" onclick="removeTag('${cls}','${t}')">×</span></div>`).join('');
+  const el = $("tags-" + cls);
+  if (!el) return;
+  el.innerHTML = universe[cls].map(t => `
+    <span class="tag">${t}<button type="button" aria-label="Remove ${t}" onclick="removeTag('${cls}','${t}')">x</button></span>
+  `).join("");
+  updateSideSummary();
+  updateRunSummary();
 }
-function removeTag(cls, t) { universe[cls] = universe[cls].filter(x => x !== t); renderTags(cls); }
+
 function addTag(cls) {
-  const inp = document.getElementById('input-'+cls);
-  inp.value.toUpperCase().split(/[\s,;]+/).forEach(t => { t = t.trim(); if (t && !universe[cls].includes(t)) universe[cls].push(t); });
-  inp.value = ''; renderTags(cls);
+  const input = $("input-" + cls);
+  const t = (input.value || "").trim().toUpperCase();
+  if (!t) return;
+  if (!universe[cls].includes(t)) universe[cls].push(t);
+  input.value = "";
+  renderTags(cls);
 }
 
-// ════════════════════════════════════════════════════
-// METHODS
-// ════════════════════════════════════════════════════
-function selMethod(type, el) {
-  el.parentElement.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  methods[type] = el.dataset.val;
+function removeTag(cls, ticker) {
+  universe[cls] = universe[cls].filter(t => t !== ticker);
+  renderTags(cls);
 }
 
-// ════════════════════════════════════════════════════
-// LIVE UPDATES
-// ════════════════════════════════════════════════════
 function rfUpdate() {
-  const v = parseFloat(document.getElementById('risk_free_rate').value);
-  document.getElementById('rf_display').textContent = v.toFixed(2) + '%';
-  document.getElementById('rf_daily').value = (v/252).toFixed(5) + '% / jour';
+  const v = num($("risk_free_rate").value);
+  updateLabel("risk_free_rate", v.toFixed(2) + "%");
+}
+
+function getAllTickers() {
+  return Object.values(universe).flat().filter(Boolean);
+}
+
+function getTickerClass(ticker) {
+  for (const [cls, tickers] of Object.entries(universe)) {
+    if (tickers.includes(ticker)) return cls;
+  }
+  return "equity";
+}
+
+function updateSideSummary() {
+  $("side-profile").textContent = selectedProfile;
+  $("side-assets").textContent = String(getAllTickers().length);
+  $("side-optim").textContent = $("optim_method")?.value === "risk_budget" ? "Risk" : ($("optim_method")?.value === "blend" ? "Blend" : "MVO");
+  $("side-taa").textContent = $("taa_enabled")?.checked ? "On" : "Off";
 }
 
 function updateRunSummary() {
   const tickers = getAllTickers();
-  const iconUser = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
-  const iconGear = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
-  const iconChart = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`;
-  document.getElementById('run-summary').innerHTML = [
-    `<span class="run-tag">${iconUser}${selectedProfile}</span>`,
-    `<span class="run-tag">${iconGear}Max Sharpe · Shrinkage μ · Ledoit-Wolf Σ</span>`,
-    `<span class="run-tag">${iconChart}${tickers.length} actifs</span>`,
-  ].join('');
+  const tags = [
+    selectedProfile,
+    $("return_method")?.selectedOptions?.[0]?.textContent || "Return model",
+    $("cov_method")?.selectedOptions?.[0]?.textContent || "Risk model",
+    $("optim_method")?.selectedOptions?.[0]?.textContent || "Optimizer",
+    tickers.length + " assets"
+  ];
+  $("run-summary").innerHTML = tags.map(t => `<span class="chip">${t}</span>`).join("");
+  updateSideSummary();
 }
 
-function getAllTickers() {
-  const p = PROFILES[selectedProfile];
-  const tickers = [...universe.equity, ...universe.fixed_income, ...universe.commodity, ...universe.real_estate];
-  if (p.crypto) tickers.push(...universe.crypto);
-  return [...new Set(tickers)];
+function setSteps(activeIdx) {
+  $("status-box").style.display = "block";
+  $("status-steps").innerHTML = STEPS.map(([id, label], i) => {
+    const cls = i < activeIdx ? "done" : (i === activeIdx ? "active" : "");
+    return `<div class="step ${cls}" id="step-${id}"><span class="dot"></span>${label}</div>`;
+  }).join("");
 }
 
-function getTickerClass(ticker) {
-  for (const [cls, tks] of Object.entries(universe)) {
-    if (tks.includes(ticker)) return cls;
-  }
-  return 'equity';
+function showAlert(msg) {
+  $("alert-box").style.display = "block";
+  $("alert-box").textContent = msg;
 }
 
-// ════════════════════════════════════════════════════
-// PORTFOLIO MATHEMATICS
-// ════════════════════════════════════════════════════
-
-// Matrix × vector
-function matVec(M, v) { return M.map(row => row.reduce((s,x,j) => s + x*v[j], 0)); }
-
-// Align price data from API
-function alignPrices(rawData, tickers) {
-  const valid = tickers.filter(t => rawData[t] && !rawData[t].error && rawData[t].timestamps && rawData[t].prices);
-  if (valid.length < 2) return null;
-  const maps = {};
-  for (const t of valid) {
-    maps[t] = {};
-    rawData[t].timestamps.forEach((ts, i) => {
-      const p = rawData[t].prices[i];
-      if (p != null && p > 0) maps[t][new Date(ts*1000).toISOString().slice(0,10)] = p;
-    });
-  }
-  let dates = new Set(Object.keys(maps[valid[0]]));
-  for (const t of valid.slice(1)) for (const d of [...dates]) { if (!maps[t][d]) dates.delete(d); }
-  dates = [...dates].sort();
-  if (dates.length < 100) return null;
-  const prices = valid.map(t => dates.map(d => maps[t][d]));
-  return { tickers: valid, dates, prices };
-}
-
-// Daily returns from prices
-function pricesToReturns(prices) { return prices.map(p => p.slice(1).map((v,i) => (v-p[i])/p[i])); }
-
-// Annualized covariance (sample)
-function sampleCov(returns, ann=252) {
-  const n = returns.length, T = returns[0].length;
-  const mu = returns.map(r => r.reduce((a,b) => a+b,0)/T);
-  const X = returns.map((r,i) => r.map(x => x-mu[i]));
-  return Array.from({length:n}, (_,i) => Array.from({length:n}, (_,j) => {
-    let s=0; for (let t=0;t<T;t++) s += X[i][t]*X[j][t];
-    return s/(T-1)*ann;
-  }));
-}
-
-// Ledoit-Wolf shrinkage
-function ledoitWolfCov(returns, ann=252) {
-  const n = returns.length, T = returns[0].length;
-  const S = sampleCov(returns, ann);
-  let trS = 0; for (let i=0;i<n;i++) trS += S[i][i];
-  const mu_hat = trS/n;
-  let num=0, denom=0;
-  for (let i=0;i<n;i++) for (let j=0;j<n;j++) {
-    const F = i===j ? mu_hat : 0;
-    denom += (S[i][j]-F)**2;
-    if (i===j) num += S[i][i]**2;
-  }
-  num *= (n+2)/T;
-  const alpha = Math.min(1, Math.max(0, num/(denom+1e-10)));
-  return S.map((row,i) => row.map((v,j) => (1-alpha)*v + alpha*(i===j?mu_hat:0)));
-}
-
-// Annualized mean returns
-function historicalMu(returns, ann=252) {
-  const T = returns[0].length;
-  return returns.map(r => r.reduce((a,b)=>a+b,0)/T*ann);
-}
-
-// James-Stein shrinkage toward grand mean (α controls intensity)
-function shrinkageMu(returns, ann=252, alpha=0.20) {
-  const mu = historicalMu(returns, ann);
-  const gm = mu.reduce((a,b)=>a+b,0)/mu.length;
-  return mu.map(m => (1-alpha)*m + alpha*gm);
-}
-
-// Portfolio variance
-function portVar(w, cov) { const Sw = matVec(cov, w); return w.reduce((s,wi,i)=>s+wi*Sw[i],0); }
-
-// Risk contributions
-function riskContribs(w, cov) {
-  const Sw = matVec(cov, w);
-  const pv = Math.max(w.reduce((s,wi,i)=>s+wi*Sw[i],0), 1e-10);
-  return w.map((wi,i) => wi*Sw[i]/pv);
-}
-
-// Project onto simplex
-function projSimplex(v, lo=0.001, hi=0.5) {
-  let w = v.map(x => Math.max(lo, Math.min(hi, x)));
-  const s = w.reduce((a,b)=>a+b,0);
-  return w.map(x => x/s);
-}
-
-// MVO: gradient ascent to maximize Sharpe
-function mvoWeights(mu, cov, rf) {
-  const n = mu.length;
-  let w = Array(n).fill(1/n);
-  let lr = 0.03;
-  for (let iter=0; iter<3000; iter++) {
-    const Sw = matVec(cov, w);
-    const pv = Math.max(w.reduce((s,wi,i)=>s+wi*Sw[i],0), 1e-10);
-    const pVol = Math.sqrt(pv);
-    const pRet = w.reduce((s,wi,i)=>s+wi*mu[i],0);
-    const sh = (pRet-rf)/pVol;
-    const grad = mu.map((mi,i) => ((mi-rf)-sh*Sw[i])/pVol);
-    const wNew = projSimplex(w.map((wi,i) => wi+lr*grad[i]));
-    const pv2 = portVar(wNew, cov);
-    const pRet2 = wNew.reduce((s,wi,i)=>s+wi*mu[i],0);
-    const sh2 = (pRet2-rf)/Math.sqrt(Math.max(pv2,1e-10));
-    if (sh2 > sh) { w = wNew; lr = Math.min(lr*1.05, 0.2); }
-    else lr *= 0.6;
-    if (lr < 1e-7) break;
-  }
-  return w;
-}
-
-// Risk parity (multiplicative weights)
-function riskParityWeights(cov, budgets) {
-  const n = cov.length;
-  const b = budgets.map(x => Math.max(x, 0.001));
-  const bs = b.reduce((a,x)=>a+x,0);
-  const bn = b.map(x => x/bs);
-  let w = bn.map(x => Math.max(x, 1/n));
-  const ws = w.reduce((a,x)=>a+x,0);
-  w = w.map(x => x/ws);
-  for (let iter=0; iter<2000; iter++) {
-    const Sw = matVec(cov, w);
-    const pv = Math.max(w.reduce((s,wi,i)=>s+wi*Sw[i],0), 1e-10);
-    const rc = w.map((wi,i) => wi*Sw[i]/pv);
-    w = w.map((wi,i) => wi*Math.exp(-0.3*(rc[i]-bn[i])));
-    w = w.map(x => Math.max(x, 1e-8));
-    const s = w.reduce((a,x)=>a+x,0);
-    w = w.map(x => x/s);
-  }
-  return w;
-}
-
-// Max drawdown
-function maxDrawdown(cumReturns) {
-  let mdd=0, peak=1;
-  for (const v of cumReturns) { if (v>peak) peak=v; const d=(v-peak)/peak; if(d<mdd) mdd=d; }
-  return mdd;
-}
-
-// Correlation matrix from covariance
-function covToCorr(cov) {
-  const n = cov.length;
-  const std = cov.map((row,i) => Math.sqrt(Math.max(row[i], 1e-10)));
-  return cov.map((row,i) => row.map((v,j) => v/(std[i]*std[j])));
-}
-
-// ════════════════════════════════════════════════════
-// ANALYSIS RUNNER
-// ════════════════════════════════════════════════════
-const STEPS = [
-  { id:'s1', label:'Téléchargement des données de marché' },
-  { id:'s2', label:'Alignement et nettoyage des séries' },
-  { id:'s3', label:'Estimation de la covariance Ledoit-Wolf (Σ)' },
-  { id:'s4', label:'Estimation des rendements par shrinkage (μ)' },
-  { id:'s5', label:'Optimisation Max Sharpe' },
-  { id:'s6', label:'Décomposition du risque (MRC / TRC / %RC)' },
-  { id:'s7', label:'Affichage des résultats' },
-];
-
-function setStep(idx) {
-  document.querySelectorAll('.step').forEach((el,i) => {
-    el.classList.remove('active','done');
-    if (i < idx) el.classList.add('done');
-    else if (i === idx) el.classList.add('active');
-  });
+function clearAlert() {
+  $("alert-box").style.display = "none";
+  $("alert-box").textContent = "";
 }
 
 async function runAnalysis() {
-  const btn = document.getElementById('run-btn');
-  btn.disabled = true; btn.textContent = '⏳ Analyse en cours…';
-
-  // Reset UI
-  document.getElementById('results-area').style.display = 'none';
-  document.getElementById('alert-warn').style.display = 'none';
-  document.getElementById('alert-err').style.display = 'none';
-
-  // Show status
-  const statusBox = document.getElementById('status-box');
-  statusBox.style.display = 'block';
-  document.getElementById('status-title').textContent = 'Analyse en cours…';
-  document.getElementById('status-steps').innerHTML = STEPS.map((s,i) =>
-    `<div class="step" id="${s.id}"><div class="step-dot"></div>${s.label}</div>`).join('');
-  setStep(0);
-
+  const btn = $("run-btn");
+  clearAlert();
+  $("results-area").style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Running analysis...";
   try {
-    // Destroy old charts
-    Object.values(charts).forEach(c => { try { c.destroy(); } catch(_){} });
-    charts = {};
-
-    // ── Step 1: Fetch data ──
+    setSteps(0);
     const tickers = getAllTickers();
-    const rf = parseFloat(document.getElementById('risk_free_rate').value) / 100;
-    let rawData;
-    try {
-      const res = await fetch(`/api/prices?tickers=${tickers.join(',')}&period=5y`);
-      rawData = await res.json();
-    } catch(e) {
-      showErr('Erreur de connexion à l\'API de données. Vérifiez votre connexion internet.');
-      resetBtn(btn); return;
-    }
-    setStep(1);
+    if (tickers.length < 3) throw new Error("Add at least three assets.");
+    const period = dataPeriod();
+    const rawData = await fetchPrices(tickers, period);
 
-    // ── Step 2: Align ──
+    setSteps(1);
     await tick();
-    const aligned = alignPrices(rawData, tickers);
-    if (!aligned || aligned.tickers.length < 3) {
-      showWarn(`Données insuffisantes. Seulement ${aligned?.tickers?.length||0} actifs disponibles. Vérifiez les tickers.`);
-      // list failed tickers
-      const failed = tickers.filter(t => !rawData[t] || rawData[t].error);
-      if (failed.length) showWarn(`Actifs non récupérés : ${failed.join(', ')}`);
-      resetBtn(btn); return;
-    }
+    let market = prepareMarketData(rawData, tickers);
+    if (market.tickers.length < 3) throw new Error("Not enough valid assets after filters.");
 
-    const { tickers: validTickers, dates, prices } = aligned;
-    const failed = tickers.filter(t => !validTickers.includes(t));
-    if (failed.length) showWarn(`Actifs ignorés (données insuffisantes) : ${failed.join(', ')}`);
-
-    const returns = pricesToReturns(prices);
-    const n = validTickers.length;
-    const estYears = parseInt(document.getElementById('estimation_window_years').value);
-    const estDays = Math.min(estYears * 252, returns[0].length);
-    const retEst = returns.map(r => r.slice(-estDays));
-    setStep(2);
-
-    // ── Step 3: Covariance (Ledoit-Wolf) ──
+    setSteps(2);
     await tick();
-    const cov = ledoitWolfCov(retEst);
-    setStep(3);
+    const estDays = Math.min(num($("estimation_window_years").value) * 252, market.returns[0].length);
+    const retEst = market.returns.map(r => r.slice(-estDays));
+    const cov = estimateCov(retEst);
 
-    // ── Step 4: Expected returns (Shrinkage) ──
+    setSteps(3);
     await tick();
-    const alpha = parseFloat(document.getElementById('shrinkage_alpha').value);
-    const mu = shrinkageMu(retEst, 252, alpha);
-    setStep(4);
+    const mu = estimateReturns(retEst, cov, market.tickers);
 
-    // ── Step 5: Optimize (Max Sharpe) ──
+    setSteps(4);
     await tick();
-    const budgets = buildBudgets(validTickers);
-    const weights = mvoWeights(mu, cov, rf);
+    const budgets = buildBudgets(market.tickers);
+    const strategic = optimizeWeights(mu, cov, market.tickers, budgets, { steps: 420 });
 
+    setSteps(5);
+    await tick();
+    const tactical = applyTacticalOverlay(strategic, market.returns, cov, market.tickers);
+    const weights = tactical.weights;
     const rc = riskContribs(weights, cov);
-    const pRet = weights.reduce((s,w,i)=>s+w*mu[i],0);
-    const pVol = Math.sqrt(portVar(weights, cov));
-    const pSharpe = (pRet - rf) / Math.max(pVol, 1e-8);
-    setStep(5);
 
-    // ── Step 6: Risk decomposition ──
+    const rf = num($("risk_free_rate").value) / 100;
+    const perf = portfolioStatsFromEstimates(weights, mu, cov, rf);
+    const result = { tickers: market.tickers, weights, strategic, tactical, rc, budgets, mu, cov, perf };
+    appState.market = market;
+    appState.result = result;
+
+    setSteps(6);
     await tick();
-    const mdd = maxDrawdown((() => {
-      let nav=1; const cum=[1];
-      returns[0].map((_,t) => weights.reduce((s,w,i)=>s+w*returns[i][t],0)).forEach(r=>{nav*=(1+r);cum.push(nav);});
-      return cum;
-    })());
-    setStep(6);
+    renderResults(result);
+    setSteps(7);
+    $("status-title").textContent = "Analysis complete";
+    $("results-area").style.display = "block";
+    generateCode();
 
-    // ── Step 7: Render ──
-    await tick();
-    renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd });
-    setStep(7);
-
-    document.getElementById('status-title').textContent = '✅ Analyse terminée';
-    document.getElementById('results-area').style.display = 'block';
-
-  } catch(e) {
-    showErr('Erreur inattendue : ' + e.message);
-    console.error(e);
+    if ($("auto_reports").checked) {
+      await runBacktest(false);
+      runMonteCarlo(false);
+    }
+  } catch (e) {
+    showAlert(e.message || String(e));
+    $("status-box").style.display = "none";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Run analysis";
   }
-  resetBtn(btn);
+}
+
+function dataPeriod() {
+  const years = Math.max(5, num($("estimation_window_years").value) + 3);
+  if (years <= 5) return "5y";
+  if (years <= 10) return "10y";
+  return "max";
+}
+
+async function fetchPrices(tickers, period) {
+  const qs = encodeURIComponent(tickers.join(","));
+  const relativeUrl = `/api/prices?tickers=${qs}&period=${period}`;
+  const localUrl = `http://127.0.0.1:4173/api/prices?tickers=${qs}&period=${period}`;
+  const isFile = typeof location !== "undefined" && location.protocol === "file:";
+  const urls = isFile ? [relativeUrl, localUrl] : [relativeUrl];
+  let lastErr;
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return await res.json();
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw new Error("Market data unavailable: " + (lastErr?.message || "fetch failed"));
+}
+
+function prepareMarketData(rawData, requestedTickers) {
+  const minDays = num($("min_history_years").value) * 252;
+  const eligibleTickers = requestedTickers.filter(t => {
+    const d = rawData[t];
+    return d && !d.error && d.timestamps && d.prices && d.timestamps.length >= minDays;
+  });
+  const aligned = alignPrices(rawData, eligibleTickers);
+  let tickers = aligned.tickers.slice();
+  let prices = aligned.prices.map(row => row.slice());
+  let dates = aligned.dates.slice();
+  let returns = pricesToReturns(prices);
+  const minVol = num($("min_annual_vol").value) / 100;
+
+  let keep = tickers.map((_, i) => returns[i].length >= minDays && stdev(returns[i]) * Math.sqrt(252) >= minVol);
+  ({ tickers, prices, returns } = subsetMarket(tickers, prices, returns, keep));
+
+  const maxCorr = num($("max_correlation").value, .9);
+  let changed = true;
+  while (changed && tickers.length > 3) {
+    changed = false;
+    const corr = covToCorr(sampleCov(returns));
+    outer:
+    for (let i = 0; i < tickers.length; i++) {
+      for (let j = i + 1; j < tickers.length; j++) {
+        if (Math.abs(corr[i][j]) > maxCorr) {
+          keep = tickers.map((_, k) => k !== j);
+          ({ tickers, prices, returns } = subsetMarket(tickers, prices, returns, keep));
+          changed = true;
+          break outer;
+        }
+      }
+    }
+  }
+
+  const removed = requestedTickers.filter(t => !tickers.includes(t));
+  if (removed.length) showAlert("Filtered or unavailable assets: " + removed.join(", "));
+  return { tickers, prices, returns, dates: dates.slice(-returns[0].length - 1), rawData };
+}
+
+function subsetMarket(tickers, prices, returns, keep) {
+  return {
+    tickers: tickers.filter((_, i) => keep[i]),
+    prices: prices.filter((_, i) => keep[i]),
+    returns: returns.filter((_, i) => keep[i])
+  };
+}
+
+function alignPrices(rawData, tickers) {
+  const valid = tickers.filter(t => rawData[t] && !rawData[t].error && rawData[t].timestamps && rawData[t].prices);
+  const maps = {};
+  valid.forEach(t => {
+    maps[t] = {};
+    rawData[t].timestamps.forEach((ts, i) => {
+      const p = rawData[t].prices[i];
+      if (p && Number.isFinite(p)) maps[t][new Date(ts * 1000).toISOString().slice(0, 10)] = p;
+    });
+  });
+  let dates = new Set(Object.keys(maps[valid[0]] || {}));
+  valid.slice(1).forEach(t => {
+    for (const d of Array.from(dates)) if (!maps[t][d]) dates.delete(d);
+  });
+  const dateArr = Array.from(dates).sort();
+  return { tickers: valid, dates: dateArr, prices: valid.map(t => dateArr.map(d => maps[t][d])) };
+}
+
+function pricesToReturns(prices) {
+  return prices.map(p => p.slice(1).map((v, i) => (v - p[i]) / p[i]));
+}
+
+function sampleCov(returns, ann = 252) {
+  const n = returns.length;
+  const T = returns[0]?.length || 0;
+  const mu = returns.map(r => mean(r));
+  return returns.map((ri, i) => returns.map((rj, j) => {
+    let s = 0;
+    for (let t = 0; t < T; t++) s += (ri[t] - mu[i]) * (rj[t] - mu[j]);
+    return s / Math.max(T - 1, 1) * ann;
+  }));
+}
+
+function ledoitWolfCov(returns, ann = 252) {
+  const S = sampleCov(returns, ann);
+  const n = S.length;
+  const avgVar = mean(S.map((row, i) => row[i]));
+  const F = S.map((row, i) => row.map((_, j) => i === j ? avgVar : 0));
+  let off = 0;
+  let diag = 0;
+  for (let i = 0; i < n; i++) {
+    diag += Math.abs(S[i][i] - avgVar);
+    for (let j = 0; j < n; j++) if (i !== j) off += Math.abs(S[i][j]);
+  }
+  const alpha = clamp(off / Math.max(off + diag, 1e-9), .05, .75);
+  return S.map((row, i) => row.map((v, j) => (1 - alpha) * v + alpha * F[i][j]));
+}
+
+function ewmaCov(returns, lambda = .94, ann = 252) {
+  const n = returns.length;
+  const T = returns[0].length;
+  let cov = Array.from({ length: n }, () => Array(n).fill(0));
+  for (let t = 0; t < T; t++) {
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        cov[i][j] = lambda * cov[i][j] + (1 - lambda) * returns[i][t] * returns[j][t];
+      }
+    }
+  }
+  return cov.map(row => row.map(v => v * ann));
+}
+
+function estimateCov(returns) {
+  const method = $("cov_method").value;
+  if (method === "sample") return sampleCov(returns);
+  if (method === "ewma") return ewmaCov(returns, num($("ewma_lambda").value, .94));
+  return ledoitWolfCov(returns);
+}
+
+function historicalMu(returns, ann = 252) {
+  return returns.map(r => mean(r) * ann);
+}
+
+function shrinkageMu(returns, alpha = .2, ann = 252) {
+  const hist = historicalMu(returns, ann);
+  const target = mean(hist);
+  return hist.map(v => (1 - alpha) * v + alpha * target);
+}
+
+function blackLittermanMu(returns, cov, tickers) {
+  const hist = shrinkageMu(returns, num($("shrinkage_alpha").value, .2));
+  const lambda = PROFILES[selectedProfile].lambda_;
+  const tau = num($("bl_tau").value, .05);
+  const confidence = num($("view_confidence").value, 35) / 100;
+  const market = marketPriorWeights(tickers);
+  const pi = matVec(cov, market).map(x => lambda * x);
+  return pi.map((prior, i) => {
+    const view = hist[i];
+    const cls = getTickerClass(tickers[i]);
+    const classTilt = (PROFILES[selectedProfile].budgets[cls] - CLASS_MARKET_WEIGHTS[cls]) * .04;
+    return (1 - confidence) * prior + confidence * view + tau * classTilt;
+  });
+}
+
+function estimateReturns(returns, cov, tickers) {
+  const method = $("return_method").value;
+  if (method === "historical") return historicalMu(returns);
+  if (method === "black_litterman") return blackLittermanMu(returns, cov, tickers);
+  return shrinkageMu(returns, num($("shrinkage_alpha").value, .2));
+}
+
+function marketPriorWeights(tickers) {
+  const raw = tickers.map(t => CLASS_MARKET_WEIGHTS[getTickerClass(t)] || .01);
+  const s = sum(raw) || 1;
+  return raw.map(x => x / s);
+}
+
+function matVec(M, v) {
+  return M.map(row => row.reduce((s, x, i) => s + x * v[i], 0));
+}
+
+function portVar(w, cov) {
+  const Sw = matVec(cov, w);
+  return Math.max(w.reduce((s, wi, i) => s + wi * Sw[i], 0), 1e-12);
+}
+
+function riskContribs(w, cov) {
+  const Sw = matVec(cov, w);
+  const pv = portVar(w, cov);
+  return w.map((wi, i) => wi * Sw[i] / pv);
+}
+
+function covToCorr(cov) {
+  const n = cov.length;
+  const std = cov.map((row, i) => Math.sqrt(Math.max(row[i], 1e-12)));
+  return cov.map((row, i) => row.map((v, j) => v / Math.max(std[i] * std[j], 1e-12)));
+}
+
+function normalize(w) {
+  const s = sum(w);
+  return s > 0 ? w.map(x => x / s) : w.map(() => 1 / w.length);
+}
+
+function projectWeights(w, tickers, cov) {
+  const n = Math.max(w.length, 1);
+  const maxSingle = Math.max(num($("max_single_asset").value, 15) / 100, 1 / n);
+  const minSingle = Math.min(num($("min_single_asset").value, 1) / 100, 1 / n);
+  let out = w.map(x => Math.max(0, x));
+  out = normalize(out);
+  for (let pass = 0; pass < 6; pass++) {
+    out = out.map(x => x > 0 ? clamp(x, minSingle, maxSingle) : 0);
+    out = normalize(out);
+    out = enforceClassCap(out, tickers, "equity", num($("max_equity").value, 60) / 100);
+    out = enforceClassCap(out, tickers, "crypto", num($("max_crypto").value, 5) / 100);
+    out = normalize(out);
+  }
+  return out;
+}
+
+function enforceClassCap(w, tickers, cls, cap) {
+  const idx = tickers.map((t, i) => getTickerClass(t) === cls ? i : -1).filter(i => i >= 0);
+  if (!idx.length) return w;
+  const classSum = idx.reduce((s, i) => s + w[i], 0);
+  if (classSum <= cap + 1e-8) return w;
+  const out = w.slice();
+  const scale = cap / Math.max(classSum, 1e-12);
+  idx.forEach(i => out[i] *= scale);
+  const freed = 1 - sum(out);
+  const others = out.map((_, i) => idx.includes(i) ? -1 : i).filter(i => i >= 0);
+  const otherSum = others.reduce((s, i) => s + out[i], 0);
+  if (others.length && freed > 0) {
+    others.forEach(i => { out[i] += freed * (otherSum > 0 ? out[i] / otherSum : 1 / others.length); });
+  }
+  return out;
+}
+
+function optimizeWeights(mu, cov, tickers, budgets, opts = {}) {
+  const method = $("optim_method").value;
+  if (method === "risk_budget") return projectWeights(riskBudgetWeights(cov, budgets, opts.steps || 500), tickers, cov);
+  if (method === "blend") {
+    const a = mvoWeights(mu, cov, tickers, opts.steps || 380);
+    const b = riskBudgetWeights(cov, budgets, opts.steps || 420);
+    return projectWeights(a.map((x, i) => .5 * x + .5 * b[i]), tickers, cov);
+  }
+  return mvoWeights(mu, cov, tickers, opts.steps || 420);
+}
+
+function mvoWeights(mu, cov, tickers, steps = 420) {
+  const n = mu.length;
+  const rf = num($("risk_free_rate").value) / 100;
+  const targetVol = num($("target_volatility").value, 12) / 100;
+  let w = projectWeights(Array(n).fill(1 / n), tickers, cov);
+  let lr = .06;
+  let best = w.slice();
+  let bestScore = objective(best);
+
+  for (let k = 0; k < steps; k++) {
+    const Sw = matVec(cov, w);
+    const pv = portVar(w, cov);
+    const pVol = Math.sqrt(pv);
+    const pRet = w.reduce((s, wi, i) => s + wi * mu[i], 0);
+    const sh = (pRet - rf) / Math.max(pVol, 1e-9);
+    const grad = mu.map((mi, i) => ((mi - rf) - sh * Sw[i]) / Math.max(pVol, 1e-9));
+    const trial = projectWeights(w.map((wi, i) => wi + lr * grad[i]), tickers, cov);
+    const score = objective(trial);
+    if (score >= objective(w)) {
+      w = trial;
+      if (score > bestScore) {
+        best = trial.slice();
+        bestScore = score;
+      }
+      lr *= 1.01;
+    } else {
+      lr *= .55;
+    }
+    if (lr < 1e-5) lr = .012;
+  }
+  return projectWeights(best, tickers, cov);
+
+  function objective(x) {
+    const ret = x.reduce((s, wi, i) => s + wi * mu[i], 0);
+    const vol = Math.sqrt(portVar(x, cov));
+    const sharpe = (ret - rf) / Math.max(vol, 1e-9);
+    const volPenalty = Math.max(0, vol - targetVol) ** 2 * 14;
+    return sharpe - volPenalty;
+  }
+}
+
+function riskBudgetWeights(cov, budgets, steps = 600) {
+  const n = cov.length;
+  let w = Array(n).fill(1 / n);
+  const b = normalize(budgets.map(x => Math.max(x, .001)));
+  for (let k = 0; k < steps; k++) {
+    const rc = riskContribs(w, cov);
+    w = w.map((wi, i) => Math.max(1e-5, wi * Math.exp(.18 * (b[i] - rc[i]))));
+    w = normalize(w);
+  }
+  return w;
 }
 
 function buildBudgets(tickers) {
-  const p = PROFILES[selectedProfile];
+  const budgets = PROFILES[selectedProfile].budgets;
   return tickers.map(t => {
     const cls = getTickerClass(t);
-    const budget = p.budgets[cls] || 0;
-    const count = tickers.filter(x => getTickerClass(x) === cls).length;
-    return budget / Math.max(count, 1);
+    const same = tickers.filter(x => getTickerClass(x) === cls).length;
+    return (budgets[cls] || 0) / Math.max(same, 1);
   });
 }
 
-function tick() { return new Promise(r => setTimeout(r, 30)); }
-
-const SVG_WARN = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:6px;flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
-const SVG_ERR  = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:6px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
-function showWarn(msg) {
-  const el = document.getElementById('alert-warn');
-  el.style.display = 'flex'; el.style.alignItems = 'center';
-  el.innerHTML = SVG_WARN + msg;
+function applyTacticalOverlay(strategic, returns, cov, tickers) {
+  if (!$("taa_enabled").checked) return { weights: strategic.slice(), turnover: 0, te: 0, regime: "off" };
+  const lookback = Math.min(num($("momentum_lookback").value, 126), returns[0].length - 1);
+  const strength = num($("taa_strength").value, 15) / 100;
+  const scores = momentumScores(returns, lookback);
+  let w = strategic.map((wi, i) => wi * (1 + strength * scores[i]));
+  const regime = volatilityRegime(returns, strategic);
+  if (regime === "high") {
+    w = w.map((wi, i) => {
+      const cls = getTickerClass(tickers[i]);
+      if (cls === "fixed_income") return wi * 1.12;
+      if (cls === "equity" || cls === "crypto") return wi * .90;
+      return wi;
+    });
+  }
+  w = projectWeights(normalize(w), tickers, cov);
+  const teMax = num($("te_budget").value, 2) / 100;
+  const te = trackingError(w, strategic, cov);
+  if (te > teMax) {
+    const scale = teMax / Math.max(te, 1e-9);
+    w = strategic.map((wi, i) => wi + scale * (w[i] - wi));
+    w = projectWeights(w, tickers, cov);
+  }
+  return {
+    weights: w,
+    turnover: .5 * sum(w.map((wi, i) => Math.abs(wi - strategic[i]))),
+    te: trackingError(w, strategic, cov),
+    regime
+  };
 }
-function showErr(msg) {
-  const el = document.getElementById('alert-err');
-  el.style.display = 'flex'; el.style.alignItems = 'center';
-  el.innerHTML = SVG_ERR + msg;
-  document.getElementById('status-box').style.display = 'none';
+
+function momentumScores(returns, lookback) {
+  const raw = returns.map(r => {
+    const recent = r.slice(-lookback);
+    const total = recent.reduce((nav, x) => nav * (1 + x), 1) - 1;
+    const vol = stdev(recent) * Math.sqrt(252);
+    return total / Math.max(vol, 1e-6);
+  });
+  const m = mean(raw);
+  const sd = stdev(raw) || 1;
+  return raw.map(x => clamp((x - m) / sd, -2, 2));
 }
-function resetBtn(btn) {
-  btn.disabled = false;
-  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Relancer l\'analyse';
+
+function volatilityRegime(returns, weights) {
+  const p = portfolioReturnSeries(weights, returns);
+  if (p.length < 126) return "normal";
+  const windows = [];
+  for (let i = 21; i <= p.length; i += 5) windows.push(stdev(p.slice(i - 21, i)) * Math.sqrt(252));
+  const current = stdev(p.slice(-21)) * Math.sqrt(252);
+  const sorted = windows.slice().sort((a, b) => a - b);
+  const p80 = sorted[Math.floor(sorted.length * .8)] || Infinity;
+  return current > p80 ? "high" : "normal";
 }
 
-// ════════════════════════════════════════════════════
-// RENDER RESULTS
-// ════════════════════════════════════════════════════
-function renderResults({ validTickers, weights, rc, budgets, mu, cov, pRet, pVol, pSharpe, mdd }) {
+function trackingError(w, base, cov) {
+  const d = w.map((wi, i) => wi - base[i]);
+  return Math.sqrt(portVar(d, cov));
+}
 
-  // KPIs
-  document.getElementById('kpi-grid').innerHTML = [
-    { label: 'Rendement annuel (μ)', value: (pRet*100).toFixed(1)+'%', cls: pRet>=0?'positive':'negative' },
-    { label: 'Volatilité annuelle (σ)', value: (pVol*100).toFixed(1)+'%', cls: '' },
-    { label: 'Ratio de Sharpe', value: pSharpe.toFixed(2), cls: pSharpe>=1?'positive':'' },
-    { label: 'Max Drawdown', value: (mdd*100).toFixed(1)+'%', cls: 'negative' },
-  ].map(k => `<div class="kpi-card"><div class="kpi-label">${k.label}</div><div class="kpi-value ${k.cls}">${k.value}</div></div>`).join('');
+function portfolioStatsFromEstimates(weights, mu, cov, rf) {
+  const ret = weights.reduce((s, w, i) => s + w * mu[i], 0);
+  const vol = Math.sqrt(portVar(weights, cov));
+  return { ret, vol, sharpe: (ret - rf) / Math.max(vol, 1e-9) };
+}
 
-  // Allocation donut
-  const allocColors = validTickers.map(t => CLASS_COLORS[getTickerClass(t)]);
-  charts.alloc = new Chart(document.getElementById('chart-alloc'), {
-    type: 'doughnut',
+function renderResults(result) {
+  const { tickers, weights, strategic, tactical, rc, budgets, mu, cov, perf } = result;
+  $("kpi-grid").innerHTML = [
+    ["Expected return", pct(perf.ret)],
+    ["Annual volatility", pct(perf.vol)],
+    ["Sharpe ratio", perf.sharpe.toFixed(2)],
+    ["Tracking error TAA", pct(tactical.te)],
+    ["Turnover TAA", pct(tactical.turnover)],
+    ["Volatility regime", tactical.regime],
+    ["Optimizer", $("optim_method").selectedOptions[0].textContent],
+    ["Valid assets", String(tickers.length)]
+  ].map(([label, value]) => `<div class="metric"><span class="label">${label}</span><span class="value">${value}</span></div>`).join("");
+
+  destroyChart("alloc");
+  charts.alloc = new Chart($("chart-alloc"), {
+    type: "doughnut",
     data: {
-      labels: validTickers,
-      datasets: [{ data: weights.map(w=>+(w*100).toFixed(2)), backgroundColor: allocColors, borderWidth: 1, borderColor: '#fff' }]
+      labels: tickers,
+      datasets: [{ data: weights.map(w => +(w * 100).toFixed(2)), backgroundColor: tickers.map(t => CLASS_COLORS[getTickerClass(t)]), borderColor: "#ffffff", borderWidth: 1 }]
     },
     options: {
-      responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { position: 'right', labels: { font: { size: 11 }, padding: 10 } }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%` } } },
-      cutout: '65%'
+      plugins: { legend: { position: "right", labels: { color: "#050505", font: { family: UI_FONT, size: 11 } } } },
+      cutout: "66%"
     }
   });
 
-  // Risk contributions grouped bar
-  charts.rc = new Chart(document.getElementById('chart-rc'), {
-    type: 'bar',
+  destroyChart("rc");
+  charts.rc = new Chart($("chart-rc"), {
+    type: "bar",
     data: {
-      labels: validTickers,
+      labels: tickers,
       datasets: [
-        { label: 'RC réelle', data: rc.map(v=>+(v*100).toFixed(2)), backgroundColor: allocColors, borderWidth: 0 },
-        { label: 'Cible', data: budgets.map(v=>+(v*100).toFixed(2)), backgroundColor: allocColors.map(c=>c+'44'), borderWidth: 1, borderColor: allocColors }
+        { label: "Actual RC", data: rc.map(v => +(v * 100).toFixed(2)), backgroundColor: "rgba(5,5,5,.86)" },
+        { label: "Target budget", data: budgets.map(v => +(v * 100).toFixed(2)), backgroundColor: "rgba(5,5,5,.18)", borderColor: "#050505", borderWidth: 1 }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { labels: { font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%` } } },
-      scales: { y: { ticks: { callback: v => v+'%' }, grid: { color: '#f0f0f0' } }, x: { grid: { display: false } } }
+      plugins: { legend: { labels: { color: "#050505", font: { family: UI_FONT, size: 11 } } } },
+      scales: {
+        y: { ticks: { color: "#050505", callback: v => v + "%" }, grid: { color: "#e8e8e8" } },
+        x: { ticks: { color: "#050505", maxRotation: 60 }, grid: { display: false } }
+      }
     }
   });
 
-  // Weights table
-  const sorted = validTickers.map((t,i) => ({ t, w: weights[i], rc: rc[i], mu: mu[i], cls: getTickerClass(t) }))
-    .sort((a,b) => b.w-a.w);
-  document.getElementById('weights-table-wrap').innerHTML = `
-    <table class="weights-table">
-      <thead><tr><th>Ticker</th><th>Classe</th><th>Poids</th><th>Contrib. risque</th><th>Rend. attendu</th></tr></thead>
-      <tbody>${sorted.map(r => `<tr>
-        <td style="font-weight:600">${r.t}</td>
-        <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${CLASS_COLORS[r.cls]};margin-right:6px"></span>${CLASS_LABELS[r.cls]}</td>
-        <td>${(r.w*100).toFixed(1)}%<div class="w-bar-bg"><div class="w-bar-fill" style="width:${r.w*100}%;background:${CLASS_COLORS[r.cls]}"></div></div></td>
-        <td>${(r.rc*100).toFixed(1)}%</td>
-        <td style="color:${r.mu>=0?'#2d7a2d':'#b91c1c'}">${(r.mu*100).toFixed(1)}%</td>
-      </tr>`).join('')}
-      </tbody>
+  const rows = tickers.map((t, i) => ({
+    t,
+    cls: getTickerClass(t),
+    w: weights[i],
+    saa: strategic[i],
+    rc: rc[i],
+    budget: budgets[i],
+    mu: mu[i]
+  })).sort((a, b) => b.w - a.w);
+  $("weights-table-wrap").innerHTML = `
+    <table>
+      <thead><tr><th class="mono">Ticker</th><th>Class</th><th>Weight</th><th>SAA</th><th>Risk contrib.</th><th>Budget</th><th>Expected return</th></tr></thead>
+      <tbody>${rows.map(r => `
+        <tr>
+          <td class="mono">${r.t}</td>
+          <td>${CLASS_LABELS[r.cls]}</td>
+          <td>${pct(r.w)}<div class="bar-bg"><div class="bar-fill" style="width:${r.w * 100}%;background:${CLASS_COLORS[r.cls]}"></div></div></td>
+          <td>${pct(r.saa)}</td>
+          <td>${pct(r.rc)}</td>
+          <td>${pct(r.budget)}</td>
+          <td>${pct(r.mu)}</td>
+        </tr>
+      `).join("")}</tbody>
     </table>`;
 
-  // Correlation heatmap
+  renderCorrelation(cov, tickers);
+}
+
+function renderCorrelation(cov, tickers) {
   const corr = covToCorr(cov);
-  const cols = validTickers;
-  let html = '<table class="heatmap-table"><thead><tr><th></th>';
-  html += cols.map(t => `<th title="${t}">${t.length>6?t.slice(0,6)+'…':t}</th>`).join('');
-  html += '</tr></thead><tbody>';
-  for (let i=0;i<cols.length;i++) {
-    html += `<tr><th style="text-align:left;padding:4px 8px">${cols[i]}</th>`;
-    for (let j=0;j<cols.length;j++) {
+  let html = "<table><thead><tr><th></th>" + tickers.map(t => `<th class="mono">${t.slice(0, 7)}</th>`).join("") + "</tr></thead><tbody>";
+  for (let i = 0; i < tickers.length; i++) {
+    html += `<tr><th class="mono">${tickers[i]}</th>`;
+    for (let j = 0; j < tickers.length; j++) {
       const v = corr[i][j];
-      const absV = Math.abs(v);
-      let bg;
-      if (i===j) bg = 'rgba(107,107,107,0.15)';
-      else if (v>0) bg = `rgba(74,144,217,${(absV*0.7).toFixed(2)})`;
-      else bg = `rgba(248,113,113,${(absV*0.7).toFixed(2)})`;
-      const textColor = absV > 0.5 ? '#fff' : '#333';
-      html += `<td style="background:${bg};color:${textColor}">${v.toFixed(2)}</td>`;
+      const alpha = i === j ? .10 : Math.min(.82, Math.abs(v) * .65);
+      const bg = v >= 0 ? `rgba(5,5,5,${alpha})` : `rgba(232,232,232,${Math.max(.5, alpha)})`;
+      const color = v > .55 ? "#ffffff" : "#050505";
+      html += `<td style="background:${bg};color:${color}">${v.toFixed(2)}</td>`;
     }
-    html += '</tr>';
+    html += "</tr>";
   }
-  html += '</tbody></table>';
-  document.getElementById('corr-heatmap').innerHTML = html;
+  $("corr-heatmap").innerHTML = html + "</tbody></table>";
 }
 
-// ════════════════════════════════════════════════════
-// CODE GENERATION
-// ════════════════════════════════════════════════════
+async function runBacktest(showToast) {
+  if (!appState.market) {
+    $("backtest-state").textContent = "Run the analysis first";
+    if (showToast) toast("Run the analysis first");
+    return;
+  }
+  $("backtest-state").textContent = "Backtest in progress...";
+  await tick();
+  const market = appState.market;
+  const returns = market.returns;
+  const tickers = market.tickers;
+  const T = returns[0].length;
+  let train = Math.min(num($("estimation_window_years").value) * 252, Math.floor(T * .65));
+  train = Math.max(126, Math.min(train, T - 63));
+  const step = 21;
+  const out = [];
+  const bench = [];
+  const logs = [];
+  let prevW = null;
+  for (let start = train; start < T - 1; start += step) {
+    const trainReturns = returns.map(r => r.slice(start - train, start));
+    const cov = estimateCov(trainReturns);
+    const mu = estimateReturns(trainReturns, cov, tickers);
+    const budgets = buildBudgets(tickers);
+    const saa = optimizeWeights(mu, cov, tickers, budgets, { steps: 140 });
+    const tactical = applyTacticalOverlay(saa, trainReturns, cov, tickers);
+    const w = tactical.weights;
+    const testEnd = Math.min(start + step, T);
+    for (let t = start; t < testEnd; t++) {
+      out.push(w.reduce((s, wi, i) => s + wi * returns[i][t], 0));
+      bench.push(benchmarkReturn(tickers, returns, t));
+    }
+    logs.push({
+      date: market.dates[start] || String(start),
+      assets: tickers.length,
+      turnover: prevW ? .5 * sum(w.map((wi, i) => Math.abs(wi - prevW[i]))) : 0,
+      vol: Math.sqrt(portVar(w, cov)),
+      ret: w.reduce((s, wi, i) => s + wi * mu[i], 0)
+    });
+    prevW = w;
+  }
+  const rf = num($("risk_free_rate").value) / 100;
+  const metrics = performanceMetrics(out, rf, bench);
+  appState.backtest = { returns: out, benchmark: bench, metrics, logs };
+  renderBacktest(appState.backtest);
+  $("backtest-state").textContent = `${out.length} out-of-sample days`;
+  if (showToast) toast("Backtest complete");
+}
+
+function benchmarkReturn(tickers, returns, t) {
+  const eq = [];
+  const fi = [];
+  tickers.forEach((ticker, i) => {
+    const cls = getTickerClass(ticker);
+    if (cls === "equity") eq.push(returns[i][t]);
+    if (cls === "fixed_income") fi.push(returns[i][t]);
+  });
+  const eqR = eq.length ? mean(eq) : mean(returns.map(r => r[t]));
+  const fiR = fi.length ? mean(fi) : 0;
+  return .6 * eqR + .4 * fiR;
+}
+
+function performanceMetrics(r, rf, bench) {
+  const annRet = r.length ? Math.pow(r.reduce((nav, x) => nav * (1 + x), 1), 252 / r.length) - 1 : 0;
+  const annVol = stdev(r) * Math.sqrt(252);
+  const downside = stdev(r.filter(x => x < 0)) * Math.sqrt(252);
+  const mdd = maxDrawdown(navSeries(r));
+  const sorted = r.slice().sort((a, b) => a - b);
+  const idx = Math.floor(sorted.length * .05);
+  const var95 = -(sorted[idx] || 0);
+  const cvar95 = -mean(sorted.slice(0, Math.max(1, idx + 1)));
+  const benchMetrics = bench?.length ? {
+    annRet: Math.pow(bench.reduce((nav, x) => nav * (1 + x), 1), 252 / bench.length) - 1,
+    annVol: stdev(bench) * Math.sqrt(252)
+  } : { annRet: 0, annVol: 0 };
+  const active = r.map((x, i) => x - (bench?.[i] || 0));
+  const te = stdev(active) * Math.sqrt(252);
+  const beta = bench?.length ? covariance(r, bench) / Math.max(variance(bench), 1e-12) : 0;
+  return {
+    annRet,
+    annVol,
+    sharpe: (annRet - rf) / Math.max(annVol, 1e-9),
+    sortino: (annRet - rf) / Math.max(downside, 1e-9),
+    mdd,
+    calmar: annRet / Math.max(Math.abs(mdd), 1e-9),
+    var95,
+    cvar95,
+    info: (annRet - benchMetrics.annRet) / Math.max(te, 1e-9),
+    beta,
+    benchRet: benchMetrics.annRet,
+    benchVol: benchMetrics.annVol
+  };
+}
+
+function variance(a) {
+  const m = mean(a);
+  return mean(a.map(x => (x - m) ** 2));
+}
+
+function covariance(a, b) {
+  const ma = mean(a);
+  const mb = mean(b);
+  return mean(a.map((x, i) => (x - ma) * (b[i] - mb)));
+}
+
+function navSeries(r) {
+  const out = [1];
+  r.forEach(x => out.push(out[out.length - 1] * (1 + x)));
+  return out;
+}
+
+function maxDrawdown(nav) {
+  let peak = nav[0] || 1;
+  let mdd = 0;
+  nav.forEach(v => {
+    peak = Math.max(peak, v);
+    mdd = Math.min(mdd, (v - peak) / peak);
+  });
+  return mdd;
+}
+
+function renderBacktest(bt) {
+  const m = bt.metrics;
+  $("backtest-metrics").innerHTML = [
+    ["Annual return", pct(m.annRet)],
+    ["Annual volatility", pct(m.annVol)],
+    ["Sharpe", m.sharpe.toFixed(2)],
+    ["Sortino", m.sortino.toFixed(2)],
+    ["Max drawdown", pct(m.mdd)],
+    ["Calmar", m.calmar.toFixed(2)],
+    ["VaR 95 daily", pct(m.var95)],
+    ["CVaR 95 daily", pct(m.cvar95)],
+    ["Info ratio", m.info.toFixed(2)],
+    ["Beta vs 60/40", m.beta.toFixed(2)],
+    ["60/40 return", pct(m.benchRet)],
+    ["60/40 vol", pct(m.benchVol)]
+  ].map(([label, value]) => `<div class="metric"><span class="label">${label}</span><span class="value">${value}</span></div>`).join("");
+
+  destroyChart("backtest");
+  const nav = navSeries(bt.returns);
+  const bnav = navSeries(bt.benchmark);
+  charts.backtest = new Chart($("chart-backtest"), {
+    type: "line",
+    data: {
+      labels: nav.map((_, i) => i),
+      datasets: [
+        { label: "System", data: nav, borderColor: "#050505", backgroundColor: "transparent", pointRadius: 0, borderWidth: 2 },
+        { label: "60/40", data: bnav, borderColor: "rgba(5,5,5,.35)", backgroundColor: "transparent", pointRadius: 0, borderWidth: 1.5 }
+      ]
+    },
+    options: {
+      plugins: { legend: { labels: { color: "#050505", font: { family: UI_FONT, size: 11 } } } },
+      scales: { x: { display: false }, y: { grid: { color: "#e8e8e8" }, ticks: { color: "#050505" } } }
+    }
+  });
+
+  const avgTurn = mean(bt.logs.map(x => x.turnover));
+  const cost = avgTurn * (num($("transaction_cost").value) / 100);
+  $("backtest-table").innerHTML = `
+    <table>
+      <thead><tr><th>Observation</th><th class="mono">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Estimation window</td><td class="mono">${Math.min(num($("estimation_window_years").value) * 252, appState.market.returns[0].length)} days</td></tr>
+        <tr><td>Monthly rebalances</td><td class="mono">${bt.logs.length}</td></tr>
+        <tr><td>Average turnover</td><td class="mono">${pct(avgTurn)}</td></tr>
+        <tr><td>Estimated cost per rebalance</td><td class="mono">${pct(cost)}</td></tr>
+        <tr><td>Last rebalance date</td><td class="mono">${bt.logs.at(-1)?.date || "-"}</td></tr>
+      </tbody>
+    </table>`;
+}
+
+function runMonteCarlo(showToast) {
+  if (!appState.result || !appState.market) {
+    if (showToast) toast("Run the analysis first");
+    return;
+  }
+  const paths = num($("mc_paths").value, 1000);
+  const years = num($("mc_years").value, 5);
+  const days = years * 252;
+  const method = $("mc_method").value;
+  const weights = appState.result.weights;
+  const daily = portfolioReturnSeries(weights, appState.market.returns);
+  const pRet = appState.result.perf.ret / 252;
+  const pVol = appState.result.perf.vol / Math.sqrt(252);
+  const ruin = num($("ruin_threshold").value, 75) / 100;
+  const terminal = [];
+  const yearly = [];
+  let ruinCount = 0;
+
+  for (let s = 0; s < paths; s++) {
+    let nav = 1;
+    let ruined = false;
+    const oneYear = [];
+    let t = 0;
+    while (t < days) {
+      const r = mcReturn(method, daily, pRet, pVol, t);
+      nav *= (1 + r);
+      if (t < 252) oneYear.push(r);
+      if (nav < ruin) ruined = true;
+      t++;
+    }
+    terminal.push(nav);
+    yearly.push(oneYear.reduce((x, r) => x * (1 + r), 1) - 1);
+    if (ruined) ruinCount++;
+  }
+
+  terminal.sort((a, b) => a - b);
+  yearly.sort((a, b) => a - b);
+  const p5 = terminal[Math.floor(paths * .05)];
+  const p50 = terminal[Math.floor(paths * .50)];
+  const p95 = terminal[Math.floor(paths * .95)];
+  const y5 = yearly[Math.floor(paths * .05)] || 0;
+  const es = mean(yearly.slice(0, Math.max(1, Math.floor(paths * .05))));
+  appState.monteCarlo = { terminal, p5, p50, p95, ruinProb: ruinCount / paths, y5, es, method };
+  renderMonteCarlo(appState.monteCarlo);
+  if (showToast) toast("Simulation complete");
+}
+
+function mcReturn(method, daily, meanDaily, volDaily, t) {
+  if (method === "bootstrap") {
+    const block = 10;
+    const start = Math.floor(Math.random() * Math.max(1, daily.length - block));
+    return daily[(start + (t % block)) % daily.length] || 0;
+  }
+  if (method === "regime") {
+    const abs = daily.map(Math.abs).sort((a, b) => a - b);
+    const threshold = abs[Math.floor(abs.length * .8)] || 0;
+    const crisis = daily.filter(x => Math.abs(x) >= threshold);
+    const normal = daily.filter(x => Math.abs(x) < threshold);
+    const bucket = Math.random() < .18 ? crisis : normal;
+    return bucket[Math.floor(Math.random() * bucket.length)] || gaussian(meanDaily, volDaily);
+  }
+  return gaussian(meanDaily, volDaily);
+}
+
+function gaussian(mu = 0, sigma = 1) {
+  const u1 = Math.max(Math.random(), 1e-12);
+  const u2 = Math.random();
+  return mu + sigma * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
+function portfolioReturnSeries(weights, returns) {
+  const T = returns[0]?.length || 0;
+  const out = [];
+  for (let t = 0; t < T; t++) out.push(weights.reduce((s, w, i) => s + w * returns[i][t], 0));
+  return out;
+}
+
+function renderMonteCarlo(mc) {
+  $("mc-metrics").innerHTML = [
+    ["Median terminal wealth", mc.p50.toFixed(2) + "x"],
+    ["5th percentile", mc.p5.toFixed(2) + "x"],
+    ["95th percentile", mc.p95.toFixed(2) + "x"],
+    ["Severe-loss probability", pct(mc.ruinProb)],
+    ["1Y VaR 5%", pct(-mc.y5)],
+    ["1Y expected shortfall", pct(-mc.es)]
+  ].map(([label, value]) => `<div class="metric"><span class="label">${label}</span><span class="value">${value}</span></div>`).join("");
+
+  const bins = 28;
+  const min = mc.terminal[0];
+  const max = mc.terminal[mc.terminal.length - 1];
+  const width = (max - min) / bins || 1;
+  const counts = Array(bins).fill(0);
+  mc.terminal.forEach(x => counts[Math.min(bins - 1, Math.floor((x - min) / width))]++);
+  destroyChart("mc");
+  charts.mc = new Chart($("chart-mc"), {
+    type: "bar",
+    data: {
+      labels: counts.map((_, i) => (min + i * width).toFixed(1) + "x"),
+      datasets: [{ label: "Paths", data: counts, backgroundColor: "rgba(5,5,5,.82)" }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: "#050505", maxRotation: 70 }, grid: { display: false } },
+        y: { ticks: { color: "#050505" }, grid: { color: "#e8e8e8" } }
+      }
+    }
+  });
+}
+
+function destroyChart(key) {
+  if (charts[key]) {
+    charts[key].destroy();
+    charts[key] = null;
+  }
+}
+
 function generateCode() {
-  const g = id => document.getElementById(id)?.value ?? '';
-  const rf = parseFloat(g('risk_free_rate'));
-  const profile = PROFILES[selectedProfile];
+  const p = PROFILES[selectedProfile];
+  const rf = num($("risk_free_rate")?.value, 4.5) / 100;
   const lines = [
-    `# ═══════════════════════════════════════════════════════`,
-    `# Multi-Asset Portfolio Construction System — Config`,
-    `# Generated by portfolio-investments.vercel.app`,
-    `# ═══════════════════════════════════════════════════════`,
-    ``,
-    `# ── Profil investisseur ─────────────────────────────────`,
-    `SELECTED_PROFILE = '${selectedProfile}'`,
-    `RISK_AVERSION_LAMBDA = ${profile.lambda_}`,
-    `TARGET_VOLATILITY    = ${parseFloat(profile.vol) / 100}`,
-    `MAX_EQUITY_EXPOSURE  = ${parseFloat(profile.max_eq) / 100}`,
-    ``,
-    `# ── Taux sans risque ────────────────────────────────────`,
-    `RISK_FREE_RATE_ANNUAL = ${(rf/100).toFixed(4)}   # ${rf.toFixed(2)}%`,
-    `RISK_FREE_RATE_DAILY  = RISK_FREE_RATE_ANNUAL / 252`,
-    ``,
-    `# ── Estimation ──────────────────────────────────────────`,
-    `ESTIMATION_WINDOW_YEARS = ${g('estimation_window_years')}`,
-    `SHRINKAGE_ALPHA         = ${parseFloat(g('shrinkage_alpha')).toFixed(2)}  # μ̂ = (1−α)·μ_hist + α·μ_grand_mean`,
-    `COVARIANCE_METHOD       = 'ledoit_wolf'`,
-    `RETURN_METHOD           = 'shrinkage'`,
-    `OPTIMIZATION_METHOD     = 'max_sharpe'`,
-    ``,
-    `# ── Filtres univers ─────────────────────────────────────`,
-    `MAX_CORRELATION    = ${parseFloat(g('max_correlation')).toFixed(2)}`,
-    `MIN_HISTORY_YEARS  = ${g('min_history_years')}`,
-    `MIN_ANNUAL_VOL     = ${(parseFloat(g('min_annual_vol'))/100).toFixed(4)}`,
-    ``,
-    `# ── Univers d'actifs ────────────────────────────────────`,
-    `ASSET_UNIVERSE = {`,
-    ...Object.entries(universe).map(([k,v]) => `    '${k}': ${JSON.stringify(v)},`),
-    `}`,
-    ``,
-    `# ── Budgets de risque par classe ────────────────────────`,
-    `RISK_BUDGETS = {`,
-    ...Object.entries(profile.budgets).map(([k,v]) => `    '${k}': ${v.toFixed(2)},`),
-    `}`,
-    ``,
-    `print(f'✅  Config chargée — profil : {SELECTED_PROFILE} | λ = {RISK_AVERSION_LAMBDA}')`,
+    "# Multi-Asset Risk-Budgeted Portfolio Construction System",
+    "# Generated by portfolio-investments web configurator",
+    "",
+    "from portfolio_system.profiling.profile import InvestorProfile",
+    "from portfolio_system.main import PortfolioSystem",
+    "",
+    "profile = InvestorProfile(",
+    `    risk_score = ${qScore().toFixed(1)},`,
+    `    lambda_ = ${p.lambda_},`,
+    `    target_vol = ${(num($("target_volatility")?.value, p.vol) / 100).toFixed(4)},`,
+    `    horizon_years = ${num($("q_hz")?.value, 10)},`,
+    `    max_equity = ${(num($("max_equity")?.value, p.max_eq) / 100).toFixed(4)},`,
+    `    max_crypto = ${(num($("max_crypto")?.value, p.max_crypto) / 100).toFixed(4)},`,
+    `    max_single_asset = ${(num($("max_single_asset")?.value, p.max_single) / 100).toFixed(4)},`,
+    `    min_single_asset = ${(num($("min_single_asset")?.value, 1) / 100).toFixed(4)},`,
+    "    risk_budgets = {",
+    ...Object.entries(p.budgets).map(([k, v]) => `        "${k}": ${v.toFixed(4)},`),
+    "    },",
+    "    rebalance_freq = \"monthly\",",
+    `    te_budget = ${(num($("te_budget")?.value, p.te) / 100).toFixed(4)},`,
+    ")",
+    "",
+    "config = {",
+    `    "risk_free_rate": ${rf.toFixed(4)},`,
+    `    "asset_universe": ${JSON.stringify(universe, null, 4).replace(/\n/g, "\n    ")},`,
+    `    "return_method": "${$("return_method")?.value || "black_litterman"}",`,
+    `    "covariance_method": "${$("cov_method")?.value || "ledoit_wolf"}",`,
+    `    "optimization_method": "${$("optim_method")?.value || "mvo"}",`,
+    `    "estimation_window_years": ${num($("estimation_window_years")?.value, 5)},`,
+    `    "shrinkage_alpha": ${num($("shrinkage_alpha")?.value, .2).toFixed(2)},`,
+    `    "black_litterman_tau": ${num($("bl_tau")?.value, .05).toFixed(2)},`,
+    `    "view_confidence": ${(num($("view_confidence")?.value, 35) / 100).toFixed(2)},`,
+    `    "ewma_lambda": ${num($("ewma_lambda")?.value, .94).toFixed(2)},`,
+    `    "max_correlation": ${num($("max_correlation")?.value, .9).toFixed(2)},`,
+    `    "min_history_years": ${num($("min_history_years")?.value, 3)},`,
+    `    "min_annual_vol": ${(num($("min_annual_vol")?.value, 1) / 100).toFixed(4)},`,
+    `    "taa_enabled": ${$("taa_enabled")?.checked ? "True" : "False"},`,
+    `    "momentum_lookback_days": ${num($("momentum_lookback")?.value, 126)},`,
+    `    "taa_strength": ${(num($("taa_strength")?.value, 15) / 100).toFixed(4)},`,
+    `    "transaction_cost": ${(num($("transaction_cost")?.value, .1) / 100).toFixed(4)},`,
+    `    "monte_carlo_method": "${$("mc_method")?.value || "gaussian"}",`,
+    `    "monte_carlo_paths": ${num($("mc_paths")?.value, 1000)},`,
+    `    "monte_carlo_years": ${num($("mc_years")?.value, 5)},`,
+    "}",
+    "",
+    "system = PortfolioSystem(profile=profile, config=config)",
+    "report = system.run_full_pipeline()"
   ];
-  document.getElementById('code-out').textContent = lines.join('\n');
+  $("code-out").textContent = lines.join("\n");
 }
 
-function copyCode() { navigator.clipboard.writeText(document.getElementById('code-out').textContent).then(()=>toast('Copié !')); }
-function downloadCode() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([document.getElementById('code-out').textContent],{type:'text/plain'})); a.download='portfolio_config.py'; a.click(); toast('Téléchargé !'); }
-function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
+function copyCode() {
+  generateCode();
+  navigator.clipboard?.writeText($("code-out").textContent);
+  toast("Copied");
+}
+
+function downloadCode() {
+  generateCode();
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([$("code-out").textContent], { type: "text/plain" }));
+  a.download = "portfolio_system_config.py";
+  a.click();
+  toast("Downloaded");
+}
+
 function resetDefaults() { location.reload(); }
-
-// ════════════════════════════════════════════════════
-// SLIDER FILL
-// ════════════════════════════════════════════════════
-function updateSliderFill(input) {
-  const min = parseFloat(input.min) || 0;
-  const max = parseFloat(input.max) || 100;
-  const pct = ((parseFloat(input.value) - min) / (max - min)) * 100;
-  input.style.setProperty('--fill', pct.toFixed(1) + '%');
+function tick() { return new Promise(r => setTimeout(r, 30)); }
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1900);
 }
-document.querySelectorAll('input[type="range"]').forEach(input => {
-  updateSliderFill(input);
-  input.addEventListener('input', () => updateSliderFill(input));
-});
 
-// ════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════
+document.querySelectorAll('input[type="range"]').forEach(updateSliderFill);
 renderProfile();
-Object.keys(universe).forEach(renderTags);
-updateRunSummary();
+renderUniverse();
+syncProfileControls();
 qUpdate();
-
+rfUpdate();
+updateRunSummary();
+generateCode();
 </script>
-
-<footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand-name">Portfolio Investment System</div>
-      <div class="footer-brand-desc">Outil académique d'optimisation de portefeuille multi-actifs — Profilage investisseur, Shrinkage μ, Ledoit-Wolf Σ, Max Sharpe, Décomposition du risque.</div>
-    </div>
-    <div>
-      <div class="footer-col-title">Équipe</div>
-      <ul class="footer-col-list">
-        <li>Hugo Puigventos</li>
-        <li>Maxime Cervasel</li>
-        <li>Kader Diop</li>
-        <li>Arthur Baumont</li>
-        <li>Lorenzo Millucio</li>
-        <li>Sacha Fedeli</li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Modules</div>
-      <ul class="footer-col-list">
-        <li>Profil investisseur</li>
-        <li>Optimisation MVO / Risk Budget</li>
-        <li>Simulation Monte Carlo</li>
-        <li>Backtest & Performance</li>
-        <li>Export Python</li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-legal">
-      Ce site est fourni à titre pédagogique uniquement. Les résultats présentés ne constituent pas un conseil en investissement. Les performances passées ne préjugent pas des performances futures. Aucune information contenue sur ce site ne saurait être interprétée comme un conseil financier, fiscal ou juridique.
-    </div>
-    <div class="footer-copy">© 2026 — Tous droits réservés</div>
-  </div>
-</footer>
 </body>
 </html>
