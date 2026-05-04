@@ -44,7 +44,7 @@ The platform is implemented using standard web technologies, ensuring accessibil
 
 ## Project Context
 
-This work was conducted as part of a collaborative academic project at **ESCP Business School**. It reflects an interdisciplinary approach combining finance, programming, and user experience design. Certain technical and creative aspects were developed with the support of **Claude**, contributing to the overall functionality and design of the platform.
+This work was conducted as part of a collaborative academic project at **ESCP Business School**. It reflects an interdisciplinary approach combining finance, programming, and user experience design. Certain technical and creative aspects were developed with the support of **Claude Code** and **CODEX**, contributing to the overall functionality and design of the platform.
 
 ## Acknowledgements
 
