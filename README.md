@@ -2,7 +2,7 @@
 
 ## Abstract
 
-This project, developed as part of a group assignment at **ESCP Business School**, presents the design and implementation of a multi-asset portfolio investment platform. The objective is to integrate financial theory with web-based technologies in order to provide an interactive environment for portfolio construction, optimization, and risk analysis. The platform incorporates investor profiling, quantitative analysis tools, and data visualization features, alongside export functionalities enabling further analysis in Python. Selected components were developed with the assistance of **Claude** and **CODEX**.
+This project, developed as part of a group assignment at **ESCP Business School**, presents the design and implementation of a multi-asset portfolio investment platform. The objective is to integrate financial theory with web-based technologies in order to provide an interactive environment for portfolio construction, optimization, and risk analysis. The platform incorporates investor profiling, quantitative analysis tools, and data visualization features, alongside export functionalities enabling further analysis in Python. Selected components were developed with the assistance of **Claude Code** and **CODEX**.
 
 ## Introduction
 
