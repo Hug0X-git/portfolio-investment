@@ -46,6 +46,11 @@ The platform is implemented using standard web technologies, ensuring accessibil
 
 This work was conducted as part of a collaborative academic project at **ESCP Business School**. It reflects an interdisciplinary approach combining finance, programming, and user experience design. Certain technical and creative aspects were developed with the support of **Claude**, contributing to the overall functionality and design of the platform.
 
+## Acknowledgements
+
+This project was developed within the academic framework of **ESCP Business School**.  
+The authors would like to acknowledge the guidance and teaching of **Paco Goze**, whose course provided the theoretical and methodological foundations for this work.
+
 ## Access
 
 The application is available online at:  
