@@ -49,7 +49,7 @@ This work was conducted as part of a collaborative academic project at **ESCP Bu
 ## Access
 
 The application is available online at:  
-https://portfolio-investments.vercel.app
+portfolio-investment-ten.vercel.app
 
 ## Repository Structure
 
