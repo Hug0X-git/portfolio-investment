@@ -51,6 +51,19 @@ This work was conducted as part of a collaborative academic project at **ESCP Bu
 The application is available online at:  
 portfolio-investment-ten.vercel.app
 
+## Credits
+
+This project was developed collaboratively by a team of students at **ESCP Business School**:
+
+- Hugo Puigventos  
+- Maxime Cervasel  
+- Kader Diop  
+- Arthur Baumont  
+- Lorenzo Millucio  
+- Sacha Fedeli  
+
+All contributors participated in the conceptual development, implementation, and refinement of the platform as part of the academic project.
+
 ## Repository Structure
 
 ```bash
